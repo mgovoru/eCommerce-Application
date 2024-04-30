@@ -3,10 +3,10 @@
     "target": "es2021",
     "module": "esnext",
     "strict": true,
-    // "outDir": "./dist",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  // "include": ["src/**/*"]
+  "include": ["src/**/*"]
 }
