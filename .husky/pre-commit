@@ -1,0 +1,2 @@
+cd eCommerce-Application
+npm run ci:format

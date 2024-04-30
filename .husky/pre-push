@@ -1,0 +1,3 @@
+cd eCommerce-Application
+npm run lint
+npx validate-branch-name
