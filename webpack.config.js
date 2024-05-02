@@ -41,10 +41,7 @@ export default {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          { loader: MiniCssExtraxtPlugin.loader, options: {} },
-          'css-loader',
-        ],
+        use: [{ loader: MiniCssExtraxtPlugin.loader, options: {} }, 'css-loader'],
       },
       {
         test: /\.s[ac]ss$/,
@@ -62,9 +59,7 @@ export default {
         type: 'asset/resource',
         generator: {
           filename: () => {
-            return isDev
-              ? 'assets/[name][ext]'
-              : 'assets/[name].[contenthash][ext]';
+            return isDev ? 'assets/[name][ext]' : 'assets/[name].[contenthash][ext]';
           },
         },
       },
