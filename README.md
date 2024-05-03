@@ -66,3 +66,7 @@ please follow these steps:
    - Usage: npm run lint
 7. prepare: Sets up Git hooks through Husky.
    - Usage: npm run prepare
+8. test: Executes the tests in your project using Jest.
+   - Usage: npm run test
+9. test:coverage: Runs tests and generates a coverage report. 
+   - Usage: npm run test:coverage
