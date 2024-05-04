@@ -34,7 +34,7 @@ git clone ...
 npm install 
 3. **Start the development server**:
 npm start
-Navigate to `http://localhost:8000` in your browser to see the application running.
+Navigate to `http://localhost:8080` in your browser to see the application running.
 
 ### Usage
 
@@ -47,7 +47,7 @@ Navigate to `http://localhost:8000` in your browser to see the application runni
 please follow these steps:
 1. Fork the repository.
 2. Create a new feature branch (`git checkout -b feat/feature`).
-3. Commit your changes (`git commit -am 'feat: add some feature'`).
+3. Commit your changes (`git commit -m 'feat: add some feature'`).
 4. Push to the branch (`git push`).
 5. Open a pull request.
 
