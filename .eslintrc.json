@@ -21,6 +21,7 @@
     "no-debugger": "off",
     "no-console": 0,
     "class-methods-use-this": "off",
+    "import/no-unresolved": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -32,6 +33,7 @@
       }
     ],
     "no-shadow": "off",
+    "import/prefer-default-export": "off",
     "@typescript-eslint/no-shadow": "warn"
   },
   "settings": {
