@@ -1,12 +1,12 @@
 # Pull Request Template
+
 1. Task: [link](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/eCommerce-Application/Sprints/Sprint%231.md)
 2. Done ...05.2024 / deadline ...05.2024
 
-
 ## Description of Changes
 
-- **Briefly describe the additions or changes.
-- **Specify the reasons these changes are necessary and what problems they solve.
+- \*\*Briefly describe the additions or changes.
+- \*\*Specify the reasons these changes are necessary and what problems they solve.
 
 ## Type of Changes
 
@@ -21,7 +21,7 @@
 
 ## Additional Information
 
-- **Any additional information.
+- \*\*Any additional information.
 
 ## List of Changes
 

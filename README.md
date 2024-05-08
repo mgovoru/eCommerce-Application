@@ -1,4 +1,5 @@
 # eCommerce-Application
+
 # Digital Art Store
 
 Welcome to the digital art store AIPainterShop, an online marketplace tailored for artists and customers who are eager to acquire digital paintings crafted by digital artists using neural networks. This web application offers a platform where artists can exhibit their artwork and customers can purchase digital art.
@@ -8,7 +9,7 @@ Welcome to the digital art store AIPainterShop, an online marketplace tailored f
 - **User Accounts**: Users can register, log in.
 - **Art Catalog**: Browse an extensive catalog of digital paintings sorted by categories such as genre, artist, theme.
 - **Shopping Cart**: Add digital paintings to your cart.
-  
+
 ## Technologies
 
 This application is built using the following technologies:
@@ -21,20 +22,21 @@ This application is built using the following technologies:
 ### Prerequisites
 
 Before setting up the project locally, ensure you have the following installed:
+
 - Node.js
-- npm 
+- npm
 
 ### Installation
 
 Follow these steps to set up and run the development version of the web app:
 
 1. **Clone the repository to your local machine**:
-git clone ...
+   git clone ...
 2. **Install required packages**
-npm install 
+   npm install
 3. **Start the development server**:
-npm start
-Navigate to `http://localhost:8080` in your browser to see the application running.
+   npm start
+   Navigate to `http://localhost:8080` in your browser to see the application running.
 
 ### Usage
 
@@ -45,6 +47,7 @@ Navigate to `http://localhost:8080` in your browser to see the application runni
 ## Contributing
 
 please follow these steps:
+
 1. Fork the repository.
 2. Create a new feature branch (`git checkout -b feat/feature`).
 3. Commit your changes (`git commit -m 'feat: add some feature'`).
@@ -52,6 +55,7 @@ please follow these steps:
 5. Open a pull request.
 
 ## Scripts
+
 1. dev: Runs Webpack in development mode.
    - Usage: npm run dev
 2. build: Runs Webpack in production mode.
@@ -68,5 +72,5 @@ please follow these steps:
    - Usage: npm run prepare
 8. test: Executes the tests in your project using Jest.
    - Usage: npm run test
-9. test:coverage: Runs tests and generates a coverage report. 
+9. test:coverage: Runs tests and generates a coverage report.
    - Usage: npm run test:coverage
