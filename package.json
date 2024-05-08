@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "ci:format": "prettier --check .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prepare": "cd .. && husky eCommerce-Application/.husky",
+    "prepare": "husky",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
