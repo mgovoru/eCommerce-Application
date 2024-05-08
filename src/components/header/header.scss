@@ -1,11 +1,19 @@
 .header {
-	width: 100%;
-	flex: 0 1 auto;
+  width: 100%;
+  flex: 0 1 auto;
+  height: 104px;
+  background-color: black;
+  padding-top: 34px;
 }
 
-// .header__img {
-// 	background-image: url('../../assets/AIPainterSHOP.png');
-// 	background-position: center;
-// 	background-size: cover;
-// 	background-repeat: no-repeat;
-// }
+.header__wrapper {
+  background-color: white;
+  height: 100%;
+  width: 100%;
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

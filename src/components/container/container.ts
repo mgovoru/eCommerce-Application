@@ -4,11 +4,14 @@ import './container.scss';
 const containerParams = {
   tag: 'div',
   textContent: '',
-  classNames: ['container'],
 };
 
 export class ContainerView extends View {
   constructor() {
     super(containerParams);
+  }
+
+  addNameClass(name: string) {
+    this.viewElementCreator.addClass(`${name}__container`);
   }
 }
