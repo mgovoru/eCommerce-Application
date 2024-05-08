@@ -10,10 +10,17 @@
   background-color: white;
   height: 100%;
   width: 100%;
+  border: 1px solid rgb(0, 0, 0);
 }
 
 .header__container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 42px;
+}
+
+.header__img {
+  display: block;
+  width: 316px;
 }

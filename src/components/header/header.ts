@@ -1,6 +1,6 @@
-import { ElementCreator } from '../../app/base';
 import { View } from '../../app/view';
 import elementImageSrc from '../../assets/AIPainterShop.png';
+import srcSearch from '../../assets/search.svg';
 import { ContainerView } from '../container/container';
 import './header.scss';
 
@@ -13,50 +13,76 @@ const headerParams = {
 export class HeaderView extends View {
   container: HTMLElement | null;
 
+  elementNav: HTMLElement | null;
+
+  elementButtons: HTMLElement | null;
+
   constructor() {
     super(headerParams);
     this.container = null;
+    this.elementNav = null;
+    this.elementButtons = null;
     this.configureView();
   }
 
   configureView() {
     this.headerContainerCreate();
     this.logoCreate();
+    this.navCreate();
+    this.addButtons();
+    this.buttonSeachCreate(srcSearch);
   }
 
-  headerContainerCreate() {
+  headerContainerCreate(): void {
     const partParams = {
       tag: 'div',
       textContent: '',
       classNames: ['header__wrapper'],
     };
-    const elementWhitePart = new ElementCreator(partParams);
-    this.getElement().append(elementWhitePart.getNode());
+    const elementWhitePart = this.drawElement(partParams);
     const element = new ContainerView();
     element.addNameClass('header');
     this.container = element.getElement();
-    elementWhitePart.getNode().append(this.container);
+    elementWhitePart.append(this.container);
   }
 
-  logoCreate() {
+  logoCreate(): void {
     const logoParams = {
       tag: 'img',
       textContent: '',
       classNames: ['header__img'],
     };
-    const element = new ElementCreator(logoParams);
-    const elementImage = element.getNode() as HTMLImageElement;
-    elementImage.src = elementImageSrc;
-    this.container?.append(elementImage);
+    this.drawImageElement(logoParams, elementImageSrc, this.container as HTMLElement);
   }
 
-  // navCreate() { }
+  navCreate(): void {
+    const navParams = {
+      tag: 'nav',
+      textContent: '',
+      classNames: ['header__nav'],
+    };
+    this.elementNav = this.drawElement(navParams, this.container as HTMLElement);
+  }
 
-  // addButtons() { }
+  addButtons() {
+    const butParams = {
+      tag: 'div',
+      textContent: '',
+      classNames: ['header__group-buttons'],
+    };
+    this.elementButtons = this.drawElement(butParams, this.container as HTMLElement);
+  }
 
-  // buttonSeachCreate() { }
+  buttonSeachCreate(src: string) {
+    const seachParams = {
+      tag: 'img',
+      textContent: '',
+      classNames: ['header__search'],
+    };
+    this.drawImageElement(seachParams, src, this.elementButtons as HTMLElement);
+  }
 
-  // buttonLoginCreate() { }
+  buttonLoginCreate() { }
 
-  // buttonCartCreate() { }
+  buttonCartCreate() { }
 }
