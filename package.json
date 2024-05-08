@@ -15,7 +15,7 @@
     "test:coverage": "jest --coverage"
   },
   "validate-branch-name": {
-    "pattern": "^((feat|fix|refactor|docs).+)|(develop)$",
+    "pattern": "^((feat|fix|refactor|docs|release).+)|(develop)$",
     "errorMsg": "your own error message"
   },
   "repository": {
