@@ -57,7 +57,7 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
     };
-    this.drawImageElement(logoParams, elementImageSrc, this.container as HTMLElement);
+    this.drawImageElement(logoParams, elementImageSrc, 'logo', this.container as HTMLElement);
   }
 
   navCreate(): HTMLElement {
@@ -114,7 +114,7 @@ export class HeaderView extends View {
       classNames: ['header__img-search'],
     };
     const element = this.drawButtonElement(seachParams, 'button', this.elementButtons as HTMLElement);
-    this.drawImageElement(imgParams, src, element);
+    this.drawImageElement(imgParams, src, 'search', element);
     return element;
   }
 
@@ -130,7 +130,7 @@ export class HeaderView extends View {
       classNames: ['header__img-profile'],
     };
     const element = this.drawButtonElement(profileParams, 'button', this.elementButtons as HTMLElement);
-    this.drawImageElement(imgParams, src, element);
+    this.drawImageElement(imgParams, src, 'profile', element);
     return element;
   }
 
@@ -146,7 +146,7 @@ export class HeaderView extends View {
       classNames: ['header__img-profile'],
     };
     const element = this.drawButtonElement(cartParams, 'button', this.elementButtons as HTMLElement);
-    this.drawImageElement(imgParams, src, element);
+    this.drawImageElement(imgParams, src, 'cart', element);
     return element;
   }
 }
