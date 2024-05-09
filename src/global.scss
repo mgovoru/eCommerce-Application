@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 *,
 *::before,
 *::after {
@@ -48,8 +50,44 @@ html {
   height: 100%;
 }
 
-.button {
+button {
+  all: unset;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  background: none;
   border: none;
+  font-size: 1em;
+  cursor: pointer;
+  text-align: center;
+  line-height: normal;
+  color: inherit;
+  font-family: inherit;
+}
+
+nav,
+nav * {
+  all: unset;
+  display: revert;
+}
+
+li {
+  all: unset;
+  display: list-item;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  all: unset;
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 body {
@@ -60,6 +98,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  font-family: "DM Sans", sans-serif;
 }
 
 [class*='__container'] {

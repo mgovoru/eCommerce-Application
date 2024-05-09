@@ -24,3 +24,21 @@
   display: block;
   width: 316px;
 }
+
+.header__group-buttons img {
+  width: 59px;
+  height: 59px;
+}
+
+.header__nav {
+  font-size: 18px;
+  line-height: 20px;
+  letter-spacing: 10px;
+}
+
+.header__nav-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
