@@ -24,9 +24,10 @@ export class View {
     return elementHTML;
   }
 
-  drawImageElement(par: Params, srcImage: string, parent: HTMLElement = this.getElement()) {
+  drawImageElement(par: Params, srcImage: string, alt: string, parent: HTMLElement = this.getElement()) {
     const elementImage = this.drawElement(par, parent) as HTMLImageElement;
     elementImage.src = srcImage;
+    elementImage.alt = alt;
     return elementImage;
   }
 
