@@ -1,0 +1,66 @@
+.registration-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.registration-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+.registration__form {
+    width: 55%;
+}
+.form__inputs-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    grid-auto-flow: column;
+    column-gap: 30px;
+}
+.input-wrapper:nth-child(-n+5) {
+    grid-column: 1; /* Первые 5 элементов идут в первую колонку */
+}
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.input-wrapper input {
+    height: 2rem;
+}
+.input-wrapper select {
+    height: 2rem;
+}
+.registration-login-ref__cont {
+    display: flex;
+    gap: 10px;
+}
+.login-ref__cont__login {
+    cursor: pointer;
+    font-weight: bold;
+}
+.registration__accept-button {
+    border: none;
+    cursor: pointer;
+    background-color: rgb(196, 196, 196);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+.registration__accept-button__arrow {
+    font-size: 1.2rem;
+}
+@media screen and (max-width: 600px) {
+    .registration__form {
+        width: 90%;
+    }
+  }
+  
