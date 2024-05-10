@@ -1,4 +1,5 @@
 import { View } from '../../app/view';
+import PageMainView from '../../pages/page-main/page-main';
 
 import './main.scss';
 
@@ -13,6 +14,8 @@ export class MainView extends View {
     };
     super(mainParams);
     this.page = null;
+    // чтобы проверить верстку страницы без роутера
+    this.setContent(new PageMainView());
   }
 
   setContent(content: View) {
