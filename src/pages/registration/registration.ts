@@ -69,6 +69,7 @@ export class RegistrationViev {
     for (let i = 0; i < 10; i += 1) {
       const inputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper'] });
       const label = new ElementCreator({ tag: 'label', textContent: labels[i] });
+      const errorDiv = new ElementCreator({ tag: 'div', classNames: ['input-reg-error'] });
       let input: HTMLInputElement | HTMLSelectElement;
       if (i === 9) {
         // Создаем выпадающий список для последнего поля
@@ -84,6 +85,7 @@ export class RegistrationViev {
       // Добавляем label и input в блок div
       inputDiv.addInnerElement(label);
       inputDiv.addInnerElement(input);
+      inputDiv.addInnerElement(errorDiv);
       // Добавляем блок div с label и input в контейнер для инпутов
       inputsContainer.addInnerElement(inputDiv);
     }
@@ -116,8 +118,13 @@ export class RegistrationViev {
       textContent: '',
       classNames: ['registration__accept-button'],
     });
-    acceptButton.getNode().setAttribute('form', 'id-form-reg');
+    // acceptButton.getNode().setAttribute('form', 'id-form-reg');
     acceptButton.setType('submit');
+    acceptButton.setCallback((event) => {
+      event.preventDefault();
+      // submit cod
+      // submit cod - end
+    });
     container.addInnerElement(acceptButton);
     const acceptButtonText = new ElementCreator({
       tag: 'span',

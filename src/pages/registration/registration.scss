@@ -36,6 +36,11 @@
 .input-wrapper select {
     height: 2rem;
 }
+.input-reg-error {
+    height: 5px;
+    font-size: .7rem;
+    color: red;
+}
 .registration-login-ref__cont {
     display: flex;
     gap: 10px;
