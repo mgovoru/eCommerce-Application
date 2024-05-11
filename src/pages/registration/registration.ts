@@ -33,6 +33,7 @@ export class RegistrationViev {
       textContent: '',
       classNames: ['registration__form'],
     });
+    form.getNode().setAttribute('id', 'id-form-reg');
     container.addInnerElement(form);
     this.createInputs(form);
   }
@@ -115,6 +116,8 @@ export class RegistrationViev {
       textContent: '',
       classNames: ['registration__accept-button'],
     });
+    acceptButton.getNode().setAttribute('form', 'id-form-reg');
+    acceptButton.setType('submit');
     container.addInnerElement(acceptButton);
     const acceptButtonText = new ElementCreator({
       tag: 'span',
