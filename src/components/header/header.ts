@@ -90,6 +90,9 @@ export class HeaderView extends View {
       const src = '';
       this.drawLinkElement(linkParams, el, src, elem as HTMLElement);
     });
+    if (window.innerWidth < 768) {
+      this.addMenu();
+    }
     return this.elementNav;
   }
 
@@ -148,5 +151,19 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(cartParams, 'button', this.elementButtons as HTMLElement);
     this.drawImageElement(imgParams, src, 'cart', element);
     return element;
+  }
+
+  addMenu() {
+    const menu = this.drawElement({ tag: 'div', classNames: ['icon-menu'] }, this.container as HTMLElement);
+    this.drawElement({ tag: 'span' }, menu as HTMLElement);
+    //   const iconMenu = document.querySelector('.icon-menu');
+    //   if (iconMenu) {
+    //     iconMenu.addEventListener('click', function (e) {
+    //       if (bodyLockStatus) {
+    //         bodyLockToggle();
+    //         document.documentElement.classList.toggle('menu-open');
+    //       }
+    //     });
+    //   }
   }
 }
