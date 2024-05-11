@@ -3,7 +3,7 @@
   flex: 0 1 auto;
   background-color: black;
   padding-top: 34px;
-
+  position: relative;
 }
 
 .header__wrapper {
@@ -18,9 +18,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 42px;
-  position: relative;
 
-  @media (max-width:435px) {
+  @media (max-width: 435px) {
     padding: 8px;
   }
 }
@@ -29,7 +28,7 @@
   display: block;
   width: 316px;
 
-  @media (max-width:1068px) {
+  @media (max-width: 1068px) {
     width: 200px;
   }
 }
@@ -38,7 +37,7 @@
   display: flex;
   gap: 8px;
 
-  @media (max-width:1068px) {
+  @media (max-width: 1068px) {
     gap: 16px;
   }
 }
@@ -47,7 +46,7 @@
   width: 59px;
   height: 59px;
 
-  @media (max-width:1068px) {
+  @media (max-width: 1068px) {
     width: 24px;
     height: 24px;
   }
@@ -58,14 +57,13 @@
   line-height: 20px;
   letter-spacing: 10px;
 
-  @media (max-width:1068px) {
+  @media (max-width: 1068px) {
     font-size: 14px;
   }
 
-  @media (max-width:768px) {
+  @media (max-width: 768px) {
     display: flex;
     justify-content: flex-end;
-
   }
 }
 
@@ -76,17 +74,18 @@
   gap: 40px;
   z-index: 10;
 
-  @media (max-width:1068px) {
+  @media (max-width: 1068px) {
     gap: 24px;
   }
 
-  @media (max-width:768px) {
+  @media (max-width: 768px) {
+    display: none;
     flex-direction: column;
     position: absolute;
     width: 250px;
     height: 250px;
     background-color: white;
-    right: -100%;
+    right: -320px;
     top: 70px;
     font-weight: 500;
   }
@@ -97,7 +96,7 @@
 
   @keyframes moveBurger {
     0% {
-      right: -100%;
+      right: -320px;
     }
 
     100% {
@@ -115,7 +114,7 @@
     }
 
     100% {
-      right: -100%;
+      right: -320px;
     }
   }
 }
@@ -134,7 +133,7 @@
     span,
     &::before,
     &::after {
-      content: "";
+      content: '';
       transition: all 0.3s ease 0s;
       left: 0px;
       position: absolute;
@@ -154,7 +153,6 @@
     span {
       top: calc(50% - 1px);
     }
-
   }
 }
 

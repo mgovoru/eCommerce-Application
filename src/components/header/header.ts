@@ -94,18 +94,25 @@ export class HeaderView extends View {
       const menu = this.addMenu();
       menu.addEventListener('click', () => {
         menu.classList.toggle('menu-open');
+        elementUl.style.display = 'flex';
         if (!elementUl.classList.contains('animation')) {
           elementUl.classList.add('animation');
           elementUl.classList.remove('animationReturn');
         } else {
           elementUl.classList.add('animationReturn');
           elementUl.classList.remove('animation');
+          setTimeout(() => {
+            elementUl.style.display = 'none';
+          }, 1000);
         }
       });
       elementUl.addEventListener('click', () => {
         menu.classList.toggle('menu-open');
         elementUl.classList.add('animationReturn');
         elementUl.classList.remove('animation');
+        setTimeout(() => {
+          elementUl.style.display = 'none';
+        }, 1000);
       });
     }
     return this.elementNav;
