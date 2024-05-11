@@ -91,7 +91,22 @@ export class HeaderView extends View {
       this.drawLinkElement(linkParams, el, src, elem as HTMLElement);
     });
     if (window.innerWidth < 768) {
-      this.addMenu();
+      const menu = this.addMenu();
+      menu.addEventListener('click', () => {
+        menu.classList.toggle('menu-open');
+        if (!elementUl.classList.contains('animation')) {
+          elementUl.classList.add('animation');
+          elementUl.classList.remove('animationReturn');
+        } else {
+          elementUl.classList.add('animationReturn');
+          elementUl.classList.remove('animation');
+        }
+      });
+      elementUl.addEventListener('click', () => {
+        menu.classList.toggle('menu-open');
+        elementUl.classList.add('animationReturn');
+        elementUl.classList.remove('animation');
+      });
     }
     return this.elementNav;
   }
@@ -153,17 +168,9 @@ export class HeaderView extends View {
     return element;
   }
 
-  addMenu() {
+  addMenu(): HTMLElement {
     const menu = this.drawElement({ tag: 'div', classNames: ['icon-menu'] }, this.container as HTMLElement);
     this.drawElement({ tag: 'span' }, menu as HTMLElement);
-    //   const iconMenu = document.querySelector('.icon-menu');
-    //   if (iconMenu) {
-    //     iconMenu.addEventListener('click', function (e) {
-    //       if (bodyLockStatus) {
-    //         bodyLockToggle();
-    //         document.documentElement.classList.toggle('menu-open');
-    //       }
-    //     });
-    //   }
+    return menu;
   }
 }
