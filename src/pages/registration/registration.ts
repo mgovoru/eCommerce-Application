@@ -81,6 +81,24 @@ export class RegistrationViev {
         });
       } else {
         input = new ElementCreator({ tag: 'input', classNames: [inputClass[i]] }).getNode() as HTMLInputElement;
+        if (i === 3 || i === 4) {
+          // Add span for password and repeat password fields
+          const showPasswordSpan = new ElementCreator({
+            tag: 'span',
+            classNames: ['hidden-reg-pas'],
+            textContent: '👁️',
+          });
+          showPasswordSpan.setCallback(() => {
+            const currentText = showPasswordSpan.getNode().textContent;
+            const newText = currentText === '👁️' ? '👁️‍🗨️' : '👁️'; // Изменение текста на другой символ при каждом клике
+            showPasswordSpan.setTextContent(newText);
+            const passwordInput = inputDiv.getNode().querySelector('input');
+            if (passwordInput instanceof HTMLInputElement) {
+              passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+            }
+          });
+          inputDiv.addInnerElement(showPasswordSpan);
+        }
       }
       // Добавляем label и input в блок div
       inputDiv.addInnerElement(label);
