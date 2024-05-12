@@ -1,5 +1,6 @@
 import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
+import State from '../../state/state';
 import './page-main.scss';
 
 const mainParams = {
@@ -9,8 +10,11 @@ const mainParams = {
 };
 
 export default class PageMainView extends View {
-  constructor() {
+  state: State;
+
+  constructor(state: State) {
     super(mainParams);
+    this.state = state;
     this.configureView();
   }
 

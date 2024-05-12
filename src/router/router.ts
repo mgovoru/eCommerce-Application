@@ -13,6 +13,7 @@ type RequestParams = {
 
 export default class Router {
   private routes: Route[];
+
   private handler: HashRouterHandler | HistoryRouterHandler;
 
   constructor(routes: Route[]) {
