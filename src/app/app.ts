@@ -60,17 +60,17 @@ export class App {
         },
       },
       {
-        path: `${Pages.REGISTARTION}`,
+        path: `${Pages.REGISTRATION}`,
         callback: async () => {
           const { default: RegistartionView } = await import('../pages/registration/registration');
-          this.setContent(Pages.REGISTARTION, new RegistartionView(state));
+          this.setContent(Pages.REGISTRATION, new RegistartionView(state));
         },
       },
       {
         path: `${Pages.CART}`,
         callback: async () => {
           const { default: CartView } = await import('../pages/cart/cart');
-          this.setContent(Pages.REGISTARTION, new CartView(state));
+          this.setContent(Pages.CART, new CartView(state));
         },
       },
       // {

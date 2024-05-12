@@ -1,5 +1,5 @@
 const Pages = {
-  REGISTARTION: 'registartion',
+  REGISTRATION: 'registration',
   LOGIN: 'login',
   ABOUT: 'about',
   MAIN: 'main',
