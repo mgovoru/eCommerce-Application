@@ -59,13 +59,13 @@ export class App {
           this.setContent(Pages.LOGIN, new LoginView(state));
         },
       },
-      // {
-      //   path: `${Pages.REGISTARTION}`,
-      //   callback: async () => {
-      //     const { default: RegistartionView } = await import('./temp-pages/registartion/registartion-view');
-      //     this.setContent(Pages.REGISTARTION, new RegistartionView(state));
-      //   },
-      // },
+      {
+        path: `${Pages.REGISTARTION}`,
+        callback: async () => {
+          const { default: RegistartionView } = await import('../pages/registration/registration');
+          this.setContent(Pages.REGISTARTION, new RegistartionView(state));
+        },
+      },
       {
         path: `${Pages.CART}`,
         callback: async () => {
