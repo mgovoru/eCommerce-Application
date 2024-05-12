@@ -136,7 +136,7 @@ export class RegistrationViev {
       textContent: '',
       classNames: ['registration__accept-button'],
     });
-    // acceptButton.getNode().setAttribute('form', 'id-form-reg');
+    acceptButton.getNode().setAttribute('form', 'id-form-reg');
     acceptButton.setType('submit');
     acceptButton.setCallback((event) => {
       event.preventDefault();
