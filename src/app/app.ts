@@ -55,14 +55,14 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          const { default: LoginView } = await import('../pages/login/login');
+          const { default: LoginView } = await import('../pages/login-mg/login-mg');
           this.setContent(Pages.LOGIN, new LoginView(state));
         },
       },
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
-          const { default: RegistartionView } = await import('../pages/registration/registration');
+          const { default: RegistartionView } = await import('../pages/registration-mg/registration-mg');
           this.setContent(Pages.REGISTRATION, new RegistartionView(state));
         },
       },
