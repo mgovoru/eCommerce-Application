@@ -4,6 +4,7 @@ import { Pages } from '../../router/pages';
 import Router from '../../router/router';
 import State from '../../state/state';
 import './page-registration.scss';
+import { RegistrationValidation } from './validation';
 
 const mainParams = {
   tag: 'section',
@@ -156,6 +157,7 @@ export default class RegistrationView extends View {
     acceptButton.setCallback((event) => {
       event.preventDefault();
       // submit cod
+      new RegistrationValidation().registrationValidAllInputs();
       // submit cod - end
     });
     container.addInnerElement(acceptButton);
