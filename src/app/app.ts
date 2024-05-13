@@ -62,8 +62,8 @@ export class App {
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
-          const { default: RegistartionView } = await import('../pages/registration-mg/registration-mg');
-          this.setContent(Pages.REGISTRATION, new RegistartionView(state));
+          const { default: RegistartionView } = await import('../pages/page-registration/page-registration');
+          this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state));
         },
       },
       {

@@ -1,21 +1,35 @@
-import './registration.scss';
 import { ElementCreator } from '../../app/base';
+import { View } from '../../app/view';
+import { Pages } from '../../router/pages';
+import Router from '../../router/router';
+import State from '../../state/state';
+import './page-registration.scss';
 
-export class RegistrationViev {
-  constructor() {
+const mainParams = {
+  tag: 'section',
+  textContent: '',
+  classNames: ['page-registration'],
+};
+
+export default class RegistrationView extends View {
+  state: State;
+
+  router: Router;
+
+  constructor(router: Router, state: State) {
+    super(mainParams);
+    this.state = state;
+    this.router = router;
     this.createRegContainer();
   }
 
   createRegContainer() {
-    const mainContainer = new ElementCreator({ tag: 'div', classNames: ['registration-container'] });
-    const mainElement = document.querySelector('.main');
-    if (mainElement) {
-      mainElement.appendChild(mainContainer.getNode());
-      this.createTitle(mainContainer);
-      this.createForm(mainContainer);
-      this.createLoginRef(mainContainer);
-      this.createAcceptButton(mainContainer);
-    }
+    const mainContainer = new ElementCreator({ tag: 'div', classNames: ['page-registration__container'] });
+    this.viewElementCreator.append(mainContainer.getNode());
+    this.createTitle(mainContainer);
+    this.createForm(mainContainer);
+    this.createLoginRef(mainContainer);
+    this.createAcceptButton(mainContainer);
   }
 
   createTitle(container: ElementCreator) {
@@ -126,6 +140,7 @@ export class RegistrationViev {
       tag: 'a',
       textContent: 'LOGIN',
       classNames: ['login-ref__cont__login'],
+      callback: () => this.router.navigate(Pages.LOGIN),
     });
     loginRefCont.addInnerElement(loginRefLogin);
   }
