@@ -3,6 +3,7 @@ interface RegistrationData {
   password: string | null;
   firstName: string | null;
   lastName: string | null;
+  date: string | null;
 }
 interface Response {
   error: string;
@@ -13,6 +14,7 @@ let registrationData: RegistrationData = {
   password: null,
   firstName: null,
   lastName: null,
+  date: null,
 };
 
 export class RegistrationValidation {
@@ -46,12 +48,15 @@ export class RegistrationValidation {
     return response;
   }
 
-  validBirthDate(str: string): boolean {
+  validBirthDate(str: string): Response {
     const dateFormatRegex = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d\d$/;
     // формат dd.mm.yyyy
     if (!dateFormatRegex.test(str)) {
-      // console.log('Не верный формат даты');
-      return false;
+      const response = {
+        error: 'dd.mm.yyyy',
+        result: false,
+      };
+      return response;
     }
     const parts = str.split('.');
     const day = parseInt(parts[0], 10);
@@ -67,7 +72,11 @@ export class RegistrationValidation {
     ) {
       ageDifference -= 1;
     }
-    return ageDifference >= 13;
+    const response = {
+      error: 'You are younger 13',
+      result: ageDifference >= 13,
+    };
+    return response;
   }
 
   validStrit(str: string): boolean {
@@ -89,6 +98,7 @@ export class RegistrationValidation {
       password: null,
       firstName: null,
       lastName: null,
+      date: null,
     };
     const emailInput = document.querySelector('.form-email') as HTMLInputElement;
     const email = emailInput.value;
@@ -124,6 +134,15 @@ export class RegistrationValidation {
       lastNameError.textContent = this.validFirstAndLastName(lastName).error;
     } else {
       registrationData.lastName = lastName;
+      console.log(registrationData);
+    }
+    const dateInput = document.querySelector('.form-birth') as HTMLInputElement;
+    const date = dateInput.value;
+    const dateError = dateInput.nextElementSibling as HTMLElement;
+    if (!this.validBirthDate(date).result) {
+      dateError.textContent = this.validBirthDate(date).error;
+    } else {
+      registrationData.date = date;
       console.log(registrationData);
     }
   }
