@@ -1,0 +1,92 @@
+.page-login {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-login__container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.login-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.login__form {
+  // width: 55%;
+  display: flex; // для избежания ошибки: Do not use empty rulesets
+}
+
+.form__inputs-container__login {
+  width: 437px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  @media (max-width: 550px) {
+    width: 300px;
+  }
+}
+
+.input-wrapper__login {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+
+.input-wrapper__login input {
+  height: 57px;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 6px;
+  // height: 2rem;
+}
+
+.input-reg-error__login {
+  height: 5px;
+  font-size: 0.7rem;
+  color: red;
+}
+
+.hidden-reg-pas__login {
+  position: absolute;
+  right: 0;
+  top: 45%;
+  cursor: pointer;
+}
+
+.login__login-ref__cont {
+  display: flex;
+  gap: 10px;
+}
+
+.login__register-ref__cont__login {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login__accept-button {
+  border: none;
+  cursor: pointer;
+  background-color: rgb(196, 196, 196);
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.login__accept-button__arrow {
+  font-size: 1.2rem;
+}

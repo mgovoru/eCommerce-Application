@@ -1,21 +1,35 @@
-import './login.scss';
 import { ElementCreator } from '../../app/base';
+import { View } from '../../app/view';
+import { Pages } from '../../router/pages';
+import Router from '../../router/router';
+import State from '../../state/state';
+import './page-login.scss';
 
-export class LoginView {
-  constructor() {
+const mainParams = {
+  tag: 'section',
+  textContent: '',
+  classNames: ['page-login'],
+};
+
+export default class LoginView extends View {
+  state: State;
+
+  router: Router;
+
+  constructor(router: Router, state: State) {
+    super(mainParams);
+    this.state = state;
+    this.router = router;
     this.createLoginCont();
   }
 
   createLoginCont() {
-    const mainContainer = new ElementCreator({ tag: 'div', classNames: ['login-container'] });
-    const mainElement = document.querySelector('.main');
-    if (mainElement) {
-      mainElement.appendChild(mainContainer.getNode());
-      this.createTitle(mainContainer);
-      this.createForm(mainContainer);
-      this.createLoginRef(mainContainer);
-      this.createAcceptButton(mainContainer);
-    }
+    const mainContainer = new ElementCreator({ tag: 'div', classNames: ['page-login__container'] });
+    this.viewElementCreator.append(mainContainer.getNode());
+    this.createTitle(mainContainer);
+    this.createForm(mainContainer);
+    this.createLoginRef(mainContainer);
+    this.createAcceptButton(mainContainer);
   }
 
   createTitle(container: ElementCreator) {
@@ -89,6 +103,7 @@ export class LoginView {
       tag: 'a',
       textContent: 'REGISTER',
       classNames: ['login__register-ref__cont__login'],
+      callback: () => this.router.navigate(Pages.REGISTRATION),
     });
     loginRefCont.addInnerElement(loginRefLogin);
   }
