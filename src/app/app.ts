@@ -55,8 +55,8 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          const { default: LoginView } = await import('../pages/login-mg/login-mg');
-          this.setContent(Pages.LOGIN, new LoginView(state));
+          const { default: LoginView } = await import('../pages/page-login/page-login');
+          this.setContent(Pages.LOGIN, new LoginView(this.router, state));
         },
       },
       {

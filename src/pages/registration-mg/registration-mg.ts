@@ -1,7 +1,7 @@
 import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
 import State from '../../state/state';
-import './registration.scss';
+import './registration-mg.scss';
 
 const mainParams = {
   tag: 'section',
