@@ -111,7 +111,7 @@ body {
   height: 100%;
 }
 
-[class*="-ibg"] {
+[class*='-ibg'] {
   position: relative;
 
   img {
@@ -124,7 +124,7 @@ body {
   }
 }
 
-[class*="-ibg_contain"] {
+[class*='-ibg_contain'] {
   img {
     object-fit: contain;
   }

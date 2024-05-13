@@ -1,7 +1,10 @@
 const Pages = {
-  REGISTARTION: 'registartion',
+  REGISTRATION: 'registration',
   LOGIN: 'login',
-  INDEX: 'index',
+  ABOUT: 'about',
+  MAIN: 'main',
+  SHOP: 'shop',
+  CART: 'cart',
   PRODUCT: 'product',
   NOT_FOUND: 'not-found',
 };

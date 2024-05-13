@@ -91,6 +91,10 @@
   }
 }
 
+.header__nav-item {
+  cursor: pointer;
+}
+
 .animation {
   animation: moveBurger 1s forwards;
 

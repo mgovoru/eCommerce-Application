@@ -4,6 +4,8 @@ import { Params } from './type';
 export class View {
   viewElementCreator: ElementCreator;
 
+  ITEM_SELECTED = 'nav-item__selected';
+
   constructor(p: Params) {
     this.viewElementCreator = this.createView(p);
   }
@@ -42,5 +44,13 @@ export class View {
     elementLink.innerHTML = text;
     elementLink.href = src;
     return elementLink;
+  }
+
+  setSelected(element: HTMLLinkElement) {
+    element.classList.add(this.ITEM_SELECTED);
+  }
+
+  setNotSelected(element: HTMLLinkElement) {
+    element.classList.remove(this.ITEM_SELECTED);
   }
 }

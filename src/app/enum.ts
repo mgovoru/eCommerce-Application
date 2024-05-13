@@ -1,8 +1,3 @@
-export enum Navigation {
-  ABOUT = 'ABOUT US',
-  MAIN = 'MAIN',
-  SHOP = 'SHOP',
-}
 export enum GitHubHame {
   GOVORU = 'mgovoru',
   LEX = 'lex010',

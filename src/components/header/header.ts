@@ -5,7 +5,8 @@ import srcProfile from '../../assets/profile.svg';
 import srcCart from '../../assets/basket.svg';
 import { ContainerView } from '../container/container';
 import './header.scss';
-import { Navigation } from '../../app/enum';
+import Router from '../../router/router';
+import { Pages } from '../../router/pages';
 
 const headerParams = {
   tag: 'header',
@@ -20,11 +21,17 @@ export class HeaderView extends View {
 
   elementButtons: HTMLElement | null;
 
-  constructor() {
+  headerLinkElements: Map<string, HTMLElement>;
+
+  router: Router;
+
+  constructor(router: Router) {
     super(headerParams);
     this.container = null;
     this.elementNav = null;
     this.elementButtons = null;
+    this.router = router;
+    this.headerLinkElements = new Map();
     this.configureView();
   }
 
@@ -78,17 +85,17 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__nav-item'],
     };
-    const linkParams = {
-      tag: 'a',
-      textContent: '',
-      classNames: ['header__nav-link'],
-    };
-    const names = [Navigation.ABOUT, Navigation.MAIN, Navigation.SHOP];
+    const names = [Pages.ABOUT, Pages.MAIN, Pages.SHOP];
     names.forEach((el) => {
       const elem = this.drawElement(itemParams, elementUl as HTMLElement);
-      // вставляется ссылка
-      const src = '';
-      this.drawLinkElement(linkParams, el, src, elem as HTMLElement);
+      const linkParams = {
+        tag: 'a',
+        textContent: '',
+        classNames: ['header__nav-link'],
+        callback: () => this.router.navigate(el),
+      };
+      const linkElement = this.drawLinkElement(linkParams, el.toUpperCase(), '', elem as HTMLElement);
+      this.headerLinkElements.set(el.toUpperCase(), linkElement);
     });
     if (window.innerWidth < 768) {
       const menu = this.addMenu();
@@ -148,6 +155,7 @@ export class HeaderView extends View {
       tag: 'button',
       textContent: '',
       classNames: ['header__profile'],
+      callback: () => this.router.navigate(Pages.LOGIN),
     };
     const imgParams = {
       tag: 'img',
@@ -156,6 +164,7 @@ export class HeaderView extends View {
     };
     const element = this.drawButtonElement(profileParams, 'button', this.elementButtons as HTMLElement);
     this.drawImageElement(imgParams, src, 'profile', element);
+    this.headerLinkElements.set(Pages.LOGIN.toUpperCase(), element);
     return element;
   }
 
@@ -164,6 +173,7 @@ export class HeaderView extends View {
       tag: 'button',
       textContent: '',
       classNames: ['header__cart'],
+      callback: () => this.router.navigate(Pages.CART),
     };
     const imgParams = {
       tag: 'img',
@@ -172,6 +182,7 @@ export class HeaderView extends View {
     };
     const element = this.drawButtonElement(cartParams, 'button', this.elementButtons as HTMLElement);
     this.drawImageElement(imgParams, src, 'cart', element);
+    this.headerLinkElements.set(Pages.CART.toUpperCase(), element);
     return element;
   }
 
