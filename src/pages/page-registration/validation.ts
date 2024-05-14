@@ -7,6 +7,7 @@ interface RegistrationData {
   country: string | null;
   street: string | null;
   city: string | null;
+  postal: string | null;
 }
 interface Response {
   error: string;
@@ -22,6 +23,7 @@ let registrationData: RegistrationData = {
   country: null,
   street: null,
   city: null,
+  postal: null,
 };
 function allValuesAreStrings(data: RegistrationData): boolean {
   return Object.values(data).every((value) => typeof value === 'string');
@@ -82,7 +84,6 @@ export class RegistrationValidation {
     const month = parseInt(parts[1], 10) - 1;
     const year = parseInt(parts[2], 10);
     const birthDate = new Date(year, month, day);
-    // console.log(birthDate);
     const currentDate = new Date();
     let ageDifference = currentDate.getFullYear() - birthDate.getFullYear();
     if (
@@ -118,6 +119,16 @@ export class RegistrationValidation {
     return response;
   }
 
+  validPostalCode(str: string): Response {
+    const regex = /^[0-9]{6}$/;
+    const response = {
+      error: 'For RU, UA, BY: 6 digits',
+      result: regex.test(str),
+    };
+    // только цифры, 6 цифр
+    return response;
+  }
+
   registrationValidAllInputs(): RegistrationData | null {
     // Удаление красного фона в инпутах
     const allWrongInputs = document.querySelectorAll('.registration-wrong-iput-field');
@@ -141,6 +152,7 @@ export class RegistrationValidation {
       country: null,
       street: null,
       city: null,
+      postal: null,
     };
 
     const emailInput = document.querySelector('.form-email') as HTMLInputElement;
@@ -227,11 +239,21 @@ export class RegistrationValidation {
       registrationData.city = city;
     }
 
+    const postalCodeInput = document.querySelector('.form-postal') as HTMLInputElement;
+    const postal = postalCodeInput.value;
+    const postalError = postalCodeInput.nextElementSibling as HTMLElement;
+    if (!this.validPostalCode(postal).result) {
+      postalError.textContent = this.validPostalCode(postal).error;
+      postalCodeInput.classList.add('registration-wrong-iput-field');
+    } else {
+      registrationData.postal = postal;
+    }
+
     // Ниже проверка что все значения записанны и пароль повторен верно
-    console.log(registrationData);
+    // console.log(registrationData);
     if (matchPassword && allValuesAreStrings(registrationData)) {
-      console.log('password is match');
-      console.log('Все данные введены верно', registrationData);
+      // console.log('password is match');
+      // console.log('Все данные введены верно', registrationData);
       return registrationData;
     }
     return null;
