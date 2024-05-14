@@ -9,6 +9,10 @@ interface RegistrationData {
   city: string | null;
   postal: string | null;
 }
+interface LoginData {
+  email: string | null;
+  password: string | null;
+}
 interface Response {
   error: string;
   result: boolean;
@@ -25,7 +29,11 @@ let registrationData: RegistrationData = {
   city: null,
   postal: null,
 };
-function allValuesAreStrings(data: RegistrationData): boolean {
+let loginData: LoginData = {
+  email: null,
+  password: null,
+};
+function allValuesAreStrings(data: RegistrationData | LoginData): boolean {
   return Object.values(data).every((value) => typeof value === 'string');
 }
 
@@ -255,6 +263,50 @@ export class RegistrationValidation {
       // console.log('password is match');
       // console.log('Все данные введены верно', registrationData);
       return registrationData;
+    }
+    return null;
+  }
+
+  loginValidAllInputs(): LoginData | null {
+    // Удаление красного фона в инпутах
+    const allWrongInputs = document.querySelectorAll('.login-wrong-iput-field');
+    allWrongInputs.forEach((element) => {
+      element.classList.remove('login-wrong-iput-field');
+    });
+    // Удаление текста во всех элементах с классом 'input-reg-error'
+    const errorElements = document.querySelectorAll('.input-reg-error__login');
+    errorElements.forEach((element) => {
+      const el = element as HTMLElement;
+      el.textContent = '';
+    });
+    loginData = {
+      email: null,
+      password: null,
+    };
+
+    const emailInput = document.querySelector('.form-email__login') as HTMLInputElement;
+    const email = emailInput.value;
+    const emailError = emailInput.nextElementSibling as HTMLElement;
+    if (!this.validMail(email).result) {
+      emailError.textContent = this.validMail(email).error;
+      emailInput.classList.add('login-wrong-iput-field');
+    } else {
+      loginData.email = email;
+    }
+
+    const passwordInput = document.querySelector('.form-pass__login') as HTMLInputElement;
+    const password = passwordInput.value;
+    const passwordError = passwordInput.nextElementSibling as HTMLElement;
+    if (!this.validPassword(password).result) {
+      passwordError.textContent = this.validPassword(password).error;
+      passwordInput.classList.add('login-wrong-iput-field');
+    } else {
+      loginData.password = password;
+    }
+
+    if (allValuesAreStrings(loginData)) {
+      // console.log('Дальше нужна проверка на сервере. Данные:', loginData);
+      return loginData;
     }
     return null;
   }

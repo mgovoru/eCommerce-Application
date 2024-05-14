@@ -4,6 +4,7 @@ import { Pages } from '../../router/pages';
 import Router from '../../router/router';
 import State from '../../state/state';
 import './page-login.scss';
+import { RegistrationValidation } from '../page-registration/validation';
 
 const mainParams = {
   tag: 'section',
@@ -119,6 +120,7 @@ export default class LoginView extends View {
     acceptButton.setCallback((event) => {
       event.preventDefault();
       // submit cod
+      new RegistrationValidation().loginValidAllInputs();
       // submit cod - end
     });
     container.addInnerElement(acceptButton);
