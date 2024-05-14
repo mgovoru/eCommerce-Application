@@ -4,6 +4,9 @@ interface RegistrationData {
   firstName: string | null;
   lastName: string | null;
   date: string | null;
+  country: string | null;
+  street: string | null;
+  city: string | null;
 }
 interface Response {
   error: string;
@@ -16,9 +19,12 @@ let registrationData: RegistrationData = {
   firstName: null,
   lastName: null,
   date: null,
+  country: null,
+  street: null,
+  city: null,
 };
 function allValuesAreStrings(data: RegistrationData): boolean {
-  return Object.values(data).every((value) => value === null || typeof value === 'string');
+  return Object.values(data).every((value) => typeof value === 'string');
 }
 
 export class RegistrationValidation {
@@ -92,16 +98,24 @@ export class RegistrationValidation {
     return response;
   }
 
-  validStrit(str: string): boolean {
+  validStreet(str: string): Response {
     const regex = /^[0-9a-zA-Z-]+$/;
+    const response = {
+      error: 'min-1sumb, only eng. or digits',
+      result: regex.test(str),
+    };
     // минимум 1 символ. допустимые англ буквы, чилса и -
-    return regex.test(str);
+    return response;
   }
 
-  validCity(str: string): boolean {
+  validCity(str: string): Response {
     const regex = /^[a-zA-Z]+$/;
+    const response = {
+      error: 'min-1 letter, only eng.',
+      result: regex.test(str),
+    };
     // минимум 1 символ. допустимы только англ буквы
-    return regex.test(str);
+    return response;
   }
 
   registrationValidAllInputs(): RegistrationData | null {
@@ -124,7 +138,11 @@ export class RegistrationValidation {
       firstName: null,
       lastName: null,
       date: null,
+      country: null,
+      street: null,
+      city: null,
     };
+
     const emailInput = document.querySelector('.form-email') as HTMLInputElement;
     const email = emailInput.value;
     const emailError = emailInput.nextElementSibling as HTMLElement;
@@ -134,6 +152,7 @@ export class RegistrationValidation {
     } else {
       registrationData.email = email;
     }
+
     const passwordInput = document.querySelector('.form-pass') as HTMLInputElement;
     const password = passwordInput.value;
     const passwordError = passwordInput.nextElementSibling as HTMLElement;
@@ -143,6 +162,7 @@ export class RegistrationValidation {
     } else {
       registrationData.password = password;
     }
+
     const passwordRepeatInput = document.querySelector('.form-r-pass') as HTMLInputElement;
     const passwordRepeat = passwordRepeatInput.value;
     const passwordRepeatError = passwordRepeatInput.nextElementSibling as HTMLElement;
@@ -162,6 +182,7 @@ export class RegistrationValidation {
     } else {
       registrationData.firstName = firstName;
     }
+
     const lastNameInput = document.querySelector('.form-l-name') as HTMLInputElement;
     const lastName = lastNameInput.value;
     const lastNameError = lastNameInput.nextElementSibling as HTMLElement;
@@ -171,6 +192,7 @@ export class RegistrationValidation {
     } else {
       registrationData.lastName = lastName;
     }
+
     const dateInput = document.querySelector('.form-birth') as HTMLInputElement;
     const date = dateInput.value;
     const dateError = dateInput.nextElementSibling as HTMLElement;
@@ -180,8 +202,33 @@ export class RegistrationValidation {
     } else {
       registrationData.date = date;
     }
-    console.log(registrationData);
+
+    const countryList = document.querySelector('.form-country') as HTMLInputElement;
+    const country = countryList.value;
+    registrationData.country = country;
+
+    const streetInput = document.querySelector('.form-street') as HTMLInputElement;
+    const street = streetInput.value;
+    const streetError = streetInput.nextElementSibling as HTMLElement;
+    if (!this.validStreet(street).result) {
+      streetError.textContent = this.validStreet(street).error;
+      streetInput.classList.add('registration-wrong-iput-field');
+    } else {
+      registrationData.street = street;
+    }
+
+    const cityInput = document.querySelector('.form-city') as HTMLInputElement;
+    const city = cityInput.value;
+    const cityError = cityInput.nextElementSibling as HTMLElement;
+    if (!this.validCity(city).result) {
+      cityError.textContent = this.validCity(city).error;
+      cityInput.classList.add('registration-wrong-iput-field');
+    } else {
+      registrationData.city = city;
+    }
+
     // Ниже проверка что все значения записанны и пароль повторен верно
+    console.log(registrationData);
     if (matchPassword && allValuesAreStrings(registrationData)) {
       console.log('password is match');
       console.log('Все данные введены верно', registrationData);
