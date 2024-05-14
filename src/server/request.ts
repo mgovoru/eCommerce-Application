@@ -1,7 +1,7 @@
 // import { AddressDraft, CustomerDraft } from '@commercetools/platform-sdk';
 import { apiRoot, Credentials } from './root';
 
-const credentials: Credentials = {
+export const credentials: Credentials = {
   projectKey: `ecommerceteam2024`,
   clientID: `6lID9e7e_dGhnVSIWF53MiwX`,
   clientSecret: `lXAZCHvhzRMB6uOcf7lm7Q_XKJ_PpLa9`,
@@ -30,11 +30,13 @@ const credentials: Credentials = {
 //   .execute()
 //   .catch((err: Error) => err);
 
-console.log(
-  apiRoot(credentials)
-    .withProjectKey({ projectKey: credentials.projectKey })
-    .products()
-    .get()
-    .execute()
-    .catch((err: Error) => err)
-);
+export async function request() {
+  return (
+    apiRoot(credentials)
+      .withProjectKey({ projectKey: credentials.projectKey })
+      // .products()
+      .get()
+      .execute()
+      .catch((err: Error) => err)
+  );
+}

@@ -7,6 +7,7 @@ import { ContainerView } from '../container/container';
 import './header.scss';
 import Router from '../../router/router';
 import { Pages } from '../../router/pages';
+import { request } from '../../server/request';
 
 const headerParams = {
   tag: 'header',
@@ -63,6 +64,10 @@ export class HeaderView extends View {
       tag: 'img',
       textContent: '',
       classNames: ['header__img'],
+      callback: async () => {
+        const data = await request();
+        console.log(data);
+      },
     };
     this.drawImageElement(logoParams, elementImageSrc, 'logo', this.container as HTMLElement);
   }

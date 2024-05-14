@@ -1,4 +1,3 @@
-// import fetch from 'node-fetch';
 import {
   ClientBuilder,
   type Client,
@@ -8,15 +7,14 @@ import {
 
 const date = new Date().toISOString();
 
-// Configure httpMiddlewareOptions
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: 'https://api.europe-west1.gcp.commercetools.com',
   fetch,
 };
 
-// Export the ClientBuilder
 export function client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {
   const scopesSplit = scopes.split(',');
+  console.log(scopesSplit);
   const authMiddlewareOptions: AuthMiddlewareOptions = {
     host: 'https://auth.europe-west1.gcp.commercetools.com',
     projectKey,
@@ -24,7 +22,7 @@ export function client(projectKey: string, clientID: string, clientSecret: strin
       clientId: clientID,
       clientSecret,
     },
-    scopes: scopesSplit,
+    // scopes: scopesSplit,
     fetch,
   };
 
