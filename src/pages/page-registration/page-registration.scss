@@ -86,7 +86,43 @@
 
 // }
 
-.inputs-container__second {
+.inputs-container__second__for-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  grid-auto-flow: column;
+  column-gap: 30px;
+
+  @media (max-width: 500px) {
+    gap: 5px;
+  }
+}
+
+.input-wrapper__ship {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+
+.input-wrapper__ship input {
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 6px;
+  height: 2rem;
+}
+
+.input-wrapper__ship select {
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 6px;
+  height: 2rem;
+}
+
+.input-wrapper__ship:nth-child(-n + 2) {
+  grid-column: 1;
+  /* Первые 2 элементов идут в первую колонку */
+}
+
+.inputs-container__second__title {
   text-align: center;
   font-weight: bold;
 }

@@ -137,13 +137,18 @@ export default class RegistrationView extends View {
     const titleSecondInputs = new ElementCreator({
       tag: 'div',
       textContent: 'Shipping Address',
-      classNames: ['inputs-container__second'],
+      classNames: ['inputs-container__second__title'],
     });
     inputsContainer.addInnerElement(titleSecondInputs);
+    const inputsContainerForInputs = new ElementCreator({
+      tag: 'div',
+      classNames: ['inputs-container__second__for-inputs'],
+    });
+    inputsContainer.addInnerElement(inputsContainerForInputs);
     const labels = ['Country', 'City', 'Street', 'Postal code'];
     const inputsId = ['ship-country', 'ship-city', 'ship-street', 'ship-postal'];
     for (let i = 0; i < 4; i += 1) {
-      const inputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper'] });
+      const inputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__ship'] });
       const label = new ElementCreator({ tag: 'label', textContent: labels[i] });
       label.getNode().setAttribute('for', inputsId[i]);
       const errorDiv = new ElementCreator({ tag: 'div', classNames: ['input-reg-error'] });
@@ -163,7 +168,7 @@ export default class RegistrationView extends View {
       inputDiv.addInnerElement(label);
       inputDiv.addInnerElement(input);
       inputDiv.addInnerElement(errorDiv);
-      inputsContainer.addInnerElement(inputDiv);
+      inputsContainerForInputs.addInnerElement(inputDiv);
     }
   }
 
