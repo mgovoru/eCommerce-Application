@@ -7,7 +7,8 @@ import { ContainerView } from '../container/container';
 import './header.scss';
 import Router from '../../router/router';
 import { Pages } from '../../router/pages';
-import { request } from '../../server/request';
+// import { request } from '../../server/request';
+import { requestLoginCustomer } from '../../server/user';
 
 const headerParams = {
   tag: 'header',
@@ -65,7 +66,7 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        const data = await request();
+        const data = await requestLoginCustomer();
         console.log(data);
       },
     };
