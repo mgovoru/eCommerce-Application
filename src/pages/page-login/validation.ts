@@ -1,7 +1,7 @@
 import { ElementCreator } from '../../app/base';
 
 const MIN_LOGIN_LENGTH = 3;
-const MIN_PASSWORD_LENGTH = 6;
+const MIN_PASSWORD_LENGTH = 8;
 
 const isEmailValid = (value: string) => {
   const pattern = new RegExp(`^[A-ZА-Я][a-zA-Zа-яА-Я0-9-_]{${MIN_LOGIN_LENGTH},}$`);

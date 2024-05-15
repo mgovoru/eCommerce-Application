@@ -41,7 +41,7 @@ export class RegistrationValidation {
   validMail(str: string): Response {
     const emailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const response = {
-      error: 'example: mail12@cs.com',
+      error: 'Correct format: name@example.com',
       result: emailValid.test(str),
     };
     // (буквы или цифры или ._%+-) + (@) + (буквы или цифры или .-) + (.) + (мин. 2 буквы)
@@ -51,7 +51,7 @@ export class RegistrationValidation {
   validPassword(str: string): Response {
     const passValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;
     const response = {
-      error: 'min-8sumb, 1Uper, 1Lower, 1Digit',
+      error: 'Password must be at least 8 symbols, including numbers and letters in lowercase and uppercase.',
       result: passValid.test(str),
     };
     // минимум 1 маленькая буква, 1 большая, 1 цифра. минимум 8 символов. Принимает Англ буквы, цифры, спецсимволы.
@@ -61,7 +61,7 @@ export class RegistrationValidation {
   validRepeatPassword(str: string): Response {
     const originalPasswordInput = document.querySelector('.form-pass') as HTMLInputElement;
     const response = {
-      error: 'not match',
+      error: "Doesn't match the password. Please enter correct password.",
       result: originalPasswordInput.value === str,
     };
     return response;
@@ -70,7 +70,7 @@ export class RegistrationValidation {
   validFirstAndLastName(str: string): Response {
     const firstLastNameValid = /^[a-zA-Z]+$/;
     const response = {
-      error: 'min-1sumb, only eng.',
+      error: 'At least 1 symbol is required',
       result: firstLastNameValid.test(str),
     };
     // Как минимум 1 буква англ алфавита
@@ -82,7 +82,7 @@ export class RegistrationValidation {
     // формат dd.mm.yyyy
     if (!dateFormatRegex.test(str)) {
       const response = {
-        error: 'dd.mm.yyyy',
+        error: 'Correct format: dd.mm.yyyy',
         result: false,
       };
       return response;
@@ -101,7 +101,7 @@ export class RegistrationValidation {
       ageDifference -= 1;
     }
     const response = {
-      error: 'You are younger 13',
+      error: 'Not eligible for users under 13 years old',
       result: ageDifference >= 13,
     };
     return response;
@@ -110,7 +110,7 @@ export class RegistrationValidation {
   validStreet(str: string): Response {
     const regex = /^[0-9a-zA-Z-]+$/;
     const response = {
-      error: 'min-1sumb, only eng. or digits',
+      error: 'At least 1 symbol is required',
       result: regex.test(str),
     };
     // минимум 1 символ. допустимые англ буквы, чилса и -
@@ -120,7 +120,7 @@ export class RegistrationValidation {
   validCity(str: string): Response {
     const regex = /^[a-zA-Z]+$/;
     const response = {
-      error: 'min-1 letter, only eng.',
+      error: 'At least 1 symbol is required',
       result: regex.test(str),
     };
     // минимум 1 символ. допустимы только англ буквы
@@ -130,7 +130,7 @@ export class RegistrationValidation {
   validPostalCode(str: string): Response {
     const regex = /^[0-9]{6}$/;
     const response = {
-      error: 'For RU, UA, BY: 6 digits',
+      error: 'Only numbers are valid. For RU, UA, BY: 6 digits',
       result: regex.test(str),
     };
     // только цифры, 6 цифр

@@ -164,7 +164,7 @@ export default class LoginView extends View {
     if (isEmailValid && isPasswordValid) {
       console.log('Email:', (this.email.getNode() as HTMLInputElement).value);
       console.log('Password:', (this.password.getNode() as HTMLInputElement).value);
-      // if true, send data to commercetools
+      // if true, send data to commercetools, check there (if such user already exists) and store it
     }
   }
 }
