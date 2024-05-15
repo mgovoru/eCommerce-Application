@@ -91,12 +91,16 @@ export default class RegistrationView extends View {
         // Создаем выпадающий список для последнего поля
         const selectOptions = ['Russia', 'Ukraine', 'Belarus'];
         input = new ElementCreator({ tag: 'select', classNames: [inputClass[i]] }).getNode() as HTMLSelectElement;
+        input.setAttribute('id', inputClass[i]);
+        label.getNode().setAttribute('for', inputClass[i]);
         selectOptions.forEach((option) => {
           const optionElement = new ElementCreator({ tag: 'option', textContent: option });
           input.appendChild(optionElement.getNode());
         });
       } else {
         input = new ElementCreator({ tag: 'input', classNames: [inputClass[i]] }).getNode() as HTMLInputElement;
+        input.setAttribute('id', inputClass[i]);
+        label.getNode().setAttribute('for', inputClass[i]);
         if (i === 3 || i === 4) {
           // Add span for password and repeat password fields
           const showPasswordSpan = new ElementCreator({
