@@ -138,6 +138,29 @@ export default class RegistrationView extends View {
     inputsContainer.addInnerElement(titleSecondInputs);
     const labels = ['Country', 'City', 'Street', 'Postal code'];
     const inputsId = ['ship-country', 'ship-city', 'ship-street', 'ship-postal'];
+    for (let i = 0; i < 4; i += 1) {
+      const inputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper'] });
+      const label = new ElementCreator({ tag: 'label', textContent: labels[i] });
+      label.getNode().setAttribute('for', inputsId[i]);
+      const errorDiv = new ElementCreator({ tag: 'div', classNames: ['input-reg-error'] });
+      let input: HTMLInputElement | HTMLSelectElement;
+      if (i === 0) {
+        const selectOptions = ['Russia', 'Ukraine', 'Belarus'];
+        input = new ElementCreator({ tag: 'select' }).getNode() as HTMLSelectElement;
+        input.setAttribute('id', inputsId[i]);
+        selectOptions.forEach((option) => {
+          const optionElement = new ElementCreator({ tag: 'option', textContent: option });
+          input.appendChild(optionElement.getNode());
+        });
+      } else {
+        input = new ElementCreator({ tag: 'input' }).getNode() as HTMLInputElement;
+        input.setAttribute('id', inputsId[i]);
+      }
+      inputDiv.addInnerElement(label);
+      inputDiv.addInnerElement(input);
+      inputDiv.addInnerElement(errorDiv);
+      inputsContainer.addInnerElement(inputDiv);
+    }
   }
 
   createLoginRef(container: ElementCreator) {
