@@ -24,6 +24,9 @@
 
 .registration__form {
   width: 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .form__inputs-container {
@@ -77,6 +80,15 @@
   right: 0;
   top: 45%;
   cursor: pointer;
+}
+
+// .inputs-container__second {
+
+// }
+
+.inputs-container__second {
+  text-align: center;
+  font-weight: bold;
 }
 
 .registration-login-ref__cont {

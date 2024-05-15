@@ -51,6 +51,7 @@ export default class RegistrationView extends View {
     form.getNode().setAttribute('id', 'id-form-reg');
     container.addInnerElement(form);
     this.createInputs(form);
+    this.createSecondAdressInputs(form);
   }
 
   createInputs(container: ElementCreator) {
@@ -63,10 +64,10 @@ export default class RegistrationView extends View {
       'password',
       'repeat password',
       'Date of birth',
-      'Street',
-      'City',
-      'Postal code',
-      'Country',
+      'Street*',
+      'City*',
+      'Postal code*',
+      'Country*',
     ];
     const inputClass = [
       'form-f-name',
@@ -122,6 +123,21 @@ export default class RegistrationView extends View {
       // Добавляем блок div с label и input в контейнер для инпутов
       inputsContainer.addInnerElement(inputDiv);
     }
+  }
+
+  createSecondAdressInputs(container: ElementCreator) {
+    const inputsContainer = new ElementCreator({ tag: 'div', classNames: ['inputs-container__second'] });
+    container.addInnerElement(inputsContainer);
+    const hr = new ElementCreator({ tag: 'hr', classNames: ['inputs-container__second__hr'] });
+    inputsContainer.addInnerElement(hr);
+    const titleSecondInputs = new ElementCreator({
+      tag: 'div',
+      textContent: 'Shipping Address',
+      classNames: ['inputs-container__second'],
+    });
+    inputsContainer.addInnerElement(titleSecondInputs);
+    const labels = ['Country', 'City', 'Street', 'Postal code'];
+    const inputsId = ['ship-country', 'ship-city', 'ship-street', 'ship-postal'];
   }
 
   createLoginRef(container: ElementCreator) {
