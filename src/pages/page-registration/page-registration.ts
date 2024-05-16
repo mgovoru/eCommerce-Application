@@ -141,7 +141,7 @@ export default class RegistrationView extends View {
     });
     thisContainer.addInnerElement(howUseBilling);
 
-    const billing = new ElementCreator({ tag: 'span', textContent: '\n- default billing adress ' });
+    const billing = new ElementCreator({ tag: 'span', textContent: '\n- Set as default Billing ' });
     howUseBilling.addInnerElement(billing);
 
     const checkBilling = new ElementCreator({ tag: 'input' });
@@ -199,6 +199,20 @@ export default class RegistrationView extends View {
       inputDiv.addInnerElement(errorDiv);
       inputsContainerForInputs.addInnerElement(inputDiv);
     }
+    this.createFlagsForDefaultShipping(container);
+  }
+
+  createFlagsForDefaultShipping(container: ElementCreator) {
+    const thisContainer = new ElementCreator({ tag: 'div', classNames: ['inputs__use-adress-s'] });
+    container.addInnerElement(thisContainer);
+
+    const defaultShipping = new ElementCreator({ tag: 'div', textContent: '- Set as default Sipping ' });
+    thisContainer.addInnerElement(defaultShipping);
+
+    const checkShipping = new ElementCreator({ tag: 'input' });
+    checkShipping.setType('checkbox');
+    checkShipping.getNode().setAttribute('id', 'shipping-flag');
+    defaultShipping.addInnerElement(checkShipping);
   }
 
   createLoginRef(container: ElementCreator) {
