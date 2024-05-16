@@ -136,18 +136,26 @@ export default class RegistrationView extends View {
 
     const howUseBilling = new ElementCreator({
       tag: 'div',
-      textContent: 'Use fields with "*" like: ',
+      textContent: 'Fields with "*" are Billing addresse. Use them for: ',
       classNames: ['how-use-billing-adress'],
     });
     thisContainer.addInnerElement(howUseBilling);
 
-    const billing = new ElementCreator({ tag: 'label', textContent: 'billing adress ' });
+    const billing = new ElementCreator({ tag: 'span', textContent: '\n- default billing adress ' });
     howUseBilling.addInnerElement(billing);
 
     const checkBilling = new ElementCreator({ tag: 'input' });
     checkBilling.setType('checkbox');
     checkBilling.getNode().setAttribute('id', 'billing-flag');
     billing.addInnerElement(checkBilling);
+
+    const asShipping = new ElementCreator({ tag: 'span', textContent: '\n- also use as Shipping address ' });
+    howUseBilling.addInnerElement(asShipping);
+
+    const checkAsShipping = new ElementCreator({ tag: 'input' });
+    checkAsShipping.setType('checkbox');
+    checkAsShipping.getNode().setAttribute('id', 'as-shipping-flag');
+    asShipping.addInnerElement(checkAsShipping);
   }
 
   createSecondAdressInputs(container: ElementCreator) {
