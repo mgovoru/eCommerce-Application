@@ -10,7 +10,7 @@ import { Pages } from '../../router/pages';
 // import { request } from '../../server/request';
 // import { requestLogin } from '../../server/request';
 // import { requestLoginCustomer } from '../../server/user';
-import { requestLogin } from '../../server/request';
+import { registerCustomer } from '../../server/request';
 
 const headerParams = {
   tag: 'header',
@@ -68,7 +68,8 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        const data = await requestLogin();
+        const data = await registerCustomer();
+        // const data = await requestLogin();
         console.log(data);
       },
     };

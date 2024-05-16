@@ -1,4 +1,4 @@
-import { AddressDraft, CustomerDraft } from '@commercetools/platform-sdk';
+import { BaseAddress, CustomerDraft } from '@commercetools/platform-sdk';
 import { Settings } from '../app/enum';
 import { apiRoot, Credentials } from './root';
 import { createCustomerApiClient } from './user';
@@ -10,18 +10,37 @@ export const credentials: Credentials = {
   scopes: Settings.SCOPES,
 };
 // данные для тестов
-const address: AddressDraft = {
+// const address: AddressDraft = {
+//   country: 'UK',
+//   city: 'London',
+//   streetName: 'st.WhiteRabbit',
+//   streetNumber: '3',
+// };
+const shippingAddress: BaseAddress = {
   country: 'UK',
+  state: '',
   city: 'London',
   streetName: 'st.WhiteRabbit',
-  streetNumber: '3',
+  streetNumber: '',
+  postalCode: '',
+};
+
+const billingAddress: BaseAddress = {
+  country: 'UK',
+  state: '',
+  city: 'London',
+  streetName: 'st.GrayRabbit',
+  streetNumber: '',
+  postalCode: '',
 };
 
 export const customerDraft: CustomerDraft = {
-  key: 'key',
-  email: 'mmmm@google.com',
+  key: 'key111',
+  email: 'rabbit@google.com',
   password: '12345',
-  addresses: [address],
+  addresses: [shippingAddress, billingAddress],
+  defaultShippingAddress: 0,
+  defaultBillingAddress: 1,
 };
 
 export async function registerCustomer() {
