@@ -7,7 +7,7 @@ import {
 
 const date = new Date().toISOString();
 
-const httpMiddlewareOptions: HttpMiddlewareOptions = {
+export const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: 'https://api.europe-west1.gcp.commercetools.com',
   fetch,
 };
@@ -22,7 +22,6 @@ export function client(projectKey: string, clientID: string, clientSecret: strin
       clientId: clientID,
       clientSecret,
     },
-    // scopes: scopesSplit,
     fetch,
   };
 

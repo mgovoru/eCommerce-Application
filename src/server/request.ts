@@ -1,42 +1,95 @@
-// import { AddressDraft, CustomerDraft } from '@commercetools/platform-sdk';
+import { BaseAddress, CustomerDraft } from '@commercetools/platform-sdk';
+import { Settings } from '../app/enum';
 import { apiRoot, Credentials } from './root';
+import { createCustomerApiClient } from './user';
 
 export const credentials: Credentials = {
-  projectKey: `ecommerceteam2024`,
-  clientID: `6lID9e7e_dGhnVSIWF53MiwX`,
-  clientSecret: `lXAZCHvhzRMB6uOcf7lm7Q_XKJ_PpLa9`,
-  scopes: `manage_project: ecommerceteam2024 manage_api_clients: ecommerceteam2024 view_api_clients: ecommerceteam2024`,
+  projectKey: Settings.PROJECTKEY,
+  clientID: Settings.CLIENTID,
+  clientSecret: Settings.CLIENTSECRET,
+  scopes: Settings.SCOPES,
 };
+// данные для тестов
 // const address: AddressDraft = {
 //   country: 'UK',
 //   city: 'London',
 //   streetName: 'st.WhiteRabbit',
 //   streetNumber: '3',
 // };
+const shippingAddress: BaseAddress = {
+  country: 'UK',
+  state: '',
+  city: 'London',
+  streetName: 'st.WhiteRabbit',
+  streetNumber: '',
+  postalCode: '',
+};
 
-// const customerDraft: CustomerDraft = {
-//   key: 'key',
-//   email: 'mmmm@google.com',
-//   password: '111111',
-//   addresses: [address],
-// };
+const billingAddress: BaseAddress = {
+  country: 'UK',
+  state: '',
+  city: 'London',
+  streetName: 'st.GrayRabbit',
+  streetNumber: '',
+  postalCode: '',
+};
 
-// apiRoot(credentials)
-//   .withProjectKey({ projectKey: credentials.projectKey })
-//   .customers()
-//   .post({
-//     body: customerDraft,
-//   })
-//   .execute()
-//   .catch((err: Error) => err);
+export const customerDraft: CustomerDraft = {
+  key: 'key111',
+  email: 'rabbit@google.com',
+  password: '12345',
+  addresses: [shippingAddress, billingAddress],
+  defaultShippingAddress: 0,
+  defaultBillingAddress: 1,
+};
 
-export async function request() {
-  return (
-    apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
-      // .products()
-      .get()
-      .execute()
-      .catch((err: Error) => err)
-  );
+export async function registerCustomer() {
+  return apiRoot(credentials)
+    .withProjectKey({ projectKey: credentials.projectKey })
+    .customers()
+    .post({
+      body: customerDraft,
+    })
+    .execute()
+    .catch((err: Error) => err);
 }
+// функция выдает список покупателей
+// export async function requestGetCustomers() {
+//   return apiRoot(credentials)
+//     .withProjectKey({ projectKey: credentials.projectKey })
+//     .customers()
+//     .get()
+//     .execute()
+//     .catch((err: Error) => err);
+// }
+export async function loginCustomer() {
+  return apiRoot(credentials)
+    .withProjectKey({ projectKey: credentials.projectKey })
+    .login()
+    .post({
+      body: {
+        email: customerDraft.email as string,
+        password: customerDraft.password as string,
+      },
+    })
+    .execute()
+    .then((response) => {
+      console.log(response);
+      const data1 = createCustomerApiClient();
+      console.log(data1);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+// handle
+// export async function requestLogin() {
+//   return apiRoot(credentials)
+//     .withProjectKey({ projectKey: credentials.projectKey })
+//     .get()
+//     .execute()
+//     .then((response) => console.log(response))
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
