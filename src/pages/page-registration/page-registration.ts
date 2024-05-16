@@ -51,6 +51,7 @@ export default class RegistrationView extends View {
     form.getNode().setAttribute('id', 'id-form-reg');
     container.addInnerElement(form);
     this.createInputs(form);
+    this.createFlagsForUseBillingAdress(form);
     this.createSecondAdressInputs(form);
   }
 
@@ -127,6 +128,26 @@ export default class RegistrationView extends View {
       // Добавляем блок div с label и input в контейнер для инпутов
       inputsContainer.addInnerElement(inputDiv);
     }
+  }
+
+  createFlagsForUseBillingAdress(container: ElementCreator) {
+    const thisContainer = new ElementCreator({ tag: 'div', classNames: ['inputs__use-adress-b'] });
+    container.addInnerElement(thisContainer);
+
+    const howUseBilling = new ElementCreator({
+      tag: 'div',
+      textContent: 'Use fields with "*" like: ',
+      classNames: ['how-use-billing-adress'],
+    });
+    thisContainer.addInnerElement(howUseBilling);
+
+    const billing = new ElementCreator({ tag: 'label', textContent: 'billing adress ' });
+    howUseBilling.addInnerElement(billing);
+
+    const checkBilling = new ElementCreator({ tag: 'input' });
+    checkBilling.setType('checkbox');
+    checkBilling.getNode().setAttribute('id', 'billing-flag');
+    billing.addInnerElement(checkBilling);
   }
 
   createSecondAdressInputs(container: ElementCreator) {
