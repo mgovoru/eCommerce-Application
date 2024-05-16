@@ -22,7 +22,6 @@ export function client(projectKey: string, clientID: string, clientSecret: strin
       clientId: clientID,
       clientSecret,
     },
-    // scopes: scopesSplit,
     fetch,
   };
 
