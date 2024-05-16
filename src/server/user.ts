@@ -6,7 +6,7 @@ import { MyTokenCache } from './token';
 
 const myTokenCache = new MyTokenCache();
 
-export async function requestLoginCustomer() {
+export async function createCustomerApiClient() {
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: 'https://auth.europe-west1.gcp.commercetools.com',
     projectKey: credentials.projectKey,

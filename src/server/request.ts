@@ -1,7 +1,7 @@
 import { AddressDraft, CustomerDraft } from '@commercetools/platform-sdk';
 import { Settings } from '../app/enum';
 import { apiRoot, Credentials } from './root';
-import { requestLoginCustomer } from './user';
+import { createCustomerApiClient } from './user';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -24,7 +24,7 @@ export const customerDraft: CustomerDraft = {
   addresses: [address],
 };
 
-export async function requestCreateCustomer() {
+export async function registerCustomer() {
   return apiRoot(credentials)
     .withProjectKey({ projectKey: credentials.projectKey })
     .customers()
@@ -34,16 +34,16 @@ export async function requestCreateCustomer() {
     .execute()
     .catch((err: Error) => err);
 }
-
-export async function requestGetCustomers() {
-  return apiRoot(credentials)
-    .withProjectKey({ projectKey: credentials.projectKey })
-    .customers()
-    .get()
-    .execute()
-    .catch((err: Error) => err);
-}
-export async function requestLogin() {
+// функция выдает список покупателей
+// export async function requestGetCustomers() {
+//   return apiRoot(credentials)
+//     .withProjectKey({ projectKey: credentials.projectKey })
+//     .customers()
+//     .get()
+//     .execute()
+//     .catch((err: Error) => err);
+// }
+export async function loginCustomer() {
   return apiRoot(credentials)
     .withProjectKey({ projectKey: credentials.projectKey })
     .login()
@@ -56,7 +56,7 @@ export async function requestLogin() {
     .execute()
     .then((response) => {
       console.log(response);
-      const data1 = requestLoginCustomer();
+      const data1 = createCustomerApiClient();
       console.log(data1);
     })
     .catch((error) => {
