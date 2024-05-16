@@ -5,6 +5,7 @@ import Router from '../../router/router';
 import State from '../../state/state';
 import './page-registration.scss';
 import { RegistrationValidation } from './validation';
+import { copyBillingToShipping, stopCopy } from './copy-billing-to-shipping';
 
 const mainParams = {
   tag: 'section',
@@ -156,6 +157,16 @@ export default class RegistrationView extends View {
     checkAsShipping.setType('checkbox');
     checkAsShipping.getNode().setAttribute('id', 'as-shipping-flag');
     asShipping.addInnerElement(checkAsShipping);
+
+    checkAsShipping.getNode().addEventListener('change', () => {
+      const checkbox = checkAsShipping.getNode() as HTMLInputElement;
+      if (checkbox.checked) {
+        copyBillingToShipping();
+        console.log('flag is true');
+      } else {
+        stopCopy();
+      }
+    });
   }
 
   createSecondAdressInputs(container: ElementCreator) {
