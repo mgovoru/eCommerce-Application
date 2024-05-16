@@ -18,6 +18,14 @@ export function copyBillingToShipping() {
   startCopy('form-city', 'ship-city');
   startCopy('form-street', 'ship-street');
   startCopy('form-postal', 'ship-postal');
+
+  const billingCountry = document.getElementById('form-country') as HTMLInputElement;
+  const shippingCountry = document.getElementById('ship-country') as HTMLInputElement;
+  function updateShipCountry() {
+    shippingCountry.value = billingCountry.value;
+    billingCountry.onchange = updateShipCountry;
+  }
+  updateShipCountry();
 }
 
 export function stopCopy() {
@@ -29,4 +37,7 @@ export function stopCopy() {
       billingAddr.removeEventListener('input', inputEventHandler);
     }
   });
+
+  const billingCountry = document.getElementById('form-country') as HTMLInputElement;
+  billingCountry.onchange = null;
 }
