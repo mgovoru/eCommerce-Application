@@ -25,7 +25,7 @@ export const error = [
   { lastName: 'At least 1 symbol is required' },
   { email: 'Correct format: name@example.com' },
   { password: 'Password must be at least 8 symbols, including numbers and letters in lowercase and uppercase.' },
-  { repeatPassword: '' },
+  { repeatPassword: "Doesn't match the password. Please enter correct password." },
   { birthDay: 'Correct format: dd.mm.yyyy' },
   { street: 'At least 1 symbol is required. Letter or digits.' },
   { city: 'At least 1 symbol is required. Only letters.' },
@@ -36,6 +36,17 @@ export function onIputCheck(idThis: string, patternThis: RegExp, errorThis: stri
   const inputById = document.getElementById(idThis) as HTMLInputElement;
   const inputValue = inputById.value;
   const errorDiv = inputById.nextElementSibling as HTMLElement;
+  if (idThis === 'form-r-pass') {
+    const inputPass = document.getElementById('form-pass') as HTMLInputElement;
+    if (!(inputValue === inputPass.value)) {
+      errorDiv.textContent = errorThis;
+      // inputById.classList.add('registration-wrong-iput-field');
+    } else {
+      errorDiv.textContent = '';
+      inputById.classList.remove('registration-wrong-iput-field');
+    }
+    return;
+  }
   if (!patternThis.test(inputValue)) {
     errorDiv.textContent = errorThis;
     // inputById.classList.add('registration-wrong-iput-field');
