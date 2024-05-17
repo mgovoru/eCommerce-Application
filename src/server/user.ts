@@ -35,6 +35,9 @@ export async function createCustomerApiClient() {
     })
     .get()
     .execute()
-    .then((res) => console.log(res, myTokenCache))
-    .catch((err) => console.log(err));
+    .then((res) => {
+      localStorage.setItem('tokenCashe', JSON.stringify(myTokenCache));
+      console.log(res, myTokenCache);
+    })
+    .catch((err) => console.log(err.message));
 }

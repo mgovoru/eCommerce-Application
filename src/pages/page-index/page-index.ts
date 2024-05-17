@@ -1,15 +1,15 @@
 import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
 import State from '../../state/state';
-import './page-main.scss';
+import './page-index.scss';
 
 const mainParams = {
   tag: 'section',
   textContent: '',
-  classNames: ['page-main'],
+  classNames: ['page-index'],
 };
 
-export default class PageMainView extends View {
+export default class PageIndexView extends View {
   state: State;
 
   constructor(state: State) {
@@ -20,16 +20,16 @@ export default class PageMainView extends View {
 
   configureView() {
     const containerNew = new ContainerView();
-    containerNew.addNameClass('page-main');
+    containerNew.addNameClass('page-index');
     const container = containerNew.getElement();
-    const textBlock = this.drawElement({ tag: 'div', classNames: ['page-main__textblock'] }, container);
-    this.drawElement({ tag: 'div', textContent: 'NEW IMAGE', classNames: ['page-main__boxNew'] }, textBlock);
-    this.drawElement({ tag: 'H1', textContent: 'FORCE AI', classNames: ['page-main__title'] }, textBlock);
+    const textBlock = this.drawElement({ tag: 'div', classNames: ['page-index__textblock'] }, container);
+    this.drawElement({ tag: 'div', textContent: 'NEW IMAGE', classNames: ['page-index__boxNew'] }, textBlock);
+    this.drawElement({ tag: 'H1', textContent: 'FORCE AI', classNames: ['page-index__title'] }, textBlock);
     this.drawElement(
       {
         tag: 'H6',
         textContent: 'universe galaxy view',
-        classNames: ['page-main__sub-title'],
+        classNames: ['page-index__sub-title'],
       },
       textBlock
     );
@@ -37,12 +37,12 @@ export default class PageMainView extends View {
       {
         tag: 'p',
         textContent: `79,99 €`,
-        classNames: ['page-main__price'],
+        classNames: ['page-index__price'],
       },
       textBlock
     );
     this.drawButtonElement(
-      { tag: 'button', textContent: 'BUY NOW', classNames: ['page-main__button', 'button'] },
+      { tag: 'button', textContent: 'BUY NOW', classNames: ['page-index__button', 'button'] },
       'button',
       textBlock
     );

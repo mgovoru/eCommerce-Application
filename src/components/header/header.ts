@@ -9,10 +9,7 @@ import { ContainerView } from '../container/container';
 import './header.scss';
 import Router from '../../router/router';
 import { Pages } from '../../router/pages';
-// import { request } from '../../server/request';
-// import { requestLogin } from '../../server/request';
-// import { requestLoginCustomer } from '../../server/user';
-import { registerCustomer } from '../../server/request';
+import { loginCustomer } from '../../server/request';
 
 const headerParams = {
   tag: 'header',
@@ -49,7 +46,7 @@ export class HeaderView extends View {
     this.buttonSeachCreate(srcSearch);
     this.buttonLoginCreate(srcProfile);
     this.buttonSignInCreate(srcSignIn);
-    this.buttonSignInCreate(srcSignOut);
+    this.buttonSignOutCreate(srcSignOut);
     this.buttonCartCreate(srcCart);
   }
 
@@ -72,8 +69,8 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        const data = await registerCustomer();
-        // const data = await requestLogin();
+        // const data = await registerCustomer();
+        const data = await loginCustomer();
         console.log(data);
       },
     };
@@ -204,7 +201,7 @@ export class HeaderView extends View {
       tag: 'button',
       textContent: '',
       classNames: ['header__sign-out'],
-      // callback: () => this.router.navigate(Pages.REGISTRATION),
+      callback: () => localStorage.clear(),
     };
     const imgParams = {
       tag: 'img',

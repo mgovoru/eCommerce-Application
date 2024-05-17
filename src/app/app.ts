@@ -41,22 +41,24 @@ export class App {
       {
         path: ``,
         callback: async () => {
-          const { default: PageMainView } = await import('../pages/page-main/page-main');
-          this.setContent(Pages.MAIN, new PageMainView(state));
+          const { default: PageIndexView } = await import('../pages/page-index/page-index');
+          this.setContent(Pages.INDEX, new PageIndexView(state));
         },
       },
       {
         path: `${Pages.MAIN}`,
         callback: async () => {
-          const { default: PageMainView } = await import('../pages/page-main/page-main');
-          this.setContent(Pages.MAIN, new PageMainView(state));
+          const { default: MainPageView } = await import('../pages/main-page/main-page');
+          this.setContent(Pages.MAIN, new MainPageView(state));
         },
       },
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          const { default: LoginView } = await import('../pages/page-login/page-login');
-          this.setContent(Pages.LOGIN, new LoginView(this.router, state));
+          if (!localStorage.getItem('tokenCashe')) {
+            const { default: LoginView } = await import('../pages/page-login/page-login');
+            this.setContent(Pages.LOGIN, new LoginView(this.router, state));
+          }
         },
       },
       {

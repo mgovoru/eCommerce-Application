@@ -79,7 +79,7 @@ export async function loginCustomer() {
       console.log(data1);
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error.message);
     });
 }
 // handle
