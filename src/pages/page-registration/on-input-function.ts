@@ -24,7 +24,10 @@ export const error = [
   { firstName: 'At least 1 symbol is required' },
   { lastName: 'At least 1 symbol is required' },
   { email: 'Correct format: name@example.com' },
-  { password: 'Password must be at least 8 symbols, including numbers and letters in lowercase and uppercase.' },
+  {
+    password:
+      'Password must be at least 8 characters, include a small letter, a capital letter, a number and a special symbol',
+  },
   { repeatPassword: "Doesn't match the password. Please enter correct password." },
   { birthDay: 'Correct format: dd.mm.yyyy' },
   { street: 'At least 1 symbol is required. Letter or digits.' },
