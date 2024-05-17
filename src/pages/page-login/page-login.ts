@@ -75,6 +75,7 @@ export default class LoginView extends View {
     });
     this.email.getNode().setAttribute('type', 'text');
     this.email.getNode().setAttribute('name', 'Email');
+    this.email.getNode().setAttribute('id', 'Email');
     this.email.getNode().setAttribute('placeholder', 'Enter email address');
     this.email.getNode().addEventListener('input', () => {
       if (validateEmail(this.email, this.emailError)) {
@@ -91,6 +92,7 @@ export default class LoginView extends View {
     });
     this.password.getNode().setAttribute('type', 'password');
     this.password.getNode().setAttribute('name', 'Password');
+    this.password.getNode().setAttribute('id', 'Password');
     this.password.getNode().setAttribute('placeholder', 'Enter password');
     this.password.getNode().addEventListener('input', () => {
       if (validatePassword(this.password, this.passwordError)) {
@@ -101,13 +103,17 @@ export default class LoginView extends View {
     });
 
     const emailInputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__login'] });
-    emailInputDiv.addInnerElement(new ElementCreator({ tag: 'label', textContent: 'Email address' }));
+    const labelEmail = new ElementCreator({ tag: 'label', textContent: 'Email address' });
+    labelEmail.getNode().setAttribute('for', 'Email');
+    emailInputDiv.addInnerElement(labelEmail);
     emailInputDiv.addInnerElement(this.email);
     emailInputDiv.addInnerElement(this.emailError);
     inputsContainer.addInnerElement(emailInputDiv);
 
     const passwordInputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__login'] });
-    passwordInputDiv.addInnerElement(new ElementCreator({ tag: 'label', textContent: 'Password' }));
+    const labelPass = new ElementCreator({ tag: 'label', textContent: 'Password' });
+    labelPass.getNode().setAttribute('for', 'Password');
+    passwordInputDiv.addInnerElement(labelPass);
     passwordInputDiv.addInnerElement(this.password);
     passwordInputDiv.addInnerElement(this.passwordError);
     inputsContainer.addInnerElement(passwordInputDiv);
