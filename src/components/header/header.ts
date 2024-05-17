@@ -3,6 +3,8 @@ import elementImageSrc from '../../assets/AIPainterShop.png';
 import srcSearch from '../../assets/search.svg';
 import srcProfile from '../../assets/profile.svg';
 import srcCart from '../../assets/basket.svg';
+import srcSignIn from '../../assets/sign-in.svg';
+import srcSignOut from '../../assets/sign-out.svg';
 import { ContainerView } from '../container/container';
 import './header.scss';
 import Router from '../../router/router';
@@ -46,6 +48,8 @@ export class HeaderView extends View {
     this.addButtons();
     this.buttonSeachCreate(srcSearch);
     this.buttonLoginCreate(srcProfile);
+    this.buttonSignInCreate(srcSignIn);
+    this.buttonSignInCreate(srcSignOut);
     this.buttonCartCreate(srcCart);
   }
 
@@ -174,6 +178,42 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(profileParams, 'button', this.elementButtons as HTMLElement);
     this.drawImageElement(imgParams, src, 'profile', element);
     this.headerLinkElements.set(Pages.LOGIN.toUpperCase(), element);
+    return element;
+  }
+
+  buttonSignInCreate(src: string): HTMLButtonElement {
+    const signInParams = {
+      tag: 'button',
+      textContent: '',
+      classNames: ['header__sign-in'],
+      callback: () => this.router.navigate(Pages.REGISTRATION),
+    };
+    const imgParams = {
+      tag: 'img',
+      textContent: '',
+      classNames: ['header__img-sign-in'],
+    };
+    const element = this.drawButtonElement(signInParams, 'button', this.elementButtons as HTMLElement);
+    this.drawImageElement(imgParams, src, 'sign-in', element);
+    this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
+    return element;
+  }
+
+  buttonSignOutCreate(src: string): HTMLButtonElement {
+    const signOutParams = {
+      tag: 'button',
+      textContent: '',
+      classNames: ['header__sign-out'],
+      // callback: () => this.router.navigate(Pages.REGISTRATION),
+    };
+    const imgParams = {
+      tag: 'img',
+      textContent: '',
+      classNames: ['header__img-sign-out'],
+    };
+    const element = this.drawButtonElement(signOutParams, 'button', this.elementButtons as HTMLElement);
+    this.drawImageElement(imgParams, src, 'sign-out', element);
+    // this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
     return element;
   }
 
