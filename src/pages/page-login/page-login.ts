@@ -111,6 +111,22 @@ export default class LoginView extends View {
     passwordInputDiv.addInnerElement(this.password);
     passwordInputDiv.addInnerElement(this.passwordError);
     inputsContainer.addInnerElement(passwordInputDiv);
+
+    const showPasswordSpan = new ElementCreator({
+      tag: 'span',
+      classNames: ['hidden-reg-pas__login'],
+      textContent: '👁️‍🗨️',
+    });
+    showPasswordSpan.setCallback(() => {
+      const currentText = showPasswordSpan.getNode().textContent;
+      const newText = currentText === '👁️' ? '👁️‍🗨️' : '👁️';
+      showPasswordSpan.setTextContent(newText);
+      const passwordInput = passwordInputDiv.getNode().querySelector('input');
+      if (passwordInput instanceof HTMLInputElement) {
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+      }
+    });
+    passwordInputDiv.addInnerElement(showPasswordSpan);
   }
 
   createLoginRef(container: ElementCreator) {
