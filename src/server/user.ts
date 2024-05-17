@@ -3,6 +3,7 @@ import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { credentials, customerDraft } from './request';
 import { httpMiddlewareOptions } from './client';
 import { MyTokenCache } from './token';
+import ErrorView from './error';
 
 const myTokenCache = new MyTokenCache();
 
@@ -35,9 +36,11 @@ export async function createCustomerApiClient() {
     })
     .get()
     .execute()
-    .then((res) => {
+    .then(() => {
       localStorage.setItem('tokenCashe', JSON.stringify(myTokenCache));
-      console.log(res, myTokenCache);
     })
-    .catch((err) => console.log(err.message));
+    .catch((err) => {
+      const errorElement = new ErrorView();
+      errorElement.show(err.message);
+    });
 }

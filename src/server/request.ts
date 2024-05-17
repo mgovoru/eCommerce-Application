@@ -2,6 +2,7 @@ import { BaseAddress, CustomerDraft } from '@commercetools/platform-sdk';
 import { Settings } from '../app/enum';
 import { apiRoot, Credentials } from './root';
 import { createCustomerApiClient } from './user';
+import ErrorView from './error';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -79,7 +80,8 @@ export async function loginCustomer() {
       console.log(data1);
     })
     .catch((error) => {
-      console.log(error.message);
+      const errorElement = new ErrorView();
+      errorElement.show(error.message);
     });
 }
 // handle
