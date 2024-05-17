@@ -17,13 +17,13 @@ export default class LoginView extends View {
 
   router: Router;
 
-  private email: ElementCreator;
+  private email!: ElementCreator;
 
-  private password: ElementCreator;
+  private password!: ElementCreator;
 
-  private emailError: ElementCreator;
+  private emailError!: ElementCreator;
 
-  private passwordError: ElementCreator;
+  private passwordError!: ElementCreator;
 
   constructor(router: Router, state: State) {
     super(mainParams);
