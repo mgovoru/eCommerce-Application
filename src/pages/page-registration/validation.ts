@@ -110,7 +110,7 @@ export class RegistrationValidation {
   validStreet(str: string): Response {
     const regex = /^[0-9a-zA-Z-]+$/;
     const response = {
-      error: 'At least 1 symbol is required',
+      error: 'At least 1 symbol is required. Letter or digits.',
       result: regex.test(str),
     };
     // минимум 1 символ. допустимые англ буквы, чилса и -
@@ -120,7 +120,7 @@ export class RegistrationValidation {
   validCity(str: string): Response {
     const regex = /^[a-zA-Z]+$/;
     const response = {
-      error: 'At least 1 symbol is required',
+      error: 'At least 1 symbol is required. Only letters.',
       result: regex.test(str),
     };
     // минимум 1 символ. допустимы только англ буквы

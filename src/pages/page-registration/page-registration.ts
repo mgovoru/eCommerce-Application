@@ -6,6 +6,7 @@ import State from '../../state/state';
 import './page-registration.scss';
 import { RegistrationValidation } from './validation';
 import { copyBillingToShipping, stopCopy } from './copy-billing-to-shipping';
+import { id, patterns, error, onIputCheck } from './on-input-function';
 
 const mainParams = {
   tag: 'section',
@@ -102,6 +103,12 @@ export default class RegistrationView extends View {
       } else {
         input = new ElementCreator({ tag: 'input', classNames: [inputClass[i]] }).getNode() as HTMLInputElement;
         input.setAttribute('id', inputClass[i]);
+        input.addEventListener('input', () => {
+          const idInMassiv = Object.values(id[i])[0];
+          const patternInMassiv = Object.values(patterns[i])[0];
+          const errorInMassiv = Object.values(error[i])[0];
+          onIputCheck(idInMassiv, patternInMassiv, errorInMassiv);
+        });
         label.getNode().setAttribute('for', inputClass[i]);
         if (i === 3 || i === 4) {
           // Add span for password and repeat password fields
