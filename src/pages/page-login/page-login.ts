@@ -14,11 +14,15 @@ const mainParams = {
 
 export default class LoginView extends View {
   state: State;
+
   router: Router;
 
   private email: ElementCreator;
+
   private password: ElementCreator;
+
   private emailError: ElementCreator;
+
   private passwordError: ElementCreator;
 
   constructor(router: Router, state: State) {
