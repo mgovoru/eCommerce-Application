@@ -50,9 +50,8 @@ export default class Router {
   redirectToNotFoundPage(originalUrl: string) {
     const notFoundPage = this.routes.find((item) => item.path === Pages.NOT_FOUND);
     if (notFoundPage) {
-      // this.navigate(notFoundPage.path);
       window.history.replaceState({ originalUrl }, '', originalUrl);
-      notFoundPage.callback(originalUrl);
+      this.navigate(notFoundPage.path);
     }
   }
 }
