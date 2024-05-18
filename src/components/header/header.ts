@@ -105,7 +105,10 @@ export class HeaderView extends View {
         tag: 'a',
         textContent: '',
         classNames: ['header__nav-link'],
-        callback: () => this.router.navigate(el),
+        callback: (event: Event) => {
+          event.preventDefault();
+          this.router.navigate(el);
+        },
       };
       const linkElement = this.drawLinkElement(linkParams, el.toUpperCase(), '', elem as HTMLElement);
       this.headerLinkElements.set(el.toUpperCase(), linkElement);
