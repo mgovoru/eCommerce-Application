@@ -1,4 +1,11 @@
-import { RegistrationData, registrationData, handlingRegistration } from './handlingRegistration';
+import {
+  RegistrationData,
+  registrationData,
+  handlingRegistration,
+  addresshandlingRegistration,
+  billingRegistrationData,
+  shippingRegistrationData,
+} from './handlingRegistration';
 
 interface LoginData {
   email: string | null;
@@ -16,6 +23,7 @@ let loginData: LoginData = {
   email: null,
   password: null,
 };
+// ИСПРАВИТЬ ПРОВЕКРУ
 function allValuesAreStrings(data: RegistrationData | LoginData): boolean {
   return Object.values(data).every((value) => typeof value === 'string');
 }
@@ -135,51 +143,26 @@ export class RegistrationValidation {
     });
     matchPassword.status = false;
 
-    handlingRegistration('.form-email', this.validMail, 'email', registrationData);
-    handlingRegistration('.form-pass', this.validPassword, 'password', registrationData);
-    handlingRegistration('.form-r-pass', this.validRepeatPassword, 'password', registrationData);
-    handlingRegistration('.form-f-name', this.validFirstAndLastName, 'firstName', registrationData);
-    handlingRegistration('.form-l-name', this.validFirstAndLastName, 'lastName', registrationData);
-    handlingRegistration('.form-birth', this.validBirthDate, 'dateOfBirth', registrationData);
+    handlingRegistration('form-email', this.validMail, 'email', registrationData);
+    handlingRegistration('form-pass', this.validPassword, 'password', registrationData);
+    handlingRegistration('form-r-pass', this.validRepeatPassword, 'password', registrationData);
+    handlingRegistration('form-f-name', this.validFirstAndLastName, 'firstName', registrationData);
+    handlingRegistration('form-l-name', this.validFirstAndLastName, 'lastName', registrationData);
+    handlingRegistration('form-birth', this.validBirthDate, 'dateOfBirth', registrationData);
 
-    const countryList = document.querySelector('.form-country') as HTMLInputElement;
-    const country = countryList.value;
-    registrationData.country = country;
+    addresshandlingRegistration('form-country', this.validBirthDate, 'country', billingRegistrationData);
+    addresshandlingRegistration('form-street', this.validStreet, 'street', billingRegistrationData);
+    addresshandlingRegistration('form-city', this.validCity, 'city', billingRegistrationData);
+    addresshandlingRegistration('form-postal', this.validPostalCode, 'postal', billingRegistrationData);
 
-    const streetInput = document.querySelector('.form-street') as HTMLInputElement;
-    const street = streetInput.value;
-    const streetError = streetInput.nextElementSibling as HTMLElement;
-    if (!this.validStreet(street).result) {
-      streetError.textContent = this.validStreet(street).error;
-      streetInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.street = street;
-    }
-
-    const cityInput = document.querySelector('.form-city') as HTMLInputElement;
-    const city = cityInput.value;
-    const cityError = cityInput.nextElementSibling as HTMLElement;
-    if (!this.validCity(city).result) {
-      cityError.textContent = this.validCity(city).error;
-      cityInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.city = city;
-    }
-
-    const postalCodeInput = document.querySelector('.form-postal') as HTMLInputElement;
-    const postal = postalCodeInput.value;
-    const postalError = postalCodeInput.nextElementSibling as HTMLElement;
-    if (!this.validPostalCode(postal).result) {
-      postalError.textContent = this.validPostalCode(postal).error;
-      postalCodeInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.postal = postal;
-    }
+    addresshandlingRegistration('ship-country', this.validBirthDate, 'country', shippingRegistrationData);
+    addresshandlingRegistration('ship-street', this.validStreet, 'street', shippingRegistrationData);
+    addresshandlingRegistration('ship-city', this.validCity, 'city', shippingRegistrationData);
+    addresshandlingRegistration('ship-postal', this.validPostalCode, 'postal', shippingRegistrationData);
 
     // Ниже проверка что все значения записанны и пароль повторен верно
-    console.log(registrationData);
+    console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
     if (matchPassword && allValuesAreStrings(registrationData)) {
-      // console.log('password is match');
       // console.log('Все данные введены верно', registrationData);
       return registrationData;
     }
