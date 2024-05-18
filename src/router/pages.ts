@@ -7,6 +7,7 @@ const Pages = {
   CART: 'cart',
   PRODUCT: 'product',
   NOT_FOUND: 'not-found',
+  INDEX: 'index',
 };
 
 const ID_SELECTOR = '{id}';

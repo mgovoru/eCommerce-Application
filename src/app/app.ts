@@ -3,6 +3,7 @@ import { HeaderView } from '../components/header/header';
 import { MainView } from '../components/main/main';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
+import { Server } from '../server/server';
 import State from '../state/state';
 import { View } from './view';
 
@@ -17,6 +18,8 @@ export class App {
 
   state: State;
 
+  server: Server;
+
   constructor() {
     this.header = null;
     this.main = null;
@@ -25,10 +28,11 @@ export class App {
     const routes = this.createRoutes(this.state);
     this.router = new Router(routes);
     this.router.setHashHandler();
+    this.server = new Server();
   }
 
   createView() {
-    this.header = new HeaderView(this.router);
+    this.header = new HeaderView(this.router, this.server);
     this.main = new MainView();
     this.footer = new FooterView();
     document.body.append(this.header.getElement());
@@ -41,29 +45,33 @@ export class App {
       {
         path: ``,
         callback: async () => {
-          const { default: PageMainView } = await import('../pages/page-main/page-main');
-          this.setContent(Pages.MAIN, new PageMainView(state));
+          const { default: PageIndexView } = await import('../pages/page-index/page-index');
+          this.setContent(Pages.INDEX, new PageIndexView(state));
         },
       },
       {
         path: `${Pages.MAIN}`,
         callback: async () => {
-          const { default: PageMainView } = await import('../pages/page-main/page-main');
-          this.setContent(Pages.MAIN, new PageMainView(state));
+          const { default: MainPageView } = await import('../pages/main-page/main-page');
+          this.setContent(Pages.MAIN, new MainPageView(state));
         },
       },
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          const { default: LoginView } = await import('../pages/page-login/page-login');
-          this.setContent(Pages.LOGIN, new LoginView(this.router, state));
+          if (!localStorage.getItem('tokenCashe')) {
+            const { default: LoginView } = await import('../pages/page-login/page-login');
+            this.setContent(Pages.LOGIN, new LoginView(this.router, state));
+          }
         },
       },
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
-          const { default: RegistartionView } = await import('../pages/page-registration/page-registration');
-          this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state));
+          if (!localStorage.getItem('tokenCashe')) {
+            const { default: RegistartionView } = await import('../pages/page-registration/page-registration');
+            this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state));
+          }
         },
       },
       {
@@ -91,7 +99,7 @@ export class App {
         path: `${Pages.NOT_FOUND}`,
         callback: async () => {
           const { default: Page404View } = await import('../pages/404page/404page');
-          this.setContent(Pages.NOT_FOUND, new Page404View());
+          this.setContent(Pages.NOT_FOUND, new Page404View(this.router));
         },
       },
     ];
