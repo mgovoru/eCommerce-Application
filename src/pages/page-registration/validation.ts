@@ -5,6 +5,7 @@ import {
   addresshandlingRegistration,
   billingRegistrationData,
   shippingRegistrationData,
+  AddressOfRegistration,
 } from './handlingRegistration';
 
 interface LoginData {
@@ -24,8 +25,8 @@ let loginData: LoginData = {
   password: null,
 };
 // ИСПРАВИТЬ ПРОВЕКРУ
-function allValuesAreStrings(data: RegistrationData | LoginData): boolean {
-  return Object.values(data).every((value) => typeof value === 'string');
+function allValuesAreNotNull(data: RegistrationData | LoginData | AddressOfRegistration): boolean {
+  return Object.values(data).every((value) => value !== null);
 }
 
 export class RegistrationValidation {
@@ -161,9 +162,15 @@ export class RegistrationValidation {
     addresshandlingRegistration('ship-postal', this.validPostalCode, 'postal', shippingRegistrationData);
 
     // Ниже проверка что все значения записанны и пароль повторен верно
-    console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
-    if (matchPassword && allValuesAreStrings(registrationData)) {
-      // console.log('Все данные введены верно', registrationData);
+    // console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
+    // console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
+    if (
+      matchPassword &&
+      allValuesAreNotNull(registrationData) &&
+      allValuesAreNotNull(billingRegistrationData) &&
+      allValuesAreNotNull(shippingRegistrationData)
+    ) {
+      console.log('Все данные введены верно', registrationData);
       return registrationData;
     }
     return null;
@@ -206,7 +213,7 @@ export class RegistrationValidation {
       loginData.password = password;
     }
 
-    if (allValuesAreStrings(loginData)) {
+    if (allValuesAreNotNull(loginData)) {
       // console.log('Дальше нужна проверка на сервере. Данные:', loginData);
       return loginData;
     }
