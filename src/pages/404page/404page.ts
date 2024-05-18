@@ -2,6 +2,8 @@ import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
 import srcImg from '../../assets/cow.png';
 import './404page.scss';
+import { Pages } from '../../router/pages';
+import Router from '../../router/router';
 
 const mainParams = {
   tag: 'section',
@@ -10,8 +12,11 @@ const mainParams = {
 };
 
 export default class Page404View extends View {
-  constructor() {
+  router: Router;
+
+  constructor(router: Router) {
     super(mainParams);
+    this.router = router;
     this.configureView();
   }
 
@@ -32,7 +37,12 @@ export default class Page404View extends View {
       textBlock
     );
     this.drawButtonElement(
-      { tag: 'button', textContent: 'MAIN', classNames: ['page-404__button', 'button'] },
+      {
+        tag: 'button',
+        textContent: 'MAIN',
+        classNames: ['page-404__button', 'button'],
+        callback: () => this.router.navigate(Pages.MAIN),
+      },
       'button',
       textBlock
     );

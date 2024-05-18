@@ -99,7 +99,7 @@ export class App {
         path: `${Pages.NOT_FOUND}`,
         callback: async () => {
           const { default: Page404View } = await import('../pages/404page/404page');
-          this.setContent(Pages.NOT_FOUND, new Page404View());
+          this.setContent(Pages.NOT_FOUND, new Page404View(this.router));
         },
       },
     ];
