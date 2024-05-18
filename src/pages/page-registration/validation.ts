@@ -135,12 +135,12 @@ export class RegistrationValidation {
     });
     matchPassword.status = false;
 
-    handlingRegistration('.form-email', this.validMail, 'email');
-    handlingRegistration('.form-pass', this.validPassword, 'password');
-    handlingRegistration('.form-r-pass', this.validRepeatPassword, 'password');
-    handlingRegistration('.form-f-name', this.validFirstAndLastName, 'firstName');
-    handlingRegistration('.form-l-name', this.validFirstAndLastName, 'lastName');
-    handlingRegistration('.form-birth', this.validBirthDate, 'dateOfBirth');
+    handlingRegistration('.form-email', this.validMail, 'email', registrationData);
+    handlingRegistration('.form-pass', this.validPassword, 'password', registrationData);
+    handlingRegistration('.form-r-pass', this.validRepeatPassword, 'password', registrationData);
+    handlingRegistration('.form-f-name', this.validFirstAndLastName, 'firstName', registrationData);
+    handlingRegistration('.form-l-name', this.validFirstAndLastName, 'lastName', registrationData);
+    handlingRegistration('.form-birth', this.validBirthDate, 'dateOfBirth', registrationData);
 
     const countryList = document.querySelector('.form-country') as HTMLInputElement;
     const country = countryList.value;

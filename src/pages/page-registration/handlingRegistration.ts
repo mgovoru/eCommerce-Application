@@ -37,8 +37,10 @@ function convertToDate(dateString: string): Date {
 export function handlingRegistration(
   classId: string,
   validationFunction: (value: string) => ValidationResult,
-  dataField: keyof RegistrationData
+  dataField: keyof RegistrationData,
+  targetObject: RegistrationData
 ) {
+  const mutableTargetObject = targetObject; // для избежания ошибки
   const input = document.querySelector(classId) as HTMLInputElement;
   const { value } = input;
   const errorElement = input.nextElementSibling as HTMLElement;
@@ -59,15 +61,15 @@ export function handlingRegistration(
   if (!validationResult.result) {
     errorElement.textContent = validationResult.error;
     input.classList.add('registration-wrong-iput-field');
-    registrationData[dataField] = null;
+    mutableTargetObject[dataField] = null;
   } else {
     errorElement.textContent = '';
     input.classList.remove('registration-wrong-iput-field');
     // обработка даты
     if (dataField === 'dateOfBirth') {
-      registrationData[dataField] = convertToDate(value);
+      mutableTargetObject[dataField] = convertToDate(value);
       return;
     }
-    registrationData[dataField] = value;
+    mutableTargetObject[dataField] = value;
   }
 }
