@@ -73,15 +73,15 @@ export class WorkApi {
   //     .execute()
   //     .catch((err: Error) => err);
   // }
-  loginCustomer() {
+  loginCustomer(emailUser: string, passwordUser: string) {
     return this.server
       .apiRoot(credentials)
       .withProjectKey({ projectKey: credentials.projectKey })
       .login()
       .post({
         body: {
-          email: customerDraft.email as string,
-          password: customerDraft.password as string,
+          email: emailUser,
+          password: passwordUser,
         },
       })
       .execute()
