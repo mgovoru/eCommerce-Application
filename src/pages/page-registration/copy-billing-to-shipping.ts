@@ -1,3 +1,14 @@
+import { onIputCheck, idShipping, patternsShipping, errorShipping } from './on-input-function';
+
+function checkShippingField() {
+  for (let i = 0; i < 3; i += 1) {
+    const idInMassiv = Object.values(idShipping[i])[0];
+    const patternInMassiv = Object.values(patternsShipping[i])[0];
+    const errorInMassiv = Object.values(errorShipping[i])[0];
+    onIputCheck(idInMassiv, patternInMassiv, errorInMassiv);
+  }
+}
+
 const inputEventHandlers: { [key: string]: () => void } = {};
 
 function startCopy(billingAddrId: string, shippingAddrId: string) {
@@ -8,11 +19,13 @@ function startCopy(billingAddrId: string, shippingAddrId: string) {
   if (billingAddr && shippingAddr) {
     const inputEventHandler = () => {
       shippingAddr.value = billingAddr.value;
+      checkShippingField();
     };
     inputEventHandlers[billingAddrId] = inputEventHandler;
     shippingAddr.value = billingAddr.value;
     billingAddr.addEventListener('input', inputEventHandler);
   }
+  checkShippingField();
 }
 
 function disabledFalse(idElement: string) {
