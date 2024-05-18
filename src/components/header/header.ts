@@ -9,7 +9,7 @@ import { ContainerView } from '../container/container';
 import './header.scss';
 import Router from '../../router/router';
 import { Pages } from '../../router/pages';
-import { loginCustomer } from '../../server/request';
+import { Server } from '../../server/server';
 
 const headerParams = {
   tag: 'header',
@@ -28,12 +28,15 @@ export class HeaderView extends View {
 
   router: Router;
 
-  constructor(router: Router) {
+  server: Server;
+
+  constructor(router: Router, server: Server) {
     super(headerParams);
     this.container = null;
     this.elementNav = null;
     this.elementButtons = null;
     this.router = router;
+    this.server = server;
     this.headerLinkElements = new Map();
     this.configureView();
   }
@@ -70,7 +73,7 @@ export class HeaderView extends View {
       classNames: ['header__img'],
       callback: async () => {
         // const data = await registerCustomer();
-        const data = await loginCustomer();
+        const data = await this.server.workApi.loginCustomer();
         console.log(data);
       },
     };

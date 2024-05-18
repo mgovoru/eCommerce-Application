@@ -3,6 +3,7 @@ import { HeaderView } from '../components/header/header';
 import { MainView } from '../components/main/main';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
+import { Server } from '../server/server';
 import State from '../state/state';
 import { View } from './view';
 
@@ -17,6 +18,8 @@ export class App {
 
   state: State;
 
+  server: Server;
+
   constructor() {
     this.header = null;
     this.main = null;
@@ -25,10 +28,11 @@ export class App {
     const routes = this.createRoutes(this.state);
     this.router = new Router(routes);
     this.router.setHashHandler();
+    this.server = new Server();
   }
 
   createView() {
-    this.header = new HeaderView(this.router);
+    this.header = new HeaderView(this.router, this.server);
     this.main = new MainView();
     this.footer = new FooterView();
     document.body.append(this.header.getElement());
