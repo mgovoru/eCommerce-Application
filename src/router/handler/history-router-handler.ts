@@ -28,7 +28,15 @@ export default class HistoryRouterHandler {
   navigate(url: PopStateEvent | string): void {
     if (typeof url === 'string') {
       this.setHistory(url);
+    } else {
+      // Handle popstate event
+      const state = (url as PopStateEvent).state;
+      if (state && state.originalUrl) {
+        this.callback({ path: state.originalUrl, resource: '' });
+        return;
+      }
     }
+    
     const locationField = this.params.locationField as keyof Location;
 
     const urlString = String(window.location[locationField]).slice(1);

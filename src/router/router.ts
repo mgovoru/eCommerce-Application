@@ -40,17 +40,19 @@ export default class Router {
     const route = this.routes.find((item) => item.path === pathForFind);
 
     if (!route) {
-      this.redirectToNotFoundPage();
+      this.redirectToNotFoundPage(requestParams.path);
       return;
     }
 
     route.callback(requestParams.resource);
   }
 
-  redirectToNotFoundPage() {
+  redirectToNotFoundPage(originalUrl: string) {
     const notFoundPage = this.routes.find((item) => item.path === Pages.NOT_FOUND);
     if (notFoundPage) {
-      this.navigate(notFoundPage.path);
+      // this.navigate(notFoundPage.path);
+      window.history.replaceState({ originalUrl }, '', originalUrl);
+      notFoundPage.callback(originalUrl);
     }
   }
 }
