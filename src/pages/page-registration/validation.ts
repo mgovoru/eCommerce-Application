@@ -140,16 +140,7 @@ export class RegistrationValidation {
     handlingRegistration('.form-r-pass', this.validRepeatPassword, 'password');
     handlingRegistration('.form-f-name', this.validFirstAndLastName, 'firstName');
     handlingRegistration('.form-l-name', this.validFirstAndLastName, 'lastName');
-
-    const dateInput = document.querySelector('.form-birth') as HTMLInputElement;
-    const date = dateInput.value;
-    const dateError = dateInput.nextElementSibling as HTMLElement;
-    if (!this.validBirthDate(date).result) {
-      dateError.textContent = this.validBirthDate(date).error;
-      dateInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.date = date;
-    }
+    handlingRegistration('.form-birth', this.validBirthDate, 'dateOfBirth');
 
     const countryList = document.querySelector('.form-country') as HTMLInputElement;
     const country = countryList.value;

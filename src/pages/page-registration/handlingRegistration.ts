@@ -5,7 +5,7 @@ export interface RegistrationData {
   password: string | null;
   firstName: string | null;
   lastName: string | null;
-  date: string | null;
+  dateOfBirth: Date | null;
   country: string | null;
   street: string | null;
   city: string | null;
@@ -17,7 +17,7 @@ export const registrationData: RegistrationData = {
   password: null,
   firstName: null,
   lastName: null,
-  date: null,
+  dateOfBirth: null,
   country: null,
   street: null,
   city: null,
@@ -27,6 +27,11 @@ export const registrationData: RegistrationData = {
 interface ValidationResult {
   result: boolean;
   error: string;
+}
+
+function convertToDate(dateString: string): Date {
+  const [day, month, year] = dateString.split('.').map(Number);
+  return new Date(year, month - 1, day);
 }
 
 export function handlingRegistration(
@@ -58,7 +63,11 @@ export function handlingRegistration(
   } else {
     errorElement.textContent = '';
     input.classList.remove('registration-wrong-iput-field');
+    // обработка даты
+    if (dataField === 'dateOfBirth') {
+      registrationData[dataField] = convertToDate(value);
+      return;
+    }
     registrationData[dataField] = value;
   }
-  console.log(registrationData);
 }
