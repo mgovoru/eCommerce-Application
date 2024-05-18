@@ -6,7 +6,7 @@ import State from '../../state/state';
 import './page-registration.scss';
 import { RegistrationValidation } from './validation';
 import { copyBillingToShipping, stopCopy } from './copy-billing-to-shipping';
-import { id, patterns, error, onIputCheck } from './on-input-function';
+import { id, patterns, error, onIputCheck, idShipping, patternsShipping, errorShipping } from './on-input-function';
 
 const mainParams = {
   tag: 'section',
@@ -211,6 +211,12 @@ export default class RegistrationView extends View {
       } else {
         input = new ElementCreator({ tag: 'input' }).getNode() as HTMLInputElement;
         input.setAttribute('id', inputsId[i]);
+        input.addEventListener('input', () => {
+          const idInMassiv = Object.values(idShipping[i - 1])[0];
+          const patternInMassiv = Object.values(patternsShipping[i - 1])[0];
+          const errorInMassiv = Object.values(errorShipping[i - 1])[0];
+          onIputCheck(idInMassiv, patternInMassiv, errorInMassiv);
+        });
       }
       inputDiv.addInnerElement(label);
       inputDiv.addInnerElement(input);

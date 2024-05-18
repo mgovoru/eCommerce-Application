@@ -34,6 +34,22 @@ export const error = [
   { city: 'At least 1 symbol is required. Only letters.' },
   { postalCode: 'Only numbers are valid. For RU, UA, BY: 6 digits' },
 ];
+// Переменные для блока inputs Shipping address
+export const idShipping = [
+  { cityShipping: 'ship-city' },
+  { streetShipping: 'ship-street' },
+  { postalCodeShipping: 'ship-postal' },
+];
+export const patternsShipping = [
+  { cityShipping: /^[a-zA-Z]+$/ },
+  { streetShipping: /^[0-9a-zA-Z-]+$/ },
+  { postalCodeShipping: /^[0-9]{6}$/ },
+];
+export const errorShipping = [
+  { cityShipping: 'At least 1 symbol is required. Only letters.' },
+  { streetShipping: 'At least 1 symbol is required. Letter or digits.' },
+  { postalCodeShipping: 'Only numbers are valid. For RU, UA, BY: 6 digits' },
+];
 
 export function onIputCheck(idThis: string, patternThis: RegExp, errorThis: string) {
   const inputById = document.getElementById(idThis) as HTMLInputElement;
