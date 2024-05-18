@@ -3,14 +3,13 @@ import elementImageSrc from '../../assets/AIPainterShop.png';
 import srcSearch from '../../assets/search.svg';
 import srcProfile from '../../assets/profile.svg';
 import srcCart from '../../assets/basket.svg';
+import srcSignIn from '../../assets/sign-in.svg';
+import srcSignOut from '../../assets/sign-out.svg';
 import { ContainerView } from '../container/container';
 import './header.scss';
 import Router from '../../router/router';
 import { Pages } from '../../router/pages';
-// import { request } from '../../server/request';
-// import { requestLogin } from '../../server/request';
-// import { requestLoginCustomer } from '../../server/user';
-import { registerCustomer } from '../../server/request';
+import { Server } from '../../server/server';
 
 const headerParams = {
   tag: 'header',
@@ -29,12 +28,15 @@ export class HeaderView extends View {
 
   router: Router;
 
-  constructor(router: Router) {
+  server: Server;
+
+  constructor(router: Router, server: Server) {
     super(headerParams);
     this.container = null;
     this.elementNav = null;
     this.elementButtons = null;
     this.router = router;
+    this.server = server;
     this.headerLinkElements = new Map();
     this.configureView();
   }
@@ -46,6 +48,8 @@ export class HeaderView extends View {
     this.addButtons();
     this.buttonSeachCreate(srcSearch);
     this.buttonLoginCreate(srcProfile);
+    this.buttonSignInCreate(srcSignIn);
+    this.buttonSignOutCreate(srcSignOut);
     this.buttonCartCreate(srcCart);
   }
 
@@ -68,8 +72,8 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        const data = await registerCustomer();
-        // const data = await requestLogin();
+        // const data = await registerCustomer();
+        const data = await this.server.workApi.loginCustomer();
         console.log(data);
       },
     };
@@ -101,7 +105,10 @@ export class HeaderView extends View {
         tag: 'a',
         textContent: '',
         classNames: ['header__nav-link'],
-        callback: () => this.router.navigate(el),
+        callback: (event: Event) => {
+          event.preventDefault();
+          this.router.navigate(el);
+        },
       };
       const linkElement = this.drawLinkElement(linkParams, el.toUpperCase(), '', elem as HTMLElement);
       this.headerLinkElements.set(el.toUpperCase(), linkElement);
@@ -174,6 +181,42 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(profileParams, 'button', this.elementButtons as HTMLElement);
     this.drawImageElement(imgParams, src, 'profile', element);
     this.headerLinkElements.set(Pages.LOGIN.toUpperCase(), element);
+    return element;
+  }
+
+  buttonSignInCreate(src: string): HTMLButtonElement {
+    const signInParams = {
+      tag: 'button',
+      textContent: '',
+      classNames: ['header__sign-in'],
+      callback: () => this.router.navigate(Pages.REGISTRATION),
+    };
+    const imgParams = {
+      tag: 'img',
+      textContent: '',
+      classNames: ['header__img-sign-in'],
+    };
+    const element = this.drawButtonElement(signInParams, 'button', this.elementButtons as HTMLElement);
+    this.drawImageElement(imgParams, src, 'sign-in', element);
+    this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
+    return element;
+  }
+
+  buttonSignOutCreate(src: string): HTMLButtonElement {
+    const signOutParams = {
+      tag: 'button',
+      textContent: '',
+      classNames: ['header__sign-out'],
+      callback: () => localStorage.clear(),
+    };
+    const imgParams = {
+      tag: 'img',
+      textContent: '',
+      classNames: ['header__img-sign-out'],
+    };
+    const element = this.drawButtonElement(signOutParams, 'button', this.elementButtons as HTMLElement);
+    this.drawImageElement(imgParams, src, 'sign-out', element);
+    // this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
     return element;
   }
 
