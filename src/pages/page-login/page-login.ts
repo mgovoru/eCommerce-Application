@@ -4,6 +4,7 @@ import { Pages } from '../../router/pages';
 import Router from '../../router/router';
 import State from '../../state/state';
 import './page-login.scss';
+import { validateEmail, validatePassword } from './validation';
 
 const mainParams = {
   tag: 'section',
@@ -15,6 +16,14 @@ export default class LoginView extends View {
   state: State;
 
   router: Router;
+
+  private email!: ElementCreator;
+
+  private password!: ElementCreator;
+
+  private emailError!: ElementCreator;
+
+  private passwordError!: ElementCreator;
 
   constructor(router: Router, state: State) {
     super(mainParams);
@@ -55,35 +64,75 @@ export default class LoginView extends View {
   createInputs(container: ElementCreator) {
     const inputsContainer = new ElementCreator({ tag: 'div', classNames: ['form__inputs-container__login'] });
     container.addInnerElement(inputsContainer);
-    const labels = ['email address', 'password'];
-    const inputClass = ['form-email__login', 'form-pass__login'];
-    for (let i = 0; i < 2; i += 1) {
-      const inputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__login'] });
-      const label = new ElementCreator({ tag: 'label', textContent: labels[i] });
-      const errorDiv = new ElementCreator({ tag: 'div', classNames: ['input-reg-error__login'] });
-      const input = new ElementCreator({ tag: 'input', classNames: [inputClass[i]] }).getNode() as HTMLInputElement;
-      if (i === 1) {
-        const showPasswordSpan = new ElementCreator({
-          tag: 'span',
-          classNames: ['hidden-reg-pas__login'],
-          textContent: '👁️',
-        });
-        showPasswordSpan.setCallback(() => {
-          const currentText = showPasswordSpan.getNode().textContent;
-          const newText = currentText === '👁️' ? '👁️‍🗨️' : '👁️';
-          showPasswordSpan.setTextContent(newText);
-          const passwordInput = inputDiv.getNode().querySelector('input');
-          if (passwordInput instanceof HTMLInputElement) {
-            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-          }
-        });
-        inputDiv.addInnerElement(showPasswordSpan);
+
+    this.emailError = new ElementCreator({ tag: 'div', classNames: ['input-reg-error__login'] });
+    this.passwordError = new ElementCreator({ tag: 'div', classNames: ['input-reg-error__login'] });
+
+    this.email = new ElementCreator({
+      tag: 'input',
+      classNames: ['form-email__login'],
+      textContent: '',
+    });
+    this.email.getNode().setAttribute('type', 'text');
+    this.email.getNode().setAttribute('name', 'Email');
+    this.email.getNode().setAttribute('id', 'Email');
+    this.email.getNode().setAttribute('placeholder', 'Enter email address');
+    this.email.getNode().addEventListener('input', () => {
+      if (validateEmail(this.email, this.emailError)) {
+        this.email.removeClass('invalid');
+      } else {
+        this.email.addClass('invalid');
       }
-      inputDiv.addInnerElement(label);
-      inputDiv.addInnerElement(input);
-      inputDiv.addInnerElement(errorDiv);
-      inputsContainer.addInnerElement(inputDiv);
-    }
+    });
+
+    this.password = new ElementCreator({
+      tag: 'input',
+      classNames: ['form-pass__login'],
+      textContent: '',
+    });
+    this.password.getNode().setAttribute('type', 'password');
+    this.password.getNode().setAttribute('name', 'Password');
+    this.password.getNode().setAttribute('id', 'Password');
+    this.password.getNode().setAttribute('placeholder', 'Enter password');
+    this.password.getNode().addEventListener('input', () => {
+      if (validatePassword(this.password, this.passwordError)) {
+        this.password.removeClass('invalid');
+      } else {
+        this.password.addClass('invalid');
+      }
+    });
+
+    const emailInputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__login'] });
+    const labelEmail = new ElementCreator({ tag: 'label', textContent: 'Email address' });
+    labelEmail.getNode().setAttribute('for', 'Email');
+    emailInputDiv.addInnerElement(labelEmail);
+    emailInputDiv.addInnerElement(this.email);
+    emailInputDiv.addInnerElement(this.emailError);
+    inputsContainer.addInnerElement(emailInputDiv);
+
+    const passwordInputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__login'] });
+    const labelPass = new ElementCreator({ tag: 'label', textContent: 'Password' });
+    labelPass.getNode().setAttribute('for', 'Password');
+    passwordInputDiv.addInnerElement(labelPass);
+    passwordInputDiv.addInnerElement(this.password);
+    passwordInputDiv.addInnerElement(this.passwordError);
+    inputsContainer.addInnerElement(passwordInputDiv);
+
+    const showPasswordSpan = new ElementCreator({
+      tag: 'span',
+      classNames: ['hidden-reg-pas__login'],
+      textContent: '👁️‍🗨️',
+    });
+    showPasswordSpan.setCallback(() => {
+      const currentText = showPasswordSpan.getNode().textContent;
+      const newText = currentText === '👁️' ? '👁️‍🗨️' : '👁️';
+      showPasswordSpan.setTextContent(newText);
+      const passwordInput = passwordInputDiv.getNode().querySelector('input');
+      if (passwordInput instanceof HTMLInputElement) {
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+      }
+    });
+    passwordInputDiv.addInnerElement(showPasswordSpan);
   }
 
   createLoginRef(container: ElementCreator) {
@@ -118,8 +167,7 @@ export default class LoginView extends View {
     acceptButton.setType('submit');
     acceptButton.setCallback((event) => {
       event.preventDefault();
-      // submit cod
-      // submit cod - end
+      this.submitHandler();
     });
     container.addInnerElement(acceptButton);
     const acceptButtonText = new ElementCreator({
@@ -134,5 +182,15 @@ export default class LoginView extends View {
       classNames: ['login__accept-button__arrow'],
     });
     acceptButton.addInnerElement(acceptButtonArrow);
+  }
+
+  submitHandler() {
+    const isEmailValid = validateEmail(this.email, this.emailError);
+    const isPasswordValid = validatePassword(this.password, this.passwordError);
+    if (isEmailValid && isPasswordValid) {
+      console.log('Email:', (this.email.getNode() as HTMLInputElement).value);
+      console.log('Password:', (this.password.getNode() as HTMLInputElement).value);
+      // if true, send data to commercetools, check there (if such user already exists) and store it
+    }
   }
 }

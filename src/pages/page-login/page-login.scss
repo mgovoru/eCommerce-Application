@@ -53,15 +53,19 @@
 }
 
 .input-reg-error__login {
-  height: 5px;
-  font-size: 0.7rem;
+  height: 40px;
+  font-size: 0.6rem;
   color: red;
+}
+
+.login-wrong-iput-field {
+  background-color: rgba(255, 0, 0, 0.5);
 }
 
 .hidden-reg-pas__login {
   position: absolute;
   right: 0;
-  top: 45%;
+  top: 35%;
   cursor: pointer;
 }
 

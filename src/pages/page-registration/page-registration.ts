@@ -4,6 +4,9 @@ import { Pages } from '../../router/pages';
 import Router from '../../router/router';
 import State from '../../state/state';
 import './page-registration.scss';
+import { RegistrationValidation } from './validation';
+import { copyBillingToShipping, stopCopy } from './copy-billing-to-shipping';
+import { id, patterns, error, onIputCheck, idShipping, patternsShipping, errorShipping } from './on-input-function';
 
 const mainParams = {
   tag: 'section',
@@ -50,6 +53,8 @@ export default class RegistrationView extends View {
     form.getNode().setAttribute('id', 'id-form-reg');
     container.addInnerElement(form);
     this.createInputs(form);
+    this.createFlagsForUseBillingAdress(form);
+    this.createSecondAdressInputs(form);
   }
 
   createInputs(container: ElementCreator) {
@@ -62,10 +67,10 @@ export default class RegistrationView extends View {
       'password',
       'repeat password',
       'Date of birth',
-      'Street',
-      'City',
-      'Postal code',
-      'Country',
+      'Street*',
+      'City*',
+      'Postal code*',
+      'Country*',
     ];
     const inputClass = [
       'form-f-name',
@@ -89,12 +94,22 @@ export default class RegistrationView extends View {
         // Создаем выпадающий список для последнего поля
         const selectOptions = ['Russia', 'Ukraine', 'Belarus'];
         input = new ElementCreator({ tag: 'select', classNames: [inputClass[i]] }).getNode() as HTMLSelectElement;
+        input.setAttribute('id', inputClass[i]);
+        label.getNode().setAttribute('for', inputClass[i]);
         selectOptions.forEach((option) => {
           const optionElement = new ElementCreator({ tag: 'option', textContent: option });
           input.appendChild(optionElement.getNode());
         });
       } else {
         input = new ElementCreator({ tag: 'input', classNames: [inputClass[i]] }).getNode() as HTMLInputElement;
+        input.setAttribute('id', inputClass[i]);
+        input.addEventListener('input', () => {
+          const idInMassiv = Object.values(id[i])[0];
+          const patternInMassiv = Object.values(patterns[i])[0];
+          const errorInMassiv = Object.values(error[i])[0];
+          onIputCheck(idInMassiv, patternInMassiv, errorInMassiv);
+        });
+        label.getNode().setAttribute('for', inputClass[i]);
         if (i === 3 || i === 4) {
           // Add span for password and repeat password fields
           const showPasswordSpan = new ElementCreator({
@@ -121,6 +136,107 @@ export default class RegistrationView extends View {
       // Добавляем блок div с label и input в контейнер для инпутов
       inputsContainer.addInnerElement(inputDiv);
     }
+  }
+
+  createFlagsForUseBillingAdress(container: ElementCreator) {
+    const thisContainer = new ElementCreator({ tag: 'div', classNames: ['inputs__use-adress-b'] });
+    container.addInnerElement(thisContainer);
+
+    const howUseBilling = new ElementCreator({
+      tag: 'div',
+      textContent: 'Fields with "*" are Billing addresse. Use them for: ',
+      classNames: ['how-use-billing-adress'],
+    });
+    thisContainer.addInnerElement(howUseBilling);
+
+    const billing = new ElementCreator({ tag: 'span', textContent: '\n- Set as default Billing ' });
+    howUseBilling.addInnerElement(billing);
+
+    const checkBilling = new ElementCreator({ tag: 'input' });
+    checkBilling.setType('checkbox');
+    checkBilling.getNode().setAttribute('id', 'billing-flag');
+    billing.addInnerElement(checkBilling);
+
+    const asShipping = new ElementCreator({ tag: 'span', textContent: '\n- also use as Shipping address ' });
+    howUseBilling.addInnerElement(asShipping);
+
+    const checkAsShipping = new ElementCreator({ tag: 'input' });
+    checkAsShipping.setType('checkbox');
+    checkAsShipping.getNode().setAttribute('id', 'as-shipping-flag');
+    asShipping.addInnerElement(checkAsShipping);
+
+    checkAsShipping.getNode().addEventListener('change', () => {
+      const checkbox = checkAsShipping.getNode() as HTMLInputElement;
+      if (checkbox.checked) {
+        copyBillingToShipping();
+        console.log('flag is true');
+      } else {
+        stopCopy();
+      }
+    });
+  }
+
+  createSecondAdressInputs(container: ElementCreator) {
+    const inputsContainer = new ElementCreator({ tag: 'div', classNames: ['inputs-container__second'] });
+    container.addInnerElement(inputsContainer);
+    const hr = new ElementCreator({ tag: 'hr', classNames: ['inputs-container__second__hr'] });
+    inputsContainer.addInnerElement(hr);
+    const titleSecondInputs = new ElementCreator({
+      tag: 'div',
+      textContent: 'Shipping Address',
+      classNames: ['inputs-container__second__title'],
+    });
+    inputsContainer.addInnerElement(titleSecondInputs);
+    const inputsContainerForInputs = new ElementCreator({
+      tag: 'div',
+      classNames: ['inputs-container__second__for-inputs'],
+    });
+    inputsContainer.addInnerElement(inputsContainerForInputs);
+    const labels = ['Country', 'City', 'Street', 'Postal code'];
+    const inputsId = ['ship-country', 'ship-city', 'ship-street', 'ship-postal'];
+    for (let i = 0; i < 4; i += 1) {
+      const inputDiv = new ElementCreator({ tag: 'div', classNames: ['input-wrapper__ship'] });
+      const label = new ElementCreator({ tag: 'label', textContent: labels[i] });
+      label.getNode().setAttribute('for', inputsId[i]);
+      const errorDiv = new ElementCreator({ tag: 'div', classNames: ['input-reg-error'] });
+      let input: HTMLInputElement | HTMLSelectElement;
+      if (i === 0) {
+        const selectOptions = ['Russia', 'Ukraine', 'Belarus'];
+        input = new ElementCreator({ tag: 'select' }).getNode() as HTMLSelectElement;
+        input.setAttribute('id', inputsId[i]);
+        selectOptions.forEach((option) => {
+          const optionElement = new ElementCreator({ tag: 'option', textContent: option });
+          input.appendChild(optionElement.getNode());
+        });
+      } else {
+        input = new ElementCreator({ tag: 'input' }).getNode() as HTMLInputElement;
+        input.setAttribute('id', inputsId[i]);
+        input.addEventListener('input', () => {
+          const idInMassiv = Object.values(idShipping[i - 1])[0];
+          const patternInMassiv = Object.values(patternsShipping[i - 1])[0];
+          const errorInMassiv = Object.values(errorShipping[i - 1])[0];
+          onIputCheck(idInMassiv, patternInMassiv, errorInMassiv);
+        });
+      }
+      inputDiv.addInnerElement(label);
+      inputDiv.addInnerElement(input);
+      inputDiv.addInnerElement(errorDiv);
+      inputsContainerForInputs.addInnerElement(inputDiv);
+    }
+    this.createFlagsForDefaultShipping(container);
+  }
+
+  createFlagsForDefaultShipping(container: ElementCreator) {
+    const thisContainer = new ElementCreator({ tag: 'div', classNames: ['inputs__use-adress-s'] });
+    container.addInnerElement(thisContainer);
+
+    const defaultShipping = new ElementCreator({ tag: 'div', textContent: '- Set as default Sipping ' });
+    thisContainer.addInnerElement(defaultShipping);
+
+    const checkShipping = new ElementCreator({ tag: 'input' });
+    checkShipping.setType('checkbox');
+    checkShipping.getNode().setAttribute('id', 'shipping-flag');
+    defaultShipping.addInnerElement(checkShipping);
   }
 
   createLoginRef(container: ElementCreator) {
@@ -156,6 +272,7 @@ export default class RegistrationView extends View {
     acceptButton.setCallback((event) => {
       event.preventDefault();
       // submit cod
+      new RegistrationValidation().registrationValidAllInputs();
       // submit cod - end
     });
     container.addInnerElement(acceptButton);
