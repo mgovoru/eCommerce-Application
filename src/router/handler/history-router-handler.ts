@@ -47,6 +47,7 @@ export default class HistoryRouterHandler {
   }
 
   setHistory(url: string) {
-    window.history.pushState(null, '', `/${url}`);
+    // window.history.pushState(null, '', `/${url}`);
+    window.history.pushState(null, '', url);
   }
 }
