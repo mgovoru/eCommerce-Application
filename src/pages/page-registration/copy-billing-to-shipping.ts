@@ -3,6 +3,7 @@ const inputEventHandlers: { [key: string]: () => void } = {};
 function startCopy(billingAddrId: string, shippingAddrId: string) {
   const billingAddr = document.getElementById(billingAddrId) as HTMLInputElement;
   const shippingAddr = document.getElementById(shippingAddrId) as HTMLInputElement;
+  shippingAddr.disabled = true; // отключаю поля
 
   if (billingAddr && shippingAddr) {
     const inputEventHandler = () => {
@@ -14,6 +15,11 @@ function startCopy(billingAddrId: string, shippingAddrId: string) {
   }
 }
 
+function disabledFalse(idElement: string) {
+  const element = document.getElementById(idElement) as HTMLInputElement;
+  element.disabled = false;
+}
+
 export function copyBillingToShipping() {
   startCopy('form-city', 'ship-city');
   startCopy('form-street', 'ship-street');
@@ -21,6 +27,7 @@ export function copyBillingToShipping() {
 
   const billingCountry = document.getElementById('form-country') as HTMLInputElement;
   const shippingCountry = document.getElementById('ship-country') as HTMLInputElement;
+  shippingCountry.disabled = true; // отключаю поля
   function updateShipCountry() {
     shippingCountry.value = billingCountry.value;
     billingCountry.onchange = updateShipCountry;
@@ -40,4 +47,8 @@ export function stopCopy() {
 
   const billingCountry = document.getElementById('form-country') as HTMLInputElement;
   billingCountry.onchange = null;
+  disabledFalse('ship-country'); // включаю поля
+  disabledFalse('ship-city');
+  disabledFalse('ship-street');
+  disabledFalse('ship-postal');
 }
