@@ -1,14 +1,5 @@
-interface RegistrationData {
-  email: string | null;
-  password: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  date: string | null;
-  country: string | null;
-  street: string | null;
-  city: string | null;
-  postal: string | null;
-}
+import { RegistrationData, registrationData, handlingRegistration } from './handlingRegistration';
+
 interface LoginData {
   email: string | null;
   password: string | null;
@@ -17,18 +8,10 @@ interface Response {
   error: string;
   result: boolean;
 }
-let matchPassword = false;
-let registrationData: RegistrationData = {
-  email: null,
-  password: null,
-  firstName: null,
-  lastName: null,
-  date: null,
-  country: null,
-  street: null,
-  city: null,
-  postal: null,
+export const matchPassword = {
+  status: false,
 };
+
 let loginData: LoginData = {
   email: null,
   password: null,
@@ -150,69 +133,13 @@ export class RegistrationValidation {
       const el = element as HTMLElement;
       el.textContent = '';
     });
-    // Очистить объект registrationData
-    matchPassword = false;
-    registrationData = {
-      email: null,
-      password: null,
-      firstName: null,
-      lastName: null,
-      date: null,
-      country: null,
-      street: null,
-      city: null,
-      postal: null,
-    };
+    matchPassword.status = false;
 
-    const emailInput = document.querySelector('.form-email') as HTMLInputElement;
-    const email = emailInput.value;
-    const emailError = emailInput.nextElementSibling as HTMLElement;
-    if (!this.validMail(email).result) {
-      emailError.textContent = this.validMail(email).error;
-      emailInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.email = email;
-    }
-
-    const passwordInput = document.querySelector('.form-pass') as HTMLInputElement;
-    const password = passwordInput.value;
-    const passwordError = passwordInput.nextElementSibling as HTMLElement;
-    if (!this.validPassword(password).result) {
-      passwordError.textContent = this.validPassword(password).error;
-      passwordInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.password = password;
-    }
-
-    const passwordRepeatInput = document.querySelector('.form-r-pass') as HTMLInputElement;
-    const passwordRepeat = passwordRepeatInput.value;
-    const passwordRepeatError = passwordRepeatInput.nextElementSibling as HTMLElement;
-    if (!this.validRepeatPassword(passwordRepeat).result) {
-      passwordRepeatError.textContent = this.validRepeatPassword(passwordRepeat).error;
-      passwordRepeatInput.classList.add('registration-wrong-iput-field');
-    } else {
-      matchPassword = true;
-    }
-
-    const firstNameInput = document.querySelector('.form-f-name') as HTMLInputElement;
-    const firstName = firstNameInput.value;
-    const firstNameError = firstNameInput.nextElementSibling as HTMLElement;
-    if (!this.validFirstAndLastName(firstName).result) {
-      firstNameError.textContent = this.validFirstAndLastName(firstName).error;
-      firstNameInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.firstName = firstName;
-    }
-
-    const lastNameInput = document.querySelector('.form-l-name') as HTMLInputElement;
-    const lastName = lastNameInput.value;
-    const lastNameError = lastNameInput.nextElementSibling as HTMLElement;
-    if (!this.validFirstAndLastName(lastName).result) {
-      lastNameError.textContent = this.validFirstAndLastName(lastName).error;
-      lastNameInput.classList.add('registration-wrong-iput-field');
-    } else {
-      registrationData.lastName = lastName;
-    }
+    handlingRegistration('.form-email', this.validMail, 'email');
+    handlingRegistration('.form-pass', this.validPassword, 'password');
+    handlingRegistration('.form-r-pass', this.validRepeatPassword, 'password');
+    handlingRegistration('.form-f-name', this.validFirstAndLastName, 'firstName');
+    handlingRegistration('.form-l-name', this.validFirstAndLastName, 'lastName');
 
     const dateInput = document.querySelector('.form-birth') as HTMLInputElement;
     const date = dateInput.value;
@@ -259,7 +186,7 @@ export class RegistrationValidation {
     }
 
     // Ниже проверка что все значения записанны и пароль повторен верно
-    // console.log(registrationData);
+    console.log(registrationData);
     if (matchPassword && allValuesAreStrings(registrationData)) {
       // console.log('password is match');
       // console.log('Все данные введены верно', registrationData);
