@@ -234,7 +234,7 @@ export default class RegistrationView extends View {
     const thisContainer = new ElementCreator({ tag: 'div', classNames: ['inputs__use-adress-s'] });
     container.addInnerElement(thisContainer);
 
-    const defaultShipping = new ElementCreator({ tag: 'div', textContent: '- Set as default Sipping ' });
+    const defaultShipping = new ElementCreator({ tag: 'div', textContent: '- Set as default Shipping ' });
     thisContainer.addInnerElement(defaultShipping);
 
     const checkShipping = new ElementCreator({ tag: 'input' });
@@ -252,7 +252,7 @@ export default class RegistrationView extends View {
     container.addInnerElement(loginRefCont);
     const loginRefQuestion = new ElementCreator({
       tag: 'div',
-      textContent: 'Alredy have an account?',
+      textContent: 'Already have an account?',
       classNames: ['login-ref__cont__question'],
     });
     loginRefCont.addInnerElement(loginRefQuestion);

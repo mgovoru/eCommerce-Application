@@ -109,9 +109,11 @@ export class App {
   }
 
   setContent(page: string, view: View) {
-    // if (this.header) {
-    //   this.header.setSelected(page);
-    // }
+    if (this.header && page === 'main') {
+      this.header.setSelectedItem(page);
+    } else if (this.header && page !== 'main') {
+      this.header.setNoSelectedItem('main');
+    }
     if (this.main) {
       this.main.setContent(view);
     }

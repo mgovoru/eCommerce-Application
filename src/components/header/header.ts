@@ -182,7 +182,7 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(profileParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'profile', element);
     elementImage.title = 'login';
-    this.headerLinkElements.set(Pages.LOGIN.toUpperCase(), element);
+    // this.headerLinkElements.set(Pages.LOGIN.toUpperCase(), element);
     return element;
   }
 
@@ -201,7 +201,7 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(signInParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'sign-in', element);
     elementImage.title = 'sign in';
-    this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
+    // this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
     return element;
   }
 
@@ -242,7 +242,7 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(cartParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'cart', element);
     elementImage.title = 'cart';
-    this.headerLinkElements.set(Pages.CART.toUpperCase(), element);
+    // this.headerLinkElements.set(Pages.CART.toUpperCase(), element);
     return element;
   }
 
@@ -250,5 +250,15 @@ export class HeaderView extends View {
     const menu = this.drawElement({ tag: 'div', classNames: ['icon-menu'] }, this.container as HTMLElement);
     this.drawElement({ tag: 'span' }, menu as HTMLElement);
     return menu;
+  }
+
+  setSelectedItem(namePage: string) {
+    const linkItem = this.headerLinkElements.get(namePage.toUpperCase()) as HTMLLinkElement;
+    this.setSelected(linkItem);
+  }
+
+  setNoSelectedItem(namePage: string) {
+    const linkItem = this.headerLinkElements.get(namePage.toUpperCase()) as HTMLLinkElement;
+    this.setNotSelected(linkItem);
   }
 }
