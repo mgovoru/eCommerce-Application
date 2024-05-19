@@ -48,8 +48,7 @@ export class RegistrationValidation {
   validPassword(str: string): Response {
     const passValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;
     const response = {
-      error:
-        'Password must be at least 8 characters, include a small letter, a capital letter, a number and a special symbol',
+      error: 'Password must be at least 8 characters, include a small letter, a capital letter, a number',
       result: passValid.test(str),
     };
     // минимум 1 маленькая буква, 1 большая, 1 цифра. минимум 8 символов. Принимает Англ буквы, цифры, спецсимволы.
