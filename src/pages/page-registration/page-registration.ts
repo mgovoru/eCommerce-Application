@@ -4,9 +4,10 @@ import { Pages } from '../../router/pages';
 import Router from '../../router/router';
 import State from '../../state/state';
 import './page-registration.scss';
-import { RegistrationValidation } from './validation';
+import { DataReturn, RegistrationValidation } from './validation';
 import { copyBillingToShipping, stopCopy } from './copy-billing-to-shipping';
 import { id, patterns, error, onIputCheck, idShipping, patternsShipping, errorShipping } from './on-input-function';
+import { Server } from '../../server/server';
 
 const mainParams = {
   tag: 'section',
@@ -19,10 +20,13 @@ export default class RegistrationView extends View {
 
   router: Router;
 
-  constructor(router: Router, state: State) {
+  server: Server;
+
+  constructor(router: Router, state: State, server: Server) {
     super(mainParams);
     this.state = state;
     this.router = router;
+    this.server = server;
     this.createRegContainer();
   }
 
@@ -272,7 +276,15 @@ export default class RegistrationView extends View {
     acceptButton.setCallback((event) => {
       event.preventDefault();
       // submit cod
-      new RegistrationValidation().registrationValidAllInputs();
+      const data = new RegistrationValidation().registrationValidAllInputs() as DataReturn;
+      const checkаflagAsShipping = (document.querySelector('#as-shipping-flag') as HTMLInputElement).checked;
+      const checkаflagAsBilling = (document.querySelector('#billing-flag') as HTMLInputElement).checked;
+      const flagDefaultAsShipping = checkаflagAsShipping ? 1 : 0;
+      const flagDefaultAsBilling = checkаflagAsBilling ? 1 : 0;
+      console.log(this.server.workApi.changeData(data, flagDefaultAsShipping, flagDefaultAsBilling));
+      this.server.workApi.registerCustomer(
+        this.server.workApi.changeData(data, flagDefaultAsShipping, flagDefaultAsBilling)
+      );
       // submit cod - end
     });
     container.addInnerElement(acceptButton);

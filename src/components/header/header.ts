@@ -207,7 +207,10 @@ export class HeaderView extends View {
       tag: 'button',
       textContent: '',
       classNames: ['header__sign-out'],
-      callback: () => localStorage.clear(),
+      callback: () => {
+        localStorage.clear();
+        this.router.navigate(Pages.INDEX);
+      },
     };
     const imgParams = {
       tag: 'img',

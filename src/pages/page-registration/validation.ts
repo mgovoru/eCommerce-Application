@@ -16,6 +16,11 @@ interface Response {
   error: string;
   result: boolean;
 }
+export interface DataReturn {
+  data: RegistrationData;
+  ship: AddressOfRegistration;
+  bill: AddressOfRegistration;
+}
 export const matchPassword = {
   status: false,
 };
@@ -130,7 +135,7 @@ export class RegistrationValidation {
     return response;
   }
 
-  registrationValidAllInputs(): RegistrationData | null {
+  registrationValidAllInputs(): DataReturn | null {
     // Удаление красного фона в инпутах
     const allWrongInputs = document.querySelectorAll('.registration-wrong-iput-field');
     allWrongInputs.forEach((element) => {
@@ -163,7 +168,7 @@ export class RegistrationValidation {
 
     // Ниже проверка что все значения записанны и пароль повторен верно
     console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
-    // console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
+    console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
     if (
       matchPassword &&
       allValuesAreNotNull(registrationData) &&
@@ -171,7 +176,11 @@ export class RegistrationValidation {
       allValuesAreNotNull(shippingRegistrationData)
     ) {
       console.log('Все данные введены верно', registrationData);
-      return registrationData;
+      return {
+        data: registrationData,
+        ship: shippingRegistrationData,
+        bill: billingRegistrationData,
+      };
     }
     return null;
   }

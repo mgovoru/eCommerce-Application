@@ -73,7 +73,7 @@ export class App {
         callback: async () => {
           if (!localStorage.getItem('tokenCashe')) {
             const { default: RegistartionView } = await import('../pages/page-registration/page-registration');
-            this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state));
+            this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state, this.server));
           }
         },
       },
