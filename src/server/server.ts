@@ -21,8 +21,7 @@ export class Server {
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {
-    const scopesSplit = scopes.split(',');
-    console.log(scopesSplit);
+    scopes.split(',');
     const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: 'https://auth.europe-west1.gcp.commercetools.com',
       projectKey,

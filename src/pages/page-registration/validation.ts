@@ -167,15 +167,15 @@ export class RegistrationValidation {
     addresshandlingRegistration('ship-postal', this.validPostalCode, 'postal', shippingRegistrationData);
 
     // Ниже проверка что все значения записанны и пароль повторен верно
-    console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
-    console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
+    // console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
+    // console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
     if (
       matchPassword &&
       allValuesAreNotNull(registrationData) &&
       allValuesAreNotNull(billingRegistrationData) &&
       allValuesAreNotNull(shippingRegistrationData)
     ) {
-      console.log('Все данные введены верно', registrationData);
+      // console.log('Все данные введены верно', registrationData);
       return {
         data: registrationData,
         ship: shippingRegistrationData,

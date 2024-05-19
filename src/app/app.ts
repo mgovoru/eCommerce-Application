@@ -62,7 +62,7 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          if (!localStorage.getItem('tokenCashe')) {
+          if (!localStorage.getItem('name')) {
             const { default: LoginView } = await import('../pages/page-login/page-login');
             this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
           }
@@ -71,7 +71,7 @@ export class App {
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
-          if (!localStorage.getItem('tokenCashe')) {
+          if (!localStorage.getItem('name')) {
             const { default: RegistartionView } = await import('../pages/page-registration/page-registration');
             this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state, this.server));
           }
