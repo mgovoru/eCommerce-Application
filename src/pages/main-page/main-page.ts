@@ -18,15 +18,19 @@ export default class MainPageView extends View {
     super(mainParams);
     this.state = state;
     this.textBlock = null;
-    this.configureView('');
+    this.configureView();
   }
 
-  configureView(str: string) {
+  configureView() {
     const containerNew = new ContainerView();
     containerNew.addNameClass('page-main');
     const container = containerNew.getElement();
     this.textBlock = this.drawElement({ tag: 'div', classNames: ['page-main__text'] }, container);
-    this.textBlock.textContent = `Hello, ${str}`;
+    if (localStorage.getItem('name')) {
+      this.textBlock.textContent = `Hello, ${JSON.parse(localStorage.getItem('name') as string)}`;
+    } else {
+      this.textBlock.textContent = `Hello!`;
+    }
     this.viewElementCreator.append(container);
   }
 

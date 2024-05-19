@@ -2,6 +2,7 @@ import { ElementCreator } from '../../app/base';
 import { View } from '../../app/view';
 import { Pages } from '../../router/pages';
 import Router from '../../router/router';
+import { Server } from '../../server/server';
 import State from '../../state/state';
 import './page-login.scss';
 import { validateEmail, validatePassword } from './validation';
@@ -25,10 +26,13 @@ export default class LoginView extends View {
 
   private passwordError!: ElementCreator;
 
-  constructor(router: Router, state: State) {
+  server: Server;
+
+  constructor(router: Router, state: State, server: Server) {
     super(mainParams);
     this.state = state;
     this.router = router;
+    this.server = server;
     this.createLoginCont();
   }
 
@@ -188,9 +192,12 @@ export default class LoginView extends View {
     const isEmailValid = validateEmail(this.email, this.emailError);
     const isPasswordValid = validatePassword(this.password, this.passwordError);
     if (isEmailValid && isPasswordValid) {
+      const userEmail = (this.email.getNode() as HTMLInputElement).value;
+      const userPassword = (this.password.getNode() as HTMLInputElement).value;
       console.log('Email:', (this.email.getNode() as HTMLInputElement).value);
       console.log('Password:', (this.password.getNode() as HTMLInputElement).value);
       // if true, send data to commercetools, check there (if such user already exists) and store it
+      this.server.workApi.loginCustomer(userEmail, userPassword);
     }
   }
 }

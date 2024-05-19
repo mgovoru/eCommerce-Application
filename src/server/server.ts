@@ -7,6 +7,7 @@ import {
 } from '@commercetools/sdk-client-v2';
 import { Credentials } from '../app/type';
 import { WorkApi } from './workapi';
+import Router from '../router/router';
 
 export const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: 'https://api.europe-west1.gcp.commercetools.com',
@@ -15,8 +16,8 @@ export const httpMiddlewareOptions: HttpMiddlewareOptions = {
 export class Server {
   workApi: WorkApi;
 
-  constructor() {
-    this.workApi = new WorkApi(this);
+  constructor(router: Router) {
+    this.workApi = new WorkApi(this, router);
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {
