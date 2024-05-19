@@ -14,39 +14,6 @@ export const credentials: Credentials = {
   clientSecret: Settings.CLIENTSECRET,
   scopes: Settings.SCOPES,
 };
-// данные для тестов
-// const address: AddressDraft = {
-//   country: 'UK',
-//   city: 'London',
-//   streetName: 'st.WhiteRabbit',
-//   streetNumber: '3',
-// };
-// const shippingAddress: BaseAddress = {
-//   country: 'UK',
-//   state: '',
-//   city: 'London',
-//   streetName: 'st.WhiteRabbit',
-//   streetNumber: '',
-//   postalCode: '',
-// };
-
-// const billingAddress: BaseAddress = {
-//   country: 'UK',
-//   state: '',
-//   city: 'London',
-//   streetName: 'st.GrayRabbit',
-//   streetNumber: '',
-//   postalCode: '',
-// };
-
-// export const customerDraft: CustomerDraft = {
-//   key: 'key111',
-//   email: 'rabbit@google.com',
-//   password: '12345',
-//   addresses: [shippingAddress, billingAddress],
-//   defaultShippingAddress: 0,
-//   defaultBillingAddress: 1,
-// };
 
 export class WorkApi {
   server: Server;
@@ -130,7 +97,6 @@ export class WorkApi {
       })
       .execute()
       .then((response) => {
-        console.log(response);
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
@@ -144,15 +110,6 @@ export class WorkApi {
       });
   }
 
-  // функция выдает список покупателей
-  // requestGetCustomers() {
-  //   return apiRoot(credentials)
-  //     .withProjectKey({ projectKey: credentials.projectKey })
-  //     .customers()
-  //     .get()
-  //     .execute()
-  //     .catch((err: Error) => err);
-  // }
   loginCustomer(emailUser: string, passwordUser: string) {
     return this.server
       .apiRoot(credentials)
@@ -166,15 +123,13 @@ export class WorkApi {
       })
       .execute()
       .then((response) => {
-        console.log(response);
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
           localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
         }
         const userApi = new UserApiServer(this.server);
-        const data1 = userApi.createCustomerApiClient(emailUser, passwordUser);
-        console.log(data1);
+        userApi.createCustomerApiClient(emailUser, passwordUser);
         this.router.navigate(Pages.MAIN);
       })
       .catch((error) => {
@@ -182,15 +137,4 @@ export class WorkApi {
         errorElement.show(error.message);
       });
   }
-  // handle
-  // requestLogin() {
-  //   return apiRoot(credentials)
-  //     .withProjectKey({ projectKey: credentials.projectKey })
-  //     .get()
-  //     .execute()
-  //     .then((response) => console.log(response))
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }
 }

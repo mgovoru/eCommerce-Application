@@ -173,7 +173,7 @@ export default class RegistrationView extends View {
       const checkbox = checkAsShipping.getNode() as HTMLInputElement;
       if (checkbox.checked) {
         copyBillingToShipping();
-        console.log('flag is true');
+        // console.log('flag is true');
       } else {
         stopCopy();
       }
@@ -234,7 +234,7 @@ export default class RegistrationView extends View {
     const thisContainer = new ElementCreator({ tag: 'div', classNames: ['inputs__use-adress-s'] });
     container.addInnerElement(thisContainer);
 
-    const defaultShipping = new ElementCreator({ tag: 'div', textContent: '- Set as default Sipping ' });
+    const defaultShipping = new ElementCreator({ tag: 'div', textContent: '- Set as default Shipping ' });
     thisContainer.addInnerElement(defaultShipping);
 
     const checkShipping = new ElementCreator({ tag: 'input' });
@@ -252,7 +252,7 @@ export default class RegistrationView extends View {
     container.addInnerElement(loginRefCont);
     const loginRefQuestion = new ElementCreator({
       tag: 'div',
-      textContent: 'Alredy have an account?',
+      textContent: 'Already have an account?',
       classNames: ['login-ref__cont__question'],
     });
     loginRefCont.addInnerElement(loginRefQuestion);
@@ -281,7 +281,7 @@ export default class RegistrationView extends View {
       const checkаflagAsBilling = (document.querySelector('#billing-flag') as HTMLInputElement).checked;
       const flagDefaultAsShipping = checkаflagAsShipping ? 1 : 0;
       const flagDefaultAsBilling = checkаflagAsBilling ? 1 : 0;
-      console.log(this.server.workApi.changeData(data, flagDefaultAsShipping, flagDefaultAsBilling));
+      // console.log(this.server.workApi.changeData(data, flagDefaultAsShipping, flagDefaultAsBilling));
       this.server.workApi.registerCustomer(
         this.server.workApi.changeData(data, flagDefaultAsShipping, flagDefaultAsBilling)
       );

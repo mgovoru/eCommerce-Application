@@ -194,8 +194,8 @@ export default class LoginView extends View {
     if (isEmailValid && isPasswordValid) {
       const userEmail = (this.email.getNode() as HTMLInputElement).value;
       const userPassword = (this.password.getNode() as HTMLInputElement).value;
-      console.log('Email:', (this.email.getNode() as HTMLInputElement).value);
-      console.log('Password:', (this.password.getNode() as HTMLInputElement).value);
+      // console.log('Email:', (this.email.getNode() as HTMLInputElement).value);
+      // console.log('Password:', (this.password.getNode() as HTMLInputElement).value);
       // if true, send data to commercetools, check there (if such user already exists) and store it
       this.server.workApi.loginCustomer(userEmail, userPassword);
     }

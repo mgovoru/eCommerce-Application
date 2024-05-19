@@ -4,7 +4,7 @@ import { Params } from './type';
 export class View {
   viewElementCreator: ElementCreator;
 
-  ITEM_SELECTED = 'nav-item__selected';
+  ITEM_SELECTED = 'selected';
 
   constructor(p: Params) {
     this.viewElementCreator = this.createView(p);

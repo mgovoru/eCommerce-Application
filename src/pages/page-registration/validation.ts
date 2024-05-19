@@ -48,8 +48,7 @@ export class RegistrationValidation {
   validPassword(str: string): Response {
     const passValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;
     const response = {
-      error:
-        'Password must be at least 8 characters, include a small letter, a capital letter, a number and a special symbol',
+      error: 'Password must be at least 8 characters, include a small letter, a capital letter, a number',
       result: passValid.test(str),
     };
     // минимум 1 маленькая буква, 1 большая, 1 цифра. минимум 8 символов. Принимает Англ буквы, цифры, спецсимволы.
@@ -167,15 +166,15 @@ export class RegistrationValidation {
     addresshandlingRegistration('ship-postal', this.validPostalCode, 'postal', shippingRegistrationData);
 
     // Ниже проверка что все значения записанны и пароль повторен верно
-    console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
-    console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
+    // console.log('reg', registrationData, 'bil', billingRegistrationData, 'ship', shippingRegistrationData);
+    // console.log('shippingRegistrationData', allValuesAreNotNull(shippingRegistrationData));
     if (
       matchPassword &&
       allValuesAreNotNull(registrationData) &&
       allValuesAreNotNull(billingRegistrationData) &&
       allValuesAreNotNull(shippingRegistrationData)
     ) {
-      console.log('Все данные введены верно', registrationData);
+      // console.log('Все данные введены верно', registrationData);
       return {
         data: registrationData,
         ship: shippingRegistrationData,

@@ -62,7 +62,7 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          if (!localStorage.getItem('tokenCashe')) {
+          if (!localStorage.getItem('name')) {
             const { default: LoginView } = await import('../pages/page-login/page-login');
             this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
           }
@@ -71,7 +71,7 @@ export class App {
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
-          if (!localStorage.getItem('tokenCashe')) {
+          if (!localStorage.getItem('name')) {
             const { default: RegistartionView } = await import('../pages/page-registration/page-registration');
             this.setContent(Pages.REGISTRATION, new RegistartionView(this.router, state, this.server));
           }
@@ -109,9 +109,11 @@ export class App {
   }
 
   setContent(page: string, view: View) {
-    // if (this.header) {
-    //   this.header.setSelected(page);
-    // }
+    if (this.header && page === 'main') {
+      this.header.setSelectedItem(page);
+    } else if (this.header && page !== 'main') {
+      this.header.setNoSelectedItem('main');
+    }
     if (this.main) {
       this.main.setContent(view);
     }
