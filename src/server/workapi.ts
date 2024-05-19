@@ -4,6 +4,8 @@ import { UserApiServer } from './user';
 import ErrorView from './error';
 import { Server } from './server';
 import { Credentials } from '../app/type';
+import { Pages } from '../router/pages';
+import Router from '../router/router';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -48,8 +50,11 @@ export const customerDraft: CustomerDraft = {
 export class WorkApi {
   server: Server;
 
-  constructor(server: Server) {
+  router: Router;
+
+  constructor(server: Server, router: Router) {
     this.server = server;
+    this.router = router;
   }
 
   registerCustomer() {
@@ -87,9 +92,15 @@ export class WorkApi {
       .execute()
       .then((response) => {
         console.log(response);
+        if (response.body.customer.firstName) {
+          localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
+        } else {
+          localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
+        }
         const userApi = new UserApiServer(this.server);
-        const data1 = userApi.createCustomerApiClient();
+        const data1 = userApi.createCustomerApiClient(emailUser, passwordUser);
         console.log(data1);
+        this.router.navigate(Pages.MAIN);
       })
       .catch((error) => {
         const errorElement = new ErrorView();

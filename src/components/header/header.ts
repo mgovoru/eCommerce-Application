@@ -72,9 +72,9 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        // const data = await registerCustomer();
-        const data = await this.server.workApi.loginCustomer();
-        console.log(data);
+        // // const data = await registerCustomer();
+        // const data = await this.server.workApi.loginCustomer();
+        // console.log(data);
       },
     };
     this.drawImageElement(logoParams, elementImageSrc, 'logo', this.container as HTMLElement);

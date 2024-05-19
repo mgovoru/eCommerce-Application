@@ -1,6 +1,6 @@
 import { ClientBuilder, PasswordAuthMiddlewareOptions } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { credentials, customerDraft } from './workapi';
+import { credentials } from './workapi';
 import { Server, httpMiddlewareOptions } from './server';
 import { MyTokenCache } from './token';
 import ErrorView from './error';
@@ -13,7 +13,7 @@ export class UserApiServer {
     this.server = server;
   }
 
-  createCustomerApiClient() {
+  createCustomerApiClient(emailUser: string, passwordUser: string) {
     const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
       host: 'https://auth.europe-west1.gcp.commercetools.com',
       projectKey: credentials.projectKey,
@@ -21,8 +21,8 @@ export class UserApiServer {
         clientId: credentials.clientID,
         clientSecret: credentials.clientSecret,
         user: {
-          username: customerDraft.email as string,
-          password: customerDraft.password as string,
+          username: emailUser,
+          password: passwordUser,
         },
       },
       scopes: [`manage_project:${credentials.projectKey}`],

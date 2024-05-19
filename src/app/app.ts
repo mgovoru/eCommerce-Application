@@ -5,6 +5,7 @@ import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { Server } from '../server/server';
 import State from '../state/state';
+import { ElementCreator } from './base';
 import { View } from './view';
 
 export class App {
@@ -28,16 +29,18 @@ export class App {
     const routes = this.createRoutes(this.state);
     this.router = new Router(routes);
     this.router.setHashHandler();
-    this.server = new Server();
+    this.server = new Server(this.router);
   }
 
   createView() {
     this.header = new HeaderView(this.router, this.server);
     this.main = new MainView();
     this.footer = new FooterView();
-    document.body.append(this.header.getElement());
-    document.body.append(this.main.getElement());
-    document.body.append(this.footer.getElement());
+    const element = new ElementCreator({ tag: 'div', classNames: ['wrapper'] });
+    element.append(this.header.getElement());
+    element.append(this.main.getElement());
+    element.append(this.footer.getElement());
+    document.body.append(element.getNode());
   }
 
   createRoutes(state: State) {
@@ -61,7 +64,7 @@ export class App {
         callback: async () => {
           if (!localStorage.getItem('tokenCashe')) {
             const { default: LoginView } = await import('../pages/page-login/page-login');
-            this.setContent(Pages.LOGIN, new LoginView(this.router, state));
+            this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
           }
         },
       },
