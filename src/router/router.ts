@@ -50,7 +50,10 @@ export default class Router {
   redirectToNotFoundPage() {
     const notFoundPage = this.routes.find((item) => item.path === Pages.NOT_FOUND);
     if (notFoundPage) {
-      this.navigate(notFoundPage.path);
+      window.history.replaceState(null, '', null);
+      notFoundPage.callback('');
+    } else {
+      console.error('Not-found page is not registered.');
     }
   }
 }

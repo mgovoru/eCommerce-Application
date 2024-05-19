@@ -29,9 +29,8 @@ export default class HistoryRouterHandler {
     if (typeof url === 'string') {
       this.setHistory(url);
     }
-    const locationField = this.params.locationField as keyof Location;
 
-    const urlString = String(window.location[locationField]).slice(1);
+    const urlString = (window.location[this.params.locationField] as string).slice(1);
 
     const result: RequestParams = {
       path: '',
@@ -48,6 +47,7 @@ export default class HistoryRouterHandler {
   }
 
   setHistory(url: string) {
-    window.history.pushState(null, '', `/${url}`);
+    // window.history.pushState(null, '', `/${url}`);
+    window.history.pushState(null, '', url);
   }
 }
