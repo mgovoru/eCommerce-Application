@@ -3,7 +3,7 @@ const Pages = {
   LOGIN: 'login',
   ABOUT: 'about',
   MAIN: 'main',
-  SHOP: 'shop',
+  CATALOG: 'catalog',
   CART: 'cart',
   PRODUCT: 'product',
   NOT_FOUND: 'not-found',

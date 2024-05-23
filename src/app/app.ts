@@ -74,6 +74,13 @@ export class App {
         },
       },
       {
+        path: `${Pages.CATALOG}`,
+        callback: async () => {
+          const { default: CatalogView } = await import('../pages/catalog/catalog');
+          this.setContent(Pages.CATALOG, new CatalogView(this.router, state, this.server));
+        },
+      },
+      {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
           if (!localStorage.getItem('name')) {
