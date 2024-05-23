@@ -62,10 +62,15 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          if (!localStorage.getItem('name')) {
-            const { default: LoginView } = await import('../pages/page-login/page-login');
-            this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
-          }
+          const { default: LoginView } = await import('../pages/page-login/page-login');
+          this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
+        },
+      },
+      {
+        path: `${Pages.PROFILE}`,
+        callback: async () => {
+          const { default: ProfilePageView } = await import('../pages/page-profile/page-profile');
+          this.setContent(Pages.PROFILE, new ProfilePageView(this.router, state, this.server));
         },
       },
       {

@@ -172,7 +172,13 @@ export class HeaderView extends View {
       tag: 'button',
       textContent: '',
       classNames: ['header__profile'],
-      callback: () => this.router.navigate(Pages.LOGIN),
+      callback: () => {
+        if (!localStorage.getItem('name')) {
+          this.router.navigate(Pages.LOGIN);
+        } else {
+          this.router.navigate(Pages.PROFILE);
+        }
+      },
     };
     const imgParams = {
       tag: 'img',

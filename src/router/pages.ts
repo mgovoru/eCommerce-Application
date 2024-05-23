@@ -8,6 +8,7 @@ const Pages = {
   PRODUCT: 'product',
   NOT_FOUND: 'not-found',
   INDEX: '',
+  PROFILE: 'profile',
 };
 
 const ID_SELECTOR = '{id}';
