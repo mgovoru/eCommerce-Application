@@ -4,6 +4,7 @@ import Router from '../../router/router';
 import { Server } from '../../server/server';
 import State from '../../state/state';
 import './page-profile.scss';
+import { ElementCreator } from '../../app/base';
 
 const mainParams = {
   tag: 'section',
@@ -31,5 +32,33 @@ export default class ProfilePageView extends View {
     containerNew.addNameClass('page-profile');
     const container = containerNew.getElement();
     this.viewElementCreator.append(container);
+    const elemCreatContainer = new ElementCreator({
+      tag: 'div',
+      classNames: ['elem-create__container'],
+    });
+    container.appendChild(elemCreatContainer.getNode());
+    this.mainUserData(elemCreatContainer);
+  }
+
+  mainUserData(container: ElementCreator) {
+    const title = new ElementCreator({
+      tag: 'div',
+      textContent: 'User Profile',
+      classNames: ['page-profile__title'],
+    });
+    container.addInnerElement(title);
+
+    const containerUser = new ElementCreator({
+      tag: 'div',
+      classNames: ['page-profile__user-main__container'],
+    });
+    container.addInnerElement(containerUser);
+
+    const firstName = new ElementCreator({
+      tag: 'div',
+      textContent: 'First Name:',
+      classNames: ['user-main__container__first-name'],
+    });
+    containerUser.addInnerElement(firstName);
   }
 }
