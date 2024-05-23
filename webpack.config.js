@@ -26,6 +26,7 @@ export default {
     port: 8080,
     hot: true,
     liveReload: true,
+    historyApiFallback: true,
   },
   plugins: [
     new HTMLWebpackPlugin({
