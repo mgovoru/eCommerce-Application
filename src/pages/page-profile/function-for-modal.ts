@@ -1,6 +1,7 @@
 import { ElementCreator } from '../../app/base';
+import { onIputCheck } from '../page-registration/on-input-function';
 
-export function createModal(value: string) {
+export function createModal(value: string, patternInMassiv: RegExp, errorInMassiv: string) {
   const modalOverlay = new ElementCreator({
     tag: 'div',
     classNames: ['modal-overlay-profile'],
@@ -17,9 +18,23 @@ export function createModal(value: string) {
     textContent: `NEW ${value}`,
   });
 
+  const modalInputContainer = new ElementCreator({
+    tag: 'div',
+    classNames: ['modal-input-container-profile'],
+  });
+
+  const modalInputError = new ElementCreator({
+    tag: 'div',
+    classNames: ['modal-input-error-profile'],
+  });
+
   const modalInput = new ElementCreator({
     tag: 'input',
     classNames: ['modal-input-profile'],
+  });
+  modalInput.getNode().setAttribute('id', 'modal-input-profile');
+  modalInput.getNode().addEventListener('input', () => {
+    onIputCheck('modal-input-profile', patternInMassiv, errorInMassiv);
   });
 
   const containerForButtons = new ElementCreator({
@@ -45,7 +60,9 @@ export function createModal(value: string) {
   });
 
   modalContainer.addInnerElement(modalContent);
-  modalContainer.addInnerElement(modalInput);
+  modalContainer.addInnerElement(modalInputContainer);
+  modalInputContainer.addInnerElement(modalInput);
+  modalInputContainer.addInnerElement(modalInputError);
   modalContainer.addInnerElement(containerForButtons);
   containerForButtons.addInnerElement(applyButton);
   containerForButtons.addInnerElement(closeButton);
@@ -54,8 +71,8 @@ export function createModal(value: string) {
   return modalOverlay;
 }
 
-export function openModal(value: string) {
-  const modal = createModal(value);
+export function openModal(value: string, patternInMassiv: RegExp, errorInMassiv: string) {
+  const modal = createModal(value, patternInMassiv, errorInMassiv);
   document.body.appendChild(modal.getNode());
   document.body.classList.add('modal-open');
 }

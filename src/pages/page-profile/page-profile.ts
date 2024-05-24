@@ -6,6 +6,7 @@ import State from '../../state/state';
 import './page-profile.scss';
 import { ElementCreator } from '../../app/base';
 import { openModal } from './function-for-modal';
+import { patterns, error } from '../page-registration/on-input-function';
 
 const mainParams = {
   tag: 'section',
@@ -76,7 +77,9 @@ export default class ProfilePageView extends View {
     });
     firstNameButton.setCallback(() => {
       const label = textLabelFirstName.getNode().textContent || '';
-      openModal(label);
+      const patternFirstName = Object.values(patterns[0])[0];
+      const errorFirstName = Object.values(error[0])[0];
+      openModal(label, patternFirstName, errorFirstName);
       // код для обработки клика по кнопке
     });
     containerUser.addInnerElement(labelFirstName);
@@ -108,7 +111,9 @@ export default class ProfilePageView extends View {
     });
     lastNameButton.setCallback(() => {
       const label = textLabelLastName.getNode().textContent || '';
-      openModal(label);
+      const patternLastName = Object.values(patterns[1])[0];
+      const errorLastName = Object.values(error[1])[0];
+      openModal(label, patternLastName, errorLastName);
       // код для обработки клика по кнопке
     });
     container.addInnerElement(labelLastName);
