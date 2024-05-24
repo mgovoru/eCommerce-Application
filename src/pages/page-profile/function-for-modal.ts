@@ -55,7 +55,6 @@ export function createModal(value: string) {
 }
 
 export function openModal(value: string) {
-  console.log('modal open');
   const modal = createModal(value);
   document.body.appendChild(modal.getNode());
   document.body.classList.add('modal-open');

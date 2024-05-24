@@ -9,6 +9,9 @@
 
 .page-profile__user-main__container {
   border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .user-main__label {

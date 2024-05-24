@@ -59,19 +59,16 @@ export default class ProfilePageView extends View {
       tag: 'div',
       classNames: ['user-main__label', 'f-name'],
     });
-    containerUser.addInnerElement(labelFirstName);
     const textLabelFirstName = new ElementCreator({
       tag: 'span',
       textContent: 'First Name: ',
       classNames: ['pp-f-name'],
     });
-    labelFirstName.addInnerElement(textLabelFirstName);
     const firstName = new ElementCreator({
       tag: 'span',
       textContent: 'Test _Name',
       classNames: ['user-main__value', 'f-name-value'],
     });
-    labelFirstName.addInnerElement(firstName);
     const firstNameButton = new ElementCreator({
       tag: 'button',
       textContent: 'Change',
@@ -82,6 +79,41 @@ export default class ProfilePageView extends View {
       openModal(label);
       // код для обработки клика по кнопке
     });
+    containerUser.addInnerElement(labelFirstName);
+    labelFirstName.addInnerElement(textLabelFirstName);
+    labelFirstName.addInnerElement(firstName);
     labelFirstName.addInnerElement(firstNameButton);
+    this.lastName(containerUser);
+  }
+
+  lastName(container: ElementCreator) {
+    const labelLastName = new ElementCreator({
+      tag: 'div',
+      classNames: ['user-main__label', 'l-name'],
+    });
+    const textLabelLastName = new ElementCreator({
+      tag: 'span',
+      textContent: 'Last Name: ',
+      classNames: ['pp-l-name'],
+    });
+    const LastName = new ElementCreator({
+      tag: 'span',
+      textContent: 'last',
+      classNames: ['user-main__value', 'l-name-value'],
+    });
+    const lastNameButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'l-name-button'],
+    });
+    lastNameButton.setCallback(() => {
+      const label = textLabelLastName.getNode().textContent || '';
+      openModal(label);
+      // код для обработки клика по кнопке
+    });
+    container.addInnerElement(labelLastName);
+    labelLastName.addInnerElement(textLabelLastName);
+    labelLastName.addInnerElement(LastName);
+    labelLastName.addInnerElement(lastNameButton);
   }
 }
