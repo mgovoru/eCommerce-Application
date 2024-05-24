@@ -20,6 +20,8 @@
   font-size: 1.2rem;
 }
 
+.modal-apply-button-profile,
+.modal-close-button-profile,
 .user-main__button {
   margin: 0 0 0 1rem;
   border: 1px solid;
@@ -31,13 +33,42 @@
     color 0.3s;
 }
 
+.modal-apply-button-profile:hover,
+.modal-close-button-profile:hover,
 .user-main__button:hover {
   background-color: black;
   color: white;
 }
 
+.modal-apply-button-profile:active,
+.modal-close-button-profile:active,
 .user-main__button:active {
   transform: scale(0.95);
   background-color: #333;
   color: white;
+}
+// модальное окно
+.modal-open {
+  overflow: hidden;
+}
+
+.modal-overlay-profile {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  top: 0;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container-profile {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

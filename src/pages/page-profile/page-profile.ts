@@ -5,6 +5,7 @@ import { Server } from '../../server/server';
 import State from '../../state/state';
 import './page-profile.scss';
 import { ElementCreator } from '../../app/base';
+import { openModal } from './function-for-modal';
 
 const mainParams = {
   tag: 'section',
@@ -56,10 +57,15 @@ export default class ProfilePageView extends View {
 
     const labelFirstName = new ElementCreator({
       tag: 'div',
-      textContent: 'First Name: ',
       classNames: ['user-main__label', 'f-name'],
     });
     containerUser.addInnerElement(labelFirstName);
+    const textLabelFirstName = new ElementCreator({
+      tag: 'span',
+      textContent: 'First Name: ',
+      classNames: ['pp-f-name'],
+    });
+    labelFirstName.addInnerElement(textLabelFirstName);
     const firstName = new ElementCreator({
       tag: 'span',
       textContent: 'Test _Name',
@@ -70,6 +76,11 @@ export default class ProfilePageView extends View {
       tag: 'button',
       textContent: 'Change',
       classNames: ['user-main__button', 'f-name-button'],
+    });
+    firstNameButton.setCallback(() => {
+      const label = textLabelFirstName.getNode().textContent || '';
+      openModal(label);
+      // код для обработки клика по кнопке
     });
     labelFirstName.addInnerElement(firstNameButton);
   }
