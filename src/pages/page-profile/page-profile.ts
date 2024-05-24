@@ -54,11 +54,23 @@ export default class ProfilePageView extends View {
     });
     container.addInnerElement(containerUser);
 
-    const firstName = new ElementCreator({
+    const labelFirstName = new ElementCreator({
       tag: 'div',
-      textContent: 'First Name:',
-      classNames: ['user-main__container__first-name'],
+      textContent: 'First Name: ',
+      classNames: ['user-main__label', 'f-name'],
     });
-    containerUser.addInnerElement(firstName);
+    containerUser.addInnerElement(labelFirstName);
+    const firstName = new ElementCreator({
+      tag: 'span',
+      textContent: 'Test _Name',
+      classNames: ['user-main__value', 'f-name-value'],
+    });
+    labelFirstName.addInnerElement(firstName);
+    const firstNameButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'f-name-button'],
+    });
+    labelFirstName.addInnerElement(firstNameButton);
   }
 }

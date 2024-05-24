@@ -1,0 +1,43 @@
+.elem-create__container {
+  text-align: center;
+}
+
+.page-profile__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.page-profile__user-main__container {
+  border: 1px solid;
+}
+
+.user-main__label {
+  font-size: 0.7rem;
+}
+
+.user-main__value {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.user-main__button {
+  margin: 0 0 0 1rem;
+  border: 1px solid;
+  font-size: 0.7rem;
+  padding: 3px;
+  border-radius: 3px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.user-main__button:hover {
+  background-color: black;
+  color: white;
+}
+
+.user-main__button:active {
+  transform: scale(0.95);
+  background-color: #333;
+  color: white;
+}
