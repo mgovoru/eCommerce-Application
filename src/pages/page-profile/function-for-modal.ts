@@ -1,7 +1,10 @@
 import { ElementCreator } from '../../app/base';
 import { onIputCheck } from '../page-registration/on-input-function';
 
-export function createModal(value: string, patternInMassiv: RegExp, errorInMassiv: string) {
+export function createModal(elementClass: string, patternInMassiv: RegExp, errorInMassiv: string) {
+  const elementSpan = document.querySelector(`.${elementClass}`);
+  const valueOfElementSpan = elementSpan?.textContent;
+
   const modalOverlay = new ElementCreator({
     tag: 'div',
     classNames: ['modal-overlay-profile'],
@@ -15,7 +18,7 @@ export function createModal(value: string, patternInMassiv: RegExp, errorInMassi
   const modalContent = new ElementCreator({
     tag: 'div',
     classNames: ['modal-content-profile'],
-    textContent: `NEW ${value}`,
+    textContent: `NEW ${valueOfElementSpan}`,
   });
 
   const modalInputContainer = new ElementCreator({
@@ -46,6 +49,10 @@ export function createModal(value: string, patternInMassiv: RegExp, errorInMassi
     tag: 'button',
     classNames: ['modal-apply-button-profile'],
     textContent: 'Apply',
+  });
+  applyButton.getNode().addEventListener('click', () => {
+    // клик на кнопку Apply
+    console.log('click apply');
   });
 
   const closeButton = new ElementCreator({

@@ -76,10 +76,10 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'f-name-button'],
     });
     firstNameButton.setCallback(() => {
-      const label = textLabelFirstName.getNode().textContent || '';
+      const classOfSelectedElement = textLabelFirstName.getNode().className;
       const patternFirstName = Object.values(patterns[0])[0];
       const errorFirstName = Object.values(error[0])[0];
-      openModal(label, patternFirstName, errorFirstName);
+      openModal(classOfSelectedElement, patternFirstName, errorFirstName);
       // код для обработки клика по кнопке
     });
     containerUser.addInnerElement(labelFirstName);
@@ -110,10 +110,10 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'l-name-button'],
     });
     lastNameButton.setCallback(() => {
-      const label = textLabelLastName.getNode().textContent || '';
+      const classOfSelectedElement = textLabelLastName.getNode().className;
       const patternLastName = Object.values(patterns[1])[0];
       const errorLastName = Object.values(error[1])[0];
-      openModal(label, patternLastName, errorLastName);
+      openModal(classOfSelectedElement, patternLastName, errorLastName);
       // код для обработки клика по кнопке
     });
     container.addInnerElement(labelLastName);
