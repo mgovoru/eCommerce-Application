@@ -75,6 +75,13 @@ export function createModal(elementClass: string, pattern: RegExp, error: string
   containerForButtons.addInnerElement(applyButton);
   containerForButtons.addInnerElement(closeButton);
   modalOverlay.addInnerElement(modalContainer);
+  // закрытие модального окна при клике в свободное место
+  modalOverlay.getNode().addEventListener('mousedown', (event: MouseEvent) => {
+    if (!modalContainer.getNode().contains(event.target as Node)) {
+      document.body.classList.remove('modal-open');
+      modalOverlay.getNode().remove();
+    }
+  });
 
   return modalOverlay;
 }

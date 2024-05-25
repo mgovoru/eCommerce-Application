@@ -7,7 +7,7 @@ export function successfulApply() {
   const messageSuccessful = new ElementCreator({
     tag: 'div',
     classNames: ['modal-successful-profile'],
-    textContent: `Succcesful`,
+    textContent: `Successful`,
   });
 
   const okButton = new ElementCreator({
