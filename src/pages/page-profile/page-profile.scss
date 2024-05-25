@@ -23,6 +23,7 @@
   font-size: 1.2rem;
 }
 
+.modal-ok-button-profile,
 .modal-apply-button-profile,
 .modal-close-button-profile,
 .user-main__button {
@@ -36,6 +37,7 @@
     color 0.3s;
 }
 
+.modal-ok-button-profile:hover,
 .modal-apply-button-profile:hover,
 .modal-close-button-profile:hover,
 .user-main__button:hover {
@@ -43,6 +45,7 @@
   color: white;
 }
 
+.modal-ok-button-profile:active,
 .modal-apply-button-profile:active,
 .modal-close-button-profile:active,
 .user-main__button:active {
@@ -80,4 +83,10 @@
   height: 40px;
   font-size: 0.6rem;
   color: red;
+}
+
+.modal-successful-profile {
+  color: rgb(0, 222, 0);
+  font-weight: bold;
+  font-size: 1.5rem;
 }

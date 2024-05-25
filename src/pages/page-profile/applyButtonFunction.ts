@@ -1,3 +1,5 @@
+import { successfulApply } from './successfulApply';
+
 export function applyButtonOk(elementClass: string, pattern: RegExp) {
   const elementSpan = document.querySelector(`.${elementClass}`);
   let name: HTMLElement | null = null;
@@ -16,13 +18,12 @@ export function applyButtonOk(elementClass: string, pattern: RegExp) {
     if (name) {
       name.textContent = thisInputValue;
     }
-    console.log(thisInputValue);
+    // запросы в комерстулс относительно выбраного элемента
     if (elementClass === 'pp-f-name') {
       console.log('THIS first name');
     }
 
     // закрыветься модальное окно
-    const modalWindow = document.querySelector('.modal-overlay-profile');
-    modalWindow?.remove();
+    successfulApply();
   }
 }
