@@ -3,10 +3,12 @@ import { Settings } from '../app/enum';
 import { UserApiServer } from './user';
 import ErrorView from './error';
 import { Server } from './server';
-import { Credentials } from '../app/type';
+import { CardInfo, Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
+import { RequestCatalog } from './requestCatalog';
+import CatalogView from '../pages/catalog/catalog';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -20,9 +22,18 @@ export class WorkApi {
 
   router: Router;
 
+  requestInstance: RequestCatalog;
+
+  idUser: string;
+
+  cards: CardInfo[];
+
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
+    this.requestInstance = new RequestCatalog(this.server, this.router);
+    this.idUser = '';
+    this.cards = [];
   }
 
   changeData(data: DataReturn, flagShippng: number, flagBilling: number): CustomerDraft {
@@ -123,6 +134,8 @@ export class WorkApi {
       })
       .execute()
       .then((response) => {
+        this.idUser = response.body.customer.id;
+        console.log(this.idUser);
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
@@ -136,5 +149,13 @@ export class WorkApi {
         const errorElement = new ErrorView();
         errorElement.show(error.message);
       });
+  }
+
+  requestProducts(content: CatalogView) {
+    this.requestInstance.getProducts(content);
+  }
+
+  requestSortProducts() {
+    this.requestInstance.getSortProducts();
   }
 }

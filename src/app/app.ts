@@ -62,8 +62,10 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          const { default: LoginView } = await import('../pages/page-login/page-login');
-          this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
+          if (!localStorage.getItem('name')) {
+            const { default: LoginView } = await import('../pages/page-login/page-login');
+            this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
+          }
         },
       },
       {
@@ -121,10 +123,8 @@ export class App {
   }
 
   setContent(page: string, view: View) {
-    if (this.header && page === 'main') {
+    if (this.header) {
       this.header.setSelectedItem(page);
-    } else if (this.header && page !== 'main') {
-      this.header.setNoSelectedItem('main');
     }
     if (this.main) {
       this.main.setContent(view);

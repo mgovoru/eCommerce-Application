@@ -72,9 +72,9 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        // // const data = await registerCustomer();
-        // const data = await this.server.workApi.loginCustomer();
-        // console.log(data);
+        this.router.navigate('');
+        // this.server.workApi.requestProducts();
+        // this.server.workApi.requestSortProducts();
       },
     };
     this.drawImageElement(logoParams, elementImageSrc, 'logo', this.container as HTMLElement);
@@ -188,7 +188,7 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(profileParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'profile', element);
     elementImage.title = 'login';
-    // this.headerLinkElements.set(Pages.LOGIN.toUpperCase(), element);
+
     return element;
   }
 
@@ -207,7 +207,6 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(signInParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'sign-in', element);
     elementImage.title = 'sign in';
-    // this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
     return element;
   }
 
@@ -229,7 +228,6 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(signOutParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'sign-out', element);
     elementImage.title = 'sign out';
-    // this.headerLinkElements.set(Pages.REGISTRATION.toUpperCase(), element);
     return element;
   }
 
@@ -248,7 +246,6 @@ export class HeaderView extends View {
     const element = this.drawButtonElement(cartParams, 'button', this.elementButtons as HTMLElement);
     const elementImage = this.drawImageElement(imgParams, src, 'cart', element);
     elementImage.title = 'cart';
-    // this.headerLinkElements.set(Pages.CART.toUpperCase(), element);
     return element;
   }
 
@@ -259,12 +256,18 @@ export class HeaderView extends View {
   }
 
   setSelectedItem(namePage: string) {
-    const linkItem = this.headerLinkElements.get(namePage.toUpperCase()) as HTMLLinkElement;
-    this.setSelected(linkItem);
+    this.setAllNoSelectedItem();
+    if (this.headerLinkElements.get(namePage.toUpperCase())) {
+      const linkItem = this.headerLinkElements.get(namePage.toUpperCase()) as HTMLLinkElement;
+      this.setSelected(linkItem);
+    }
   }
 
-  setNoSelectedItem(namePage: string) {
-    const linkItem = this.headerLinkElements.get(namePage.toUpperCase()) as HTMLLinkElement;
-    this.setNotSelected(linkItem);
+  setAllNoSelectedItem() {
+    this.headerLinkElements.forEach((value) => {
+      if (value.classList.contains('selected')) {
+        this.setNotSelected(value as HTMLLinkElement);
+      }
+    });
   }
 }

@@ -14,3 +14,9 @@ export enum Settings {
   CLIENTSECRET = `lXAZCHvhzRMB6uOcf7lm7Q_XKJ_PpLa9`,
   SCOPES = `manage_project: ecommerceteam2024 manage_api_clients: ecommerceteam2024 view_api_clients: ecommerceteam2024`,
 }
+export enum QueryRequest {
+  SORTNAMEASC = 'name.en asc',
+  SORTNAMEDESC = 'name.en desc',
+  SORTPRICEASC = 'price asc',
+  SORTPRICEDESC = 'price desc',
+}
