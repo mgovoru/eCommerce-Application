@@ -1,7 +1,8 @@
 import { ElementCreator } from '../../app/base';
 import { onIputCheck } from '../page-registration/on-input-function';
+import { applyButtonOk } from './applyButtonFunction';
 
-export function createModal(elementClass: string, patternInMassiv: RegExp, errorInMassiv: string) {
+export function createModal(elementClass: string, pattern: RegExp, error: string) {
   const elementSpan = document.querySelector(`.${elementClass}`);
   const valueOfElementSpan = elementSpan?.textContent;
 
@@ -37,7 +38,7 @@ export function createModal(elementClass: string, patternInMassiv: RegExp, error
   });
   modalInput.getNode().setAttribute('id', 'modal-input-profile');
   modalInput.getNode().addEventListener('input', () => {
-    onIputCheck('modal-input-profile', patternInMassiv, errorInMassiv);
+    onIputCheck('modal-input-profile', pattern, error);
   });
 
   const containerForButtons = new ElementCreator({
@@ -52,7 +53,7 @@ export function createModal(elementClass: string, patternInMassiv: RegExp, error
   });
   applyButton.getNode().addEventListener('click', () => {
     // клик на кнопку Apply
-    console.log('click apply');
+    applyButtonOk(elementClass, pattern);
   });
 
   const closeButton = new ElementCreator({
@@ -78,8 +79,8 @@ export function createModal(elementClass: string, patternInMassiv: RegExp, error
   return modalOverlay;
 }
 
-export function openModal(value: string, patternInMassiv: RegExp, errorInMassiv: string) {
-  const modal = createModal(value, patternInMassiv, errorInMassiv);
+export function openModal(value: string, pattern: RegExp, error: string) {
+  const modal = createModal(value, pattern, error);
   document.body.appendChild(modal.getNode());
   document.body.classList.add('modal-open');
 }
