@@ -92,6 +92,13 @@ ol {
   list-style: none;
 }
 
+select,
+option {
+  all: unset;
+  display: inline-block;
+  appearance: none;
+}
+
 body {
   width: 100%;
   height: 100%;
