@@ -7,6 +7,7 @@ import './page-profile.scss';
 import { ElementCreator } from '../../app/base';
 import { openModal } from './function-for-modal';
 import { patterns, error } from '../page-registration/on-input-function';
+import { userVariable } from './userVariable';
 
 const mainParams = {
   tag: 'section',
@@ -39,7 +40,12 @@ export default class ProfilePageView extends View {
       classNames: ['elem-create__container'],
     });
     container.appendChild(elemCreatContainer.getNode());
-    this.mainUserData(elemCreatContainer);
+    // получаю данные пользователя с сервера
+    this.server.workApi.updateUser().then(() => {
+      // отрисовываю страницу после получения данных
+      this.mainUserData(elemCreatContainer);
+      console.log(userVariable.firstName);
+    });
   }
 
   mainUserData(container: ElementCreator) {
@@ -67,7 +73,7 @@ export default class ProfilePageView extends View {
     });
     const firstName = new ElementCreator({
       tag: 'span',
-      textContent: 'Test _Name',
+      textContent: userVariable.firstName,
       classNames: ['user-main__value', 'f-name-value'],
     });
     const firstNameButton = new ElementCreator({
@@ -101,7 +107,7 @@ export default class ProfilePageView extends View {
     });
     const LastName = new ElementCreator({
       tag: 'span',
-      textContent: 'last',
+      textContent: userVariable.lastName,
       classNames: ['user-main__value', 'l-name-value'],
     });
     const lastNameButton = new ElementCreator({

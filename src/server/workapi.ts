@@ -7,6 +7,7 @@ import { Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
+import { userVariable } from '../pages/page-profile/userVariable'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -99,6 +100,7 @@ export class WorkApi {
       .then((response) => {
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
+          localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
         } else {
           localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
         }
@@ -124,6 +126,7 @@ export class WorkApi {
       .execute()
       .then((response) => {
         if (response.body.customer.firstName) {
+          localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
           localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
@@ -136,5 +139,31 @@ export class WorkApi {
         const errorElement = new ErrorView();
         errorElement.show(error.message);
       });
+  }
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  updateUser() {
+    const idString = localStorage.getItem('id');
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .get()
+        .execute()
+        .then((response) => {
+          // console.log(response.body)
+          userVariable.firstName = response.body.firstName;
+          userVariable.lastName = response.body.lastName;
+          return response.body;
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
 }
