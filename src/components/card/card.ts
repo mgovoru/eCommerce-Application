@@ -13,6 +13,16 @@ export class CardView extends View {
   }
 
   render(cardInfo: CardInfo): string {
+    let discount = '';
+    let styleline = '';
+    let stylecolor = '';
+    const price = String(cardInfo.price[0]?.value?.centAmount).slice(0, 2);
+    if (cardInfo.price[0].discounted?.value.centAmount) {
+      discount = String(cardInfo.price[0].discounted?.value.centAmount).slice(0, 2);
+      styleline = 'text-decoration:line-through';
+      stylecolor = 'color:red';
+    }
+
     return `
 			<div class="cards__item">
 			<div class="cards__element">
@@ -25,7 +35,7 @@ export class CardView extends View {
 					<h3 class="cards__title">${cardInfo?.title}</h3>
 						<h4 class="cards__sub-title">${cardInfo?.description}</h4>
 							</div>
-							<div class="cards__price">${cardInfo.price[0]?.value?.centAmount}</div>
+							<div class="cards__price"><span style=${styleline}>${price}</span><span span style=${stylecolor}>${discount}</span>${cardInfo.price[0]?.value?.currencyCode}</div>
 			</div>
 			</div>
 			</div>`;

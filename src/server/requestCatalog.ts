@@ -25,6 +25,7 @@ export class RequestCatalog {
       .get()
       .execute()
       .then((response) => {
+        console.log(response.body);
         this.server.workApi.cards = [];
         response.body.results.forEach((el) => {
           const card: CardInfo = {
@@ -64,6 +65,7 @@ export class RequestCatalog {
             title: el.name?.en as string,
             description: el.description?.en as string,
             price: el.masterVariant.prices as Price[],
+            // discount:el.variants.dis
           };
           this.server.workApi.cards.push(card);
         });
