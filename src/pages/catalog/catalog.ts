@@ -4,7 +4,7 @@ import { CardView } from '../../components/card/card';
 import { ContainerView } from '../../components/container/container';
 import Router from '../../router/router';
 import { Server } from '../../server/server';
-import State from '../../state/state';
+// import State from '../../state/state';
 import './catalog.scss';
 // import cardImg from '../../assets/turtle.jpg';
 import { ElementCreator } from '../../app/base';
@@ -12,13 +12,13 @@ import { QueryRequest } from '../../app/enum';
 import FilterView from './fliter';
 
 const mainParams = {
-  tag: 'section',
+  tag: 'div',
   textContent: '',
   classNames: ['page-catalog', 'catalog'],
 };
 
 export default class CatalogView extends View {
-  state: State;
+  // state: State;
 
   router: Router;
 
@@ -30,9 +30,9 @@ export default class CatalogView extends View {
 
   items: HTMLElement;
 
-  constructor(router: Router, state: State, server: Server) {
+  constructor(router: Router, server: Server) {
     super(mainParams);
-    this.state = state;
+    // this.state = state;
     this.router = router;
     this.server = server;
     this.container = null;

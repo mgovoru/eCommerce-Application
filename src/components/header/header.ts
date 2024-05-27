@@ -98,7 +98,7 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__nav-item'],
     };
-    const names = [Pages.ABOUT, Pages.MAIN, Pages.CATALOG];
+    const names = [Pages.ABOUT, Pages.MAIN, Pages.SHOP];
     names.forEach((el) => {
       const elem = this.drawElement(itemParams, elementUl as HTMLElement);
       const linkParams = {
