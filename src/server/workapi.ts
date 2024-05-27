@@ -158,4 +158,8 @@ export class WorkApi {
   requestSortProducts(content: CatalogView, str: string = '') {
     this.requestInstance.getSortProducts(content, str);
   }
+
+  requestFilterProducts(content: CatalogView, str: string) {
+    this.requestInstance.getFilterProducts(content, str);
+  }
 }

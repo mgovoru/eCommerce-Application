@@ -37,3 +37,31 @@
 .catalog__sort option:focus {
   border-color: rgb(210, 116, 210);
 }
+
+.catalog__filter {
+  width: 120px;
+  height: 42px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 41.58px;
+  letter-spacing: 0px;
+  text-align: left;
+  padding: 0 11px;
+  position: relative;
+}
+
+.catalog__filter::after {
+  content: '';
+  position: absolute;
+  width: 34px;
+  height: 28px;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url('../../assets/filter_catalog.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

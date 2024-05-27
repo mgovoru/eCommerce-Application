@@ -72,8 +72,8 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        this.router.navigate('');
-        // this.server.workApi.requestProducts();
+        // this.router.navigate('');
+        // this.server.workApi.requestFilterProducts();
         // this.server.workApi.requestSortProducts();
       },
     };

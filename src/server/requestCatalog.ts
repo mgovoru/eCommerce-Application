@@ -77,7 +77,9 @@ export class RequestCatalog {
       });
   }
 
-  getFilterProducts() {
+  getFilterProducts(content: CatalogView, strFilter: string) {
+    // const filterPrice = 'variants.price.centAmount:range (1000 to 2000)';
+    // const filterTime = 'variants.attributes.time.key:"future"';
     return this.server
       .apiRoot(credentials)
       .withProjectKey({ projectKey: credentials.projectKey })
@@ -85,12 +87,24 @@ export class RequestCatalog {
       .search()
       .get({
         queryArgs: {
-          filter: '',
+          filter: strFilter,
         },
       })
       .execute()
       .then((response) => {
         console.log(response.body);
+        this.server.workApi.cards = [];
+        response.body.results.forEach((el) => {
+          const card: CardInfo = {
+            src: el.masterVariant.images as Image[],
+            title: el.name?.en as string,
+            description: el.description?.en as string,
+            price: el.masterVariant.prices as Price[],
+            // discount:el.variants.dis
+          };
+          this.server.workApi.cards.push(card);
+        });
+        content.drawItems(this.server.workApi.cards);
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();

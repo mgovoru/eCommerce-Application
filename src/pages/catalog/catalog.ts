@@ -9,6 +9,7 @@ import './catalog.scss';
 // import cardImg from '../../assets/turtle.jpg';
 import { ElementCreator } from '../../app/base';
 import { QueryRequest } from '../../app/enum';
+import FilterView from './fliter';
 
 const mainParams = {
   tag: 'section',
@@ -27,7 +28,7 @@ export default class CatalogView extends View {
 
   blockTitle: HTMLElement | null;
 
-  items: HTMLElement | null;
+  items: HTMLElement;
 
   constructor(router: Router, state: State, server: Server) {
     super(mainParams);
@@ -36,7 +37,7 @@ export default class CatalogView extends View {
     this.server = server;
     this.container = null;
     this.blockTitle = null;
-    this.items = null;
+    this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
   }
 
@@ -47,13 +48,14 @@ export default class CatalogView extends View {
     this.server.workApi.requestProducts(this);
     this.blockTitle = new ElementCreator({ tag: 'div', classNames: ['catalog__header'] }).getNode();
     this.drawTitle();
+    this.drawFilter();
     this.drawSelectSort();
     this.container.append(this.blockTitle);
     this.viewElementCreator.append(this.container);
   }
 
   drawItems(array: CardInfo[]) {
-    this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
+    this.items.innerHTML = '';
     array.forEach((el) => {
       const card = new CardView();
       this.items?.insertAdjacentHTML('beforeend', card.render(el));
@@ -134,5 +136,18 @@ export default class CatalogView extends View {
       textContent: 'Catalog',
     }).getNode();
     this.blockTitle?.append(titleCatalog);
+  }
+
+  drawFilter() {
+    const filter = new ElementCreator({
+      tag: 'div',
+      classNames: ['catalog__filter'],
+      textContent: 'filter',
+      callback: () => {
+        const filterBlock = new FilterView(this, this.server);
+        this.container?.insertBefore(filterBlock.getElement(), this.items);
+      },
+    }).getNode();
+    this.blockTitle?.append(filter);
   }
 }

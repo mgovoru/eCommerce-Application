@@ -16,9 +16,9 @@ export class CardView extends View {
     let discount = '';
     let styleline = '';
     let stylecolor = '';
-    const price = String(cardInfo.price[0]?.value?.centAmount).slice(0, 2);
+    const price = String(cardInfo.price[0]?.value?.centAmount).slice(0, -2);
     if (cardInfo.price[0].discounted?.value.centAmount) {
-      discount = String(cardInfo.price[0].discounted?.value.centAmount).slice(0, 2);
+      discount = String(cardInfo.price[0].discounted?.value.centAmount).slice(0, -2);
       styleline = 'text-decoration:line-through';
       stylecolor = 'color:red';
     }
