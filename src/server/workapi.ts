@@ -18,7 +18,9 @@ export const credentials: Credentials = {
 
 export class WorkApi {
   server: Server;
+
   router: Router;
+
   requestProductInstance: RequestDetailedProduct;
 
   constructor(server: Server, router: Router) {

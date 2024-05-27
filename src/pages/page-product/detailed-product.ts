@@ -12,11 +12,17 @@ const mainParams = {
 
 export default class DetailedProductView extends View {
   router: Router;
+
   state: State;
+
   server: Server;
+
   id: string;
+
   container: HTMLElement | null;
+
   blockTitle: HTMLElement | null;
+
   item: HTMLElement | null;
 
   constructor(router: Router, state: State, server: Server, id: string) {

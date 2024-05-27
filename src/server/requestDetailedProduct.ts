@@ -1,12 +1,13 @@
-import { Image, Price } from '@commercetools/platform-sdk';
+// import { Image, Price } from '@commercetools/platform-sdk';
 import Router from '../router/router';
 import ErrorView from './error';
 import { Server } from './server';
 import { credentials } from './workapi';
-import DetailedProductView from '../pages/page-product/detailed-product';
+// import DetailedProductView from '../pages/page-product/detailed-product';
 
 export class RequestDetailedProduct {
   server: Server;
+
   router: Router;
 
   constructor(server: Server, router: Router) {
