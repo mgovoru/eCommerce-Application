@@ -1,7 +1,7 @@
 import { FooterView } from '../components/footer/footer';
 import { HeaderView } from '../components/header/header';
 import { MainView } from '../components/main/main';
-import { Pages } from '../router/pages';
+import { Pages, ID_SELECTOR } from '../router/pages';
 import Router from '../router/router';
 import { Server } from '../server/server';
 import State from '../state/state';
@@ -96,13 +96,13 @@ export class App {
       //     this.setContent(Pages.PRODUCT, new ProductView(this.router));
       //   },
       // },
-      // {
-      //   path: `${Pages.PRODUCT}/${ID_SELECTOR}`,
-      //   callback: async (id) => {
-      //     const { default: ProductView } = await import('./temp-pages/product/product-view');
-      //     this.setContent(Pages.PRODUCT, new ProductView(this.router, id));
-      //   },
-      // },
+      {
+        path: `${Pages.PRODUCT}/${ID_SELECTOR}`,
+        callback: async (id: string) => {
+          const { default: DetailedProductView } = await import('../pages/page-product/detailed-product');
+          this.setContent(Pages.PRODUCT, new DetailedProductView(this.router, this.state, this.server, id));
+        },
+      },
       {
         path: `${Pages.NOT_FOUND}`,
         callback: async () => {

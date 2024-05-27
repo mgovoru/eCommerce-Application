@@ -7,6 +7,7 @@ import { Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
+import { RequestDetailedProduct } from './requestDetailedProduct';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -17,12 +18,17 @@ export const credentials: Credentials = {
 
 export class WorkApi {
   server: Server;
-
   router: Router;
+  requestProductInstance: RequestDetailedProduct;
 
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
+    this.requestProductInstance = new RequestDetailedProduct(this.server, this.router);
+  }
+
+  requestDetailedProduct(id: string) {
+    this.requestProductInstance.getProductById(id);
   }
 
   changeData(data: DataReturn, flagShippng: number, flagBilling: number): CustomerDraft {
