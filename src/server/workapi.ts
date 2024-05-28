@@ -155,9 +155,45 @@ export class WorkApi {
         .get()
         .execute()
         .then((response) => {
-          // console.log(response.body)
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
           userVariable.firstName = response.body.firstName;
           userVariable.lastName = response.body.lastName;
+          return response.body;
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  firstNameUpdateUser() {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: [
+              {
+                action: 'setFirstName',
+                firstName: userVariable.newFirstNameInIput,
+              },
+            ],
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
           return response.body;
         })
         .catch((error) => {

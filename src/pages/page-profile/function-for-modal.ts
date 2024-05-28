@@ -2,7 +2,7 @@ import { ElementCreator } from '../../app/base';
 import { onIputCheck } from '../page-registration/on-input-function';
 import { applyButtonOk } from './applyButtonFunction';
 
-export function createModal(elementClass: string, pattern: RegExp, error: string) {
+export function createModal(elementClass: string, pattern: RegExp, error: string, callback: () => void) {
   const elementSpan = document.querySelector(`.${elementClass}`);
   const valueOfElementSpan = elementSpan?.textContent;
 
@@ -53,7 +53,7 @@ export function createModal(elementClass: string, pattern: RegExp, error: string
   });
   applyButton.getNode().addEventListener('click', () => {
     // клик на кнопку Apply
-    applyButtonOk(elementClass, pattern);
+    applyButtonOk(elementClass, pattern, callback);
   });
 
   const closeButton = new ElementCreator({
@@ -86,8 +86,8 @@ export function createModal(elementClass: string, pattern: RegExp, error: string
   return modalOverlay;
 }
 
-export function openModal(value: string, pattern: RegExp, error: string) {
-  const modal = createModal(value, pattern, error);
+export function openModal(value: string, pattern: RegExp, error: string, callback: () => void) {
+  const modal = createModal(value, pattern, error, callback);
   document.body.appendChild(modal.getNode());
   document.body.classList.add('modal-open');
 }

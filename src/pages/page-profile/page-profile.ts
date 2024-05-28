@@ -44,7 +44,6 @@ export default class ProfilePageView extends View {
     this.server.workApi.updateUser().then(() => {
       // отрисовываю страницу после получения данных
       this.mainUserData(elemCreatContainer);
-      console.log(userVariable.firstName);
     });
   }
 
@@ -85,7 +84,16 @@ export default class ProfilePageView extends View {
       const classOfSelectedElement = textLabelFirstName.getNode().className;
       const patternFirstName = Object.values(patterns[0])[0];
       const errorFirstName = Object.values(error[0])[0];
-      openModal(classOfSelectedElement, patternFirstName, errorFirstName);
+      openModal(classOfSelectedElement, patternFirstName, errorFirstName, () => {
+        this.server.workApi
+          .firstNameUpdateUser()
+          .then((user) => {
+            console.log('User updated:', user);
+          })
+          .catch((errors) => {
+            console.error('Error updating user:', errors.message);
+          });
+      });
       // код для обработки клика по кнопке
     });
     containerUser.addInnerElement(labelFirstName);
@@ -119,7 +127,9 @@ export default class ProfilePageView extends View {
       const classOfSelectedElement = textLabelLastName.getNode().className;
       const patternLastName = Object.values(patterns[1])[0];
       const errorLastName = Object.values(error[1])[0];
-      openModal(classOfSelectedElement, patternLastName, errorLastName);
+      openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
+        console.log('call back for last name');
+      });
       // код для обработки клика по кнопке
     });
     container.addInnerElement(labelLastName);

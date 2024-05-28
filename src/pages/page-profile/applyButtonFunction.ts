@@ -1,6 +1,7 @@
 import { successfulApply } from './successfulApply';
+import { userVariable } from './userVariable';
 
-export function applyButtonOk(elementClass: string, pattern: RegExp) {
+export function applyButtonOk(elementClass: string, pattern: RegExp, callback: () => void) {
   const elementSpan = document.querySelector(`.${elementClass}`);
   let name: HTMLElement | null = null;
   if (elementSpan) {
@@ -20,7 +21,13 @@ export function applyButtonOk(elementClass: string, pattern: RegExp) {
     }
     // запросы в комерстулс относительно выбраного элемента
     if (elementClass === 'pp-f-name') {
-      console.log('THIS first name');
+      userVariable.newFirstNameInIput = thisInputValue;
+      callback();
+    }
+    // просто калбаск если не pp-f-name
+    if (elementClass === 'pp-l-name') {
+      userVariable.newLastNameInIput = thisInputValue;
+      callback();
     }
 
     // закрыветься модальное окно
