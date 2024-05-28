@@ -83,6 +83,7 @@ export class WorkApi {
       lastName: data.data.lastName as string,
       email: data.data.email as string,
       password: data.data.password as string,
+      dateOfBirth: data.data.dateOfBirth as string, // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
       addresses: [shippingAddress, billingAddress],
       defaultShippingAddress: flagShippng,
       defaultBillingAddress: flagBilling,
@@ -159,6 +160,7 @@ export class WorkApi {
           localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
           userVariable.firstName = response.body.firstName;
           userVariable.lastName = response.body.lastName;
+          userVariable.dateOfBirth = response.body.dateOfBirth;
           return response.body;
         })
         .catch((error) => {

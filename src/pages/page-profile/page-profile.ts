@@ -94,6 +94,7 @@ export default class ProfilePageView extends View {
     labelFirstName.addInnerElement(firstName);
     labelFirstName.addInnerElement(firstNameButton);
     this.lastName(containerUser);
+    this.dateOfBirth(containerUser);
   }
 
   lastName(container: ElementCreator) {
@@ -106,7 +107,7 @@ export default class ProfilePageView extends View {
       textContent: 'Last Name: ',
       classNames: ['pp-l-name'],
     });
-    const LastName = new ElementCreator({
+    const lastName = new ElementCreator({
       tag: 'span',
       textContent: userVariable.lastName,
       classNames: ['user-main__value', 'l-name-value'],
@@ -127,7 +128,27 @@ export default class ProfilePageView extends View {
     });
     container.addInnerElement(labelLastName);
     labelLastName.addInnerElement(textLabelLastName);
-    labelLastName.addInnerElement(LastName);
+    labelLastName.addInnerElement(lastName);
     labelLastName.addInnerElement(lastNameButton);
+  }
+
+  dateOfBirth(container: ElementCreator) {
+    const labelDateOfBirth = new ElementCreator({
+      tag: 'div',
+      classNames: ['user-main__label', 'date-birth'],
+    });
+    const textLabelDateOfBirth = new ElementCreator({
+      tag: 'span',
+      textContent: 'Date of birth(Y-M-D): ',
+      classNames: ['pp__date-birth'],
+    });
+    const date = new ElementCreator({
+      tag: 'span',
+      textContent: userVariable.dateOfBirth,
+      classNames: ['user-main__value', 'date-birth-value'],
+    });
+    container.addInnerElement(labelDateOfBirth);
+    labelDateOfBirth.addInnerElement(textLabelDateOfBirth);
+    labelDateOfBirth.addInnerElement(date);
   }
 }
