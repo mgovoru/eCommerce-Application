@@ -1,3 +1,9 @@
+.filter {
+  display: flex;
+  gap: 48px;
+  padding: 16px 0;
+}
+
 .filter__price {
   position: relative;
   width: 300px;
@@ -62,4 +68,17 @@
   position: relative;
   left: -50px;
   top: 15px;
+}
+
+.filter__time,
+.filter__size,
+.filter__color {
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selected-item {
+  color: rgb(210, 116, 210);
 }

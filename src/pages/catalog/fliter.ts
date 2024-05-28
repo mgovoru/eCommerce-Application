@@ -16,22 +16,52 @@ export default class FilterView extends View {
 
   content: CatalogView;
 
+  timeFilter: HTMLElement | null;
+
+  filterColor: HTMLElement | null;
+
+  sizeFilter: HTMLElement | null;
+
   constructor(content: CatalogView, server: Server) {
     super(mainParams);
     this.server = server;
     this.content = content;
     this.priceFilter = null;
+    this.timeFilter = null;
+    this.filterColor = null;
+    this.sizeFilter = null;
     this.configureView();
   }
 
   configureView() {
-    this.drawTime();
     this.drawPrice();
+    this.drawTime();
     this.drawColor();
     this.drawSize();
+    this.resetFilters();
   }
 
-  drawTime() {}
+  drawTime() {
+    this.timeFilter = new ElementCreator({
+      tag: 'ul',
+      classNames: ['filter__time'],
+    }).getNode();
+    const timeItems = ['TIME', 'old', 'modern', 'future'];
+    timeItems.forEach((el) => {
+      const li = new ElementCreator({
+        tag: 'li',
+        classNames: ['filter__time-item'],
+        textContent: el,
+        callback: (event) => {
+          if (el !== 'TIME') {
+            this.addClassSelectItem(event, 'time', el);
+          }
+        },
+      }).getNode();
+      this.timeFilter?.append(li);
+    });
+    this.getElement().append(this.timeFilter);
+  }
 
   drawPrice() {
     let timer: number;
@@ -46,7 +76,7 @@ export default class FilterView extends View {
       timer = setTimeout(() => {
         const filterPrice = `variants.price.centAmount:range (
 				 ${Number(rangeInputMin.value) * 100} to ${Number(rangeInputMax.value) * 100})`;
-        this.server.workApi.requestFilterProducts(this.content, filterPrice);
+        this.server.workApi.requestSortFilterProducts(this.content, '', filterPrice);
       }, 1000) as unknown as number;
     });
     rangeInputMax.addEventListener('input', () => {
@@ -54,12 +84,20 @@ export default class FilterView extends View {
       timer = setTimeout(() => {
         const filterPrice = `variants.price.centAmount:range (
 				 ${Number(rangeInputMin.value) * 100} to ${Number(rangeInputMax.value) * 100})`;
-        this.server.workApi.requestFilterProducts(this.content, filterPrice);
+        this.server.workApi.requestSortFilterProducts(this.content, '', filterPrice);
       }, 1000) as unknown as number;
     });
   }
 
-  startFilter() {}
+  resetFilters() {
+    const filterReset = new ElementCreator({
+      tag: 'div',
+      classNames: ['filter__reset'],
+      textContent: 'Reset Filters',
+      callback: () => {},
+    }).getNode();
+    this.getElement().append(filterReset);
+  }
 
   drawInputPrice(className: string, valueInput: number): HTMLInputElement {
     const rangeWrapper = new ElementCreator({
@@ -88,9 +126,49 @@ export default class FilterView extends View {
     return rangeInput;
   }
 
-  drawColor() {}
+  drawColor() {
+    this.filterColor = new ElementCreator({
+      tag: 'ul',
+      classNames: ['filter__color'],
+    }).getNode();
+    const timeItems = ['COLOR', 'multi', 'blue', 'green', 'red'];
+    timeItems.forEach((el) => {
+      const li = new ElementCreator({
+        tag: 'li',
+        classNames: ['filter__color-item'],
+        textContent: el,
+        callback: (event) => {
+          if (el !== 'COLOR') {
+            this.addClassSelectItem(event,'color', el);
+          }
+        },
+      }).getNode();
+      this.filterColor?.append(li);
+    });
+    this.getElement().append(this.filterColor);
+  }
 
-  drawSize() {}
+  drawSize() {
+    this.sizeFilter = new ElementCreator({
+      tag: 'ul',
+      classNames: ['filter__size'],
+    }).getNode();
+    const timeItems = ['SIZE', 'small', 'normal', 'big'];
+    timeItems.forEach((el) => {
+      const li = new ElementCreator({
+        tag: 'li',
+        classNames: ['filter__size-item'],
+        textContent: el,
+        callback: (event) => {
+          if (el !== 'SIZE') {
+            this.addClassSelectItem(event, 'size', el);
+          }
+        },
+      }).getNode();
+      this.sizeFilter?.append(li);
+    });
+    this.getElement().append(this.sizeFilter);
+  }
 
   drawBlock(liItems: string[], funcLi: (() => void)[]) {
     const ulElement = new ElementCreator({
@@ -106,5 +184,22 @@ export default class FilterView extends View {
       ulElement.getNode().appendChild(liElement.getNode());
     });
     this.getElement().appendChild(ulElement.getNode());
+  }
+
+  addClassSelectItem(event: Event, str: string, el: string) {
+    const parent = (event.target as HTMLElement).parentElement;
+    if (!(event.target as HTMLElement).classList.contains('selected-item')) {
+      if (parent) {
+        const children = parent.querySelectorAll('.selected-item');
+        children.forEach((child) => {
+          (child as HTMLElement).classList.remove('selected-item');
+        });
+      }
+      (event.target as HTMLElement).classList.add('selected-item');
+      const filterTime = `variants.attributes.${str}.key:"${el}"`;
+      this.server.workApi.requestSortFilterProducts(this.content, '', filterTime);
+    } else {
+      (event.target as HTMLElement).classList.remove('selected-item');
+    }
   }
 }

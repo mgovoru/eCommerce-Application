@@ -30,6 +30,10 @@ export default class CatalogView extends View {
 
   items: HTMLElement;
 
+  strSort: string;
+
+  strFilter: string;
+
   constructor(router: Router, server: Server) {
     super(mainParams);
     // this.state = state;
@@ -37,6 +41,8 @@ export default class CatalogView extends View {
     this.server = server;
     this.container = null;
     this.blockTitle = null;
+    this.strSort = '';
+    this.strFilter = '';
     this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
   }
@@ -101,28 +107,32 @@ export default class CatalogView extends View {
           if (this.items) {
             this.items.innerHTML = '';
           }
-          this.server.workApi.requestSortProducts(this, QueryRequest.SORTNAMEASC);
+          this.strSort = QueryRequest.SORTNAMEASC;
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
           break;
         }
         case 'nameZ': {
           if (this.items) {
             this.items.innerHTML = '';
           }
-          this.server.workApi.requestSortProducts(this, QueryRequest.SORTNAMEDESC);
+          this.strSort = QueryRequest.SORTNAMEDESC;
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
           break;
         }
         case 'priceA': {
           if (this.items) {
             this.items.innerHTML = '';
           }
-          this.server.workApi.requestSortProducts(this, QueryRequest.SORTPRICEASC);
+          this.strSort = QueryRequest.SORTPRICEASC;
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
           break;
         }
         case 'priceZ': {
           if (this.items) {
             this.items.innerHTML = '';
           }
-          this.server.workApi.requestSortProducts(this, QueryRequest.SORTPRICEDESC);
+          this.strSort = QueryRequest.SORTPRICEDESC;
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
           break;
         }
         default:
