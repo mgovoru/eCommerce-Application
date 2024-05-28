@@ -139,7 +139,7 @@ export default class FilterView extends View {
         textContent: el,
         callback: (event) => {
           if (el !== 'COLOR') {
-            this.addClassSelectItem(event,'color', el);
+            this.addClassSelectItem(event, 'color', el);
           }
         },
       }).getNode();
