@@ -3,7 +3,6 @@ import Router from '../../router/router';
 import { Server } from '../../server/server';
 import State from '../../state/state';
 import './detailed-product.scss';
-import { ElementCreator } from '../../app/base';
 import { ProductDetail } from '../../app/type';
 
 const mainParams = {

@@ -13,6 +13,7 @@ export class RequestCatalog {
 
   constructor(server: Server, router: Router) {
     this.server = server;
+
     this.router = router;
   }
   getProducts(content: CatalogView) {

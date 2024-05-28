@@ -5,7 +5,6 @@ import { Server } from '../../server/server';
 import State from '../../state/state';
 import { RequestDetailedProduct } from '../../server/requestDetailedProduct';
 import DetailedProductView from '../../pages/page-product/detailed-product';
-import { ProductDetail } from '../../app/type';
 
 const CssClasses = {
   SHOP: 'shop',
