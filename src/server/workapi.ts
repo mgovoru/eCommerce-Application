@@ -3,11 +3,13 @@ import { Settings } from '../app/enum';
 import { UserApiServer } from './user';
 import ErrorView from './error';
 import { Server } from './server';
-import { Credentials } from '../app/type';
+import { CardInfo, Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
 import { RequestDetailedProduct } from './requestDetailedProduct';
+import { RequestCatalog } from './requestCatalog';
+import ProductListView from '../pages/page-product/product-list';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -23,12 +25,21 @@ export class WorkApi {
 
   requestProductInstance: RequestDetailedProduct;
 
+  requestInstance: RequestCatalog;
+
+  cards: CardInfo[];
+
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
     this.requestProductInstance = new RequestDetailedProduct(this.server, this.router);
+    this.requestInstance = new RequestCatalog(this.server, this.router);
+    this.cards = [];
   }
 
+  requestProducts(content: ProductListView) {
+    this.requestInstance.getProducts(content);
+  }
   requestDetailedProduct(id: string) {
     this.requestProductInstance.getProductById(id);
   }
