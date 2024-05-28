@@ -16,6 +16,7 @@ export class RequestCatalog {
 
     this.router = router;
   }
+
   getProducts(content: CatalogView) {
     return this.server
       .apiRoot(credentials)
@@ -42,6 +43,7 @@ export class RequestCatalog {
         errorElement.show(err.message);
       });
   }
+
   getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
     return this.server
       .apiRoot(credentials)
