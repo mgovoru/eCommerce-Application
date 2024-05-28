@@ -4,7 +4,9 @@ import Router from '../router/router';
 import ErrorView from './error';
 import { Server } from './server';
 import { credentials } from './workapi';
+import { CardInfo } from '../app/type';
 import CatalogView from '../pages/catalog/catalog';
+
 
 export class RequestCatalog {
   server: Server;
@@ -15,7 +17,6 @@ export class RequestCatalog {
     this.server = server;
     this.router = router;
   }
-
   getProducts(content: CatalogView) {
     return this.server
       .apiRoot(credentials)
@@ -42,7 +43,6 @@ export class RequestCatalog {
         errorElement.show(err.message);
       });
   }
-
   getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
     return this.server
       .apiRoot(credentials)

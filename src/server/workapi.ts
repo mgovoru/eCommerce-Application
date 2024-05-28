@@ -7,6 +7,7 @@ import { CardInfo, Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
+import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
 import CatalogView from '../pages/catalog/catalog';
 
@@ -22,6 +23,8 @@ export class WorkApi {
 
   router: Router;
 
+  requestProductInstance: RequestDetailedProduct;
+
   requestInstance: RequestCatalog;
 
   idUser: string;
@@ -31,9 +34,18 @@ export class WorkApi {
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
+    this.requestProductInstance = new RequestDetailedProduct(this.server, this.router);
     this.requestInstance = new RequestCatalog(this.server, this.router);
-    this.idUser = '';
     this.cards = [];
+    this.idUser = '';
+  }
+
+  requestProducts(content: ProductListView) {
+    this.requestInstance.getProducts(content);
+  }
+
+  requestDetailedProduct(id: string) {
+    this.requestProductInstance.getProductById(id);
   }
 
   changeData(data: DataReturn, flagShippng: number, flagBilling: number): CustomerDraft {
