@@ -40,6 +40,7 @@ export class WorkApi {
   requestProducts(content: ProductListView) {
     this.requestInstance.getProducts(content);
   }
+
   requestDetailedProduct(id: string) {
     this.requestProductInstance.getProductById(id);
   }
