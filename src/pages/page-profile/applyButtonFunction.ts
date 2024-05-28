@@ -1,4 +1,3 @@
-import { successfulApply } from './successfulApply';
 import { userVariable } from './userVariable';
 
 export function applyButtonOk(elementClass: string, pattern: RegExp, callback: () => void) {
@@ -29,8 +28,5 @@ export function applyButtonOk(elementClass: string, pattern: RegExp, callback: (
       userVariable.newLastNameInIput = thisInputValue;
       callback();
     }
-
-    // закрыветься модальное окно
-    successfulApply();
   }
 }

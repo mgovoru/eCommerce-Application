@@ -8,6 +8,7 @@ import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
 import { userVariable } from '../pages/page-profile/userVariable'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+import { successfulApply, errorApply } from '../pages/page-profile/successfulApply'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -194,10 +195,11 @@ export class WorkApi {
         .execute()
         .then((response) => {
           localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
           return response.body;
         })
         .catch((error) => {
-          console.log(error.message);
+          errorApply(error.message);
         });
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
