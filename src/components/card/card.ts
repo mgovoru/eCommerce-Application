@@ -1,5 +1,8 @@
+import { ElementCreator } from '../../app/base';
 import { CardInfo } from '../../app/type';
 import { View } from '../../app/view';
+import { Pages } from '../../router/pages';
+import Router from '../../router/router';
 import './card.scss';
 
 const containerParams = {
@@ -8,8 +11,25 @@ const containerParams = {
 };
 
 export class CardView extends View {
-  constructor() {
+  bodyCard: HTMLElement | null;
+
+  router: Router;
+
+  constructor(router: Router, cardInfo: CardInfo) {
     super(containerParams);
+    this.router = router;
+    this.bodyCard = null;
+    this.configureView(cardInfo);
+  }
+
+  configureView(cardInfo: CardInfo) {
+    this.bodyCard = new ElementCreator({
+      tag: 'div',
+      classNames: ['cards__item'],
+      callback: () => {
+        this.router.navigate(`${Pages.SHOP}/${cardInfo.id}`);
+      },
+    }).getNode();
   }
 
   render(cardInfo: CardInfo): string {
@@ -24,7 +44,6 @@ export class CardView extends View {
     }
 
     return `
-			<div class="cards__item">
 			<div class="cards__element">
 				<div class="cards__image -ibg">
 					<img src="${cardInfo.src[0]?.url}" alt = "фото"
@@ -36,7 +55,6 @@ export class CardView extends View {
 						<h4 class="cards__sub-title">${cardInfo?.description}</h4>
 							</div>
 							<div class="cards__price"><span style=${styleline}>${price}</span><span span style=${stylecolor}>${discount}</span>${cardInfo.price[0]?.value?.currencyCode}</div>
-			</div>
 			</div>
 			</div>`;
   }

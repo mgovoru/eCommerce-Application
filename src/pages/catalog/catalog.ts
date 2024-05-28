@@ -57,8 +57,10 @@ export default class CatalogView extends View {
   drawItems(array: CardInfo[]) {
     this.items.innerHTML = '';
     array.forEach((el) => {
-      const card = new CardView();
-      this.items?.insertAdjacentHTML('beforeend', card.render(el));
+      const card = new CardView(this.router, el);
+      // card.bodyCard.innerHTML = card.render(el);
+      card.bodyCard?.insertAdjacentHTML('beforeend', card.render(el));
+      this.items.append(card.bodyCard as HTMLElement);
     });
     this.container?.append(this.items);
   }

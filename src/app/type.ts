@@ -21,4 +21,5 @@ export interface CardInfo {
   title: string;
   description: string;
   price: Price[];
+  id: string;
 }
