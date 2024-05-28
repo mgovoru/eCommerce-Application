@@ -4,9 +4,7 @@ import Router from '../router/router';
 import ErrorView from './error';
 import { Server } from './server';
 import { credentials } from './workapi';
-import { CardInfo } from '../app/type';
 import CatalogView from '../pages/catalog/catalog';
-
 
 export class RequestCatalog {
   server: Server;

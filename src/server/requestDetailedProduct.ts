@@ -1,3 +1,4 @@
+import { ProductDetail } from '../app/type';
 import Router from '../router/router';
 import ErrorView from './error';
 import { Server } from './server';
@@ -27,11 +28,12 @@ export class RequestDetailedProduct {
         const product = response.body;
 
         console.log('product', product);
-        return product;
+        return product as ProductDetail;
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();
         errorElement.show(err.message);
+        throw err;
       });
   }
 }

@@ -102,14 +102,14 @@ export class App {
         path: `${Pages.SHOP}`,
         callback: async () => {
           const { default: ShopView } = await import('../components/shop/shop');
-          this.setContent(Pages.SHOP, new ShopView(this.router, this.server));
+          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state));
         },
       },
       {
         path: `${Pages.SHOP}/${ID_SELECTOR}`,
         callback: async (id: string) => {
           const { default: ShopView } = await import('../components/shop/shop');
-          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, id));
+          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, id));
         },
       },
       {
