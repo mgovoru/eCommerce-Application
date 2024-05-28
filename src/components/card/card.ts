@@ -1,6 +1,6 @@
 import { ElementCreator } from '../../app/base';
-import { View } from '../../app/view';
 import { CardInfo } from '../../app/type';
+import { View } from '../../app/view';
 import { Pages } from '../../router/pages';
 import Router from '../../router/router';
 import './card.scss';

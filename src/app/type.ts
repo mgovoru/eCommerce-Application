@@ -23,7 +23,6 @@ export interface CardInfo {
   price: Price[];
   id: string;
 }
-
 export interface ProductDetail {
   id: string;
   name: string;

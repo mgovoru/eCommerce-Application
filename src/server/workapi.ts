@@ -9,7 +9,7 @@ import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
 import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
-import ProductListView from '../pages/page-product/product-list';
+import CatalogView from '../pages/catalog/catalog';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -27,6 +27,8 @@ export class WorkApi {
 
   requestInstance: RequestCatalog;
 
+  idUser: string;
+
   cards: CardInfo[];
 
   constructor(server: Server, router: Router) {
@@ -35,6 +37,7 @@ export class WorkApi {
     this.requestProductInstance = new RequestDetailedProduct(this.server, this.router);
     this.requestInstance = new RequestCatalog(this.server, this.router);
     this.cards = [];
+    this.idUser = '';
   }
 
   requestProducts(content: ProductListView) {
@@ -143,6 +146,8 @@ export class WorkApi {
       })
       .execute()
       .then((response) => {
+        this.idUser = response.body.customer.id;
+        console.log(this.idUser);
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
@@ -156,5 +161,17 @@ export class WorkApi {
         const errorElement = new ErrorView();
         errorElement.show(error.message);
       });
+  }
+
+  requestProducts(content: CatalogView) {
+    this.requestInstance.getProducts(content);
+  }
+
+  // requestSortProducts(content: CatalogView, str: string = '') {
+  //   this.requestInstance.getSortProducts(content, str);
+  // }
+
+  requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
+    this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
   }
 }
