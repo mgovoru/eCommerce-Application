@@ -1,3 +1,5 @@
+import { Image, Price } from '@commercetools/platform-sdk';
+
 export type Params = {
   tag?: string;
   textContent?: string;
@@ -14,3 +16,10 @@ export type Credentials = {
     password: string;
   };
 };
+export interface CardInfo {
+  src: Image[];
+  title: string;
+  description: string;
+  price: Price[];
+  id: string;
+}
