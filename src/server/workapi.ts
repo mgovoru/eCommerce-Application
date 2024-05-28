@@ -243,4 +243,41 @@ export class WorkApi {
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  dateOfBirthUpdateUser() {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: [
+              {
+                action: 'setDateOfBirth',
+                dateOfBirth: userVariable.newDateOfBirth,
+              },
+            ],
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
+          return response.body;
+        })
+        .catch((error) => {
+          errorApply(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
 }

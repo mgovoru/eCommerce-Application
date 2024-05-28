@@ -4,6 +4,7 @@ interface UserDataInterface {
   dateOfBirth: string | undefined;
   newFirstNameInIput: string | undefined;
   newLastNameInIput: string | undefined;
+  newDateOfBirth: string | undefined;
 }
 
 export const userVariable: UserDataInterface = {
@@ -12,4 +13,5 @@ export const userVariable: UserDataInterface = {
   dateOfBirth: '',
   newFirstNameInIput: '',
   newLastNameInIput: '',
+  newDateOfBirth: '',
 };

@@ -81,13 +81,13 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'f-name-button'],
     });
     firstNameButton.setCallback(() => {
+      // код для обработки клика по кнопке
       const classOfSelectedElement = textLabelFirstName.getNode().className;
       const patternFirstName = Object.values(patterns[0])[0];
       const errorFirstName = Object.values(error[0])[0];
       openModal(classOfSelectedElement, patternFirstName, errorFirstName, () => {
         this.server.workApi.firstNameUpdateUser();
       });
-      // код для обработки клика по кнопке
     });
     containerUser.addInnerElement(labelFirstName);
     labelFirstName.addInnerElement(textLabelFirstName);
@@ -118,13 +118,13 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'l-name-button'],
     });
     lastNameButton.setCallback(() => {
+      // код для обработки клика по кнопке
       const classOfSelectedElement = textLabelLastName.getNode().className;
       const patternLastName = Object.values(patterns[1])[0];
       const errorLastName = Object.values(error[1])[0];
       openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
         this.server.workApi.lastNameUpdateUser();
       });
-      // код для обработки клика по кнопке
     });
     container.addInnerElement(labelLastName);
     labelLastName.addInnerElement(textLabelLastName);
@@ -147,8 +147,23 @@ export default class ProfilePageView extends View {
       textContent: userVariable.dateOfBirth,
       classNames: ['user-main__value', 'date-birth-value'],
     });
+    const dateButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'date-birth-button'],
+    });
+    dateButton.setCallback(() => {
+      // код для обработки клика по кнопке
+      const classOfSelectedElement = textLabelDateOfBirth.getNode().className;
+      const patternLastName = Object.values(patterns[5])[0];
+      const errorLastName = Object.values(error[5])[0];
+      openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
+        this.server.workApi.dateOfBirthUpdateUser();
+      });
+    });
     container.addInnerElement(labelDateOfBirth);
     labelDateOfBirth.addInnerElement(textLabelDateOfBirth);
     labelDateOfBirth.addInnerElement(date);
+    labelDateOfBirth.addInnerElement(dateButton);
   }
 }

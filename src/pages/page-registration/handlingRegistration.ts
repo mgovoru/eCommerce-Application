@@ -38,7 +38,7 @@ interface ValidationResult {
   error: string;
 }
 
-function convertDateAsComTool(dateString: string): string {
+export function convertDateAsComTool(dateString: string): string {
   const [day, month, year] = dateString.split('.').map(Number);
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }

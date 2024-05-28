@@ -1,4 +1,5 @@
 import { userVariable } from './userVariable';
+import { convertDateAsComTool } from '../page-registration/handlingRegistration';
 
 export function applyButtonOk(elementClass: string, pattern: RegExp, callback: () => void) {
   const elementSpan = document.querySelector(`.${elementClass}`);
@@ -23,9 +24,12 @@ export function applyButtonOk(elementClass: string, pattern: RegExp, callback: (
       userVariable.newFirstNameInIput = thisInputValue;
       callback();
     }
-    // просто калбаск если не pp-f-name
     if (elementClass === 'pp-l-name') {
       userVariable.newLastNameInIput = thisInputValue;
+      callback();
+    }
+    if (elementClass === 'pp__date-birth') {
+      userVariable.newDateOfBirth = convertDateAsComTool(thisInputValue);
       callback();
     }
   }
