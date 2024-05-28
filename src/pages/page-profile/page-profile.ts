@@ -85,14 +85,7 @@ export default class ProfilePageView extends View {
       const patternFirstName = Object.values(patterns[0])[0];
       const errorFirstName = Object.values(error[0])[0];
       openModal(classOfSelectedElement, patternFirstName, errorFirstName, () => {
-        this.server.workApi
-          .firstNameUpdateUser()
-          .then((user) => {
-            console.log('User updated:', user);
-          })
-          .catch((errors) => {
-            console.error('Error updating user:', errors.message);
-          });
+        this.server.workApi.firstNameUpdateUser();
       });
       // код для обработки клика по кнопке
     });
@@ -128,7 +121,7 @@ export default class ProfilePageView extends View {
       const patternLastName = Object.values(patterns[1])[0];
       const errorLastName = Object.values(error[1])[0];
       openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
-        console.log('call back for last name');
+        this.server.workApi.lastNameUpdateUser();
       });
       // код для обработки клика по кнопке
     });
