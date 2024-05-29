@@ -277,6 +277,9 @@ export default class RegistrationView extends View {
       event.preventDefault();
       // submit cod
       const data = new RegistrationValidation().registrationValidAllInputs() as DataReturn;
+      if (data === null) {
+        return;
+      }
       const checkаflagAsShipping = (document.querySelector('#as-shipping-flag') as HTMLInputElement).checked;
       const checkаflagAsBilling = (document.querySelector('#billing-flag') as HTMLInputElement).checked;
       const flagDefaultAsShipping = checkаflagAsShipping ? 1 : 0;
