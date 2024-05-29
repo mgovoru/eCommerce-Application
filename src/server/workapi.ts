@@ -13,7 +13,6 @@ import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
 import CatalogView from '../pages/catalog/catalog';
 
-
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
   clientID: Settings.CLIENTID,
@@ -165,7 +164,6 @@ export class WorkApi {
       });
   }
 
-
   // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
   updateUser() {
     const idString = localStorage.getItem('id');
@@ -302,6 +300,7 @@ export class WorkApi {
         });
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
 
   requestProducts(content: CatalogView) {
     this.requestInstance.getProducts(content);
@@ -313,6 +312,5 @@ export class WorkApi {
 
   requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
     this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
-
   }
 }
