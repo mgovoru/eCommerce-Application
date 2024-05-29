@@ -9,6 +9,7 @@ import { openModal } from './function-for-modal';
 import { patterns, error } from '../page-registration/on-input-function';
 import { userVariable } from './userVariable';
 import { ProfilePageRequest } from '../../server/profileRequest';
+import { passOpenModal } from './change-password/open-modal-for-password';
 
 const mainParams = {
   tag: 'section',
@@ -45,9 +46,11 @@ export default class ProfilePageView extends View {
     this.server.workApi.updateUser().then((r) => {
       if (r) {
         userVariable.email = r.email;
+        userVariable.currentPassword = r.password;
       }
       // отрисовываю страницу после получения данных
       this.mainUserData(elemCreatContainer);
+      this.password(elemCreatContainer);
     });
   }
 
@@ -205,5 +208,47 @@ export default class ProfilePageView extends View {
     labelEmail.addInnerElement(textLabelEmail);
     labelEmail.addInnerElement(email);
     labelEmail.addInnerElement(emailButton);
+  }
+
+  password(container: ElementCreator) {
+    const passwordTitle = new ElementCreator({
+      tag: 'div',
+      textContent: 'password',
+      classNames: ['page-profile__password-title'],
+    });
+    const containerPassword = new ElementCreator({
+      tag: 'div',
+      classNames: ['page-profile__user-main__container'],
+    });
+    const textLabelPassword = new ElementCreator({
+      tag: 'span',
+      textContent: 'password: ',
+      classNames: ['pp__password'],
+    });
+    const password = new ElementCreator({
+      tag: 'span',
+      textContent: userVariable.currentPassword,
+      classNames: ['user-main__value', 'pp__password-value'],
+    });
+    const passwordButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'pp__password-button'],
+    });
+    passwordButton.setCallback(() => {
+      // код для обработки клика по кнопке
+      const classOfSelectedElement = textLabelPassword.getNode().className;
+      const pattern = Object.values(patterns[3])[0];
+      const errorThis = Object.values(error[3])[0];
+      passOpenModal(classOfSelectedElement, pattern, errorThis, () => {
+        new ProfilePageRequest(this.server, this.router).passwordUpdateUser();
+        password.getNode().textContent = '*****';
+      });
+    });
+    container.addInnerElement(passwordTitle);
+    container.addInnerElement(containerPassword);
+    containerPassword.addInnerElement(textLabelPassword);
+    textLabelPassword.addInnerElement(password);
+    textLabelPassword.addInnerElement(passwordButton);
   }
 }
