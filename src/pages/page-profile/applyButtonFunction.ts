@@ -32,5 +32,9 @@ export function applyButtonOk(elementClass: string, pattern: RegExp, callback: (
       userVariable.newDateOfBirth = convertDateAsComTool(thisInputValue);
       callback();
     }
+    if (elementClass === 'pp__email') {
+      userVariable.newEmail = thisInputValue;
+      callback();
+    }
   }
 }

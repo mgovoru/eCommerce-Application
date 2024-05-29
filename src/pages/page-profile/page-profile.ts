@@ -8,6 +8,7 @@ import { ElementCreator } from '../../app/base';
 import { openModal } from './function-for-modal';
 import { patterns, error } from '../page-registration/on-input-function';
 import { userVariable } from './userVariable';
+import { ProfilePageRequest } from '../../server/profileRequest';
 
 const mainParams = {
   tag: 'section',
@@ -41,7 +42,10 @@ export default class ProfilePageView extends View {
     });
     container.appendChild(elemCreatContainer.getNode());
     // получаю данные пользователя с сервера
-    this.server.workApi.updateUser().then(() => {
+    this.server.workApi.updateUser().then((r) => {
+      if (r) {
+        userVariable.email = r.email;
+      }
       // отрисовываю страницу после получения данных
       this.mainUserData(elemCreatContainer);
     });
@@ -95,6 +99,7 @@ export default class ProfilePageView extends View {
     labelFirstName.addInnerElement(firstNameButton);
     this.lastName(containerUser);
     this.dateOfBirth(containerUser);
+    this.email(containerUser);
   }
 
   lastName(container: ElementCreator) {
@@ -155,9 +160,9 @@ export default class ProfilePageView extends View {
     dateButton.setCallback(() => {
       // код для обработки клика по кнопке
       const classOfSelectedElement = textLabelDateOfBirth.getNode().className;
-      const patternLastName = Object.values(patterns[5])[0];
-      const errorLastName = Object.values(error[5])[0];
-      openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
+      const pattern = Object.values(patterns[5])[0];
+      const errorThis = Object.values(error[5])[0];
+      openModal(classOfSelectedElement, pattern, errorThis, () => {
         this.server.workApi.dateOfBirthUpdateUser();
       });
     });
@@ -165,5 +170,40 @@ export default class ProfilePageView extends View {
     labelDateOfBirth.addInnerElement(textLabelDateOfBirth);
     labelDateOfBirth.addInnerElement(date);
     labelDateOfBirth.addInnerElement(dateButton);
+  }
+
+  email(container: ElementCreator) {
+    const labelEmail = new ElementCreator({
+      tag: 'div',
+      classNames: ['user-main__label', 'email__profile'],
+    });
+    const textLabelEmail = new ElementCreator({
+      tag: 'span',
+      textContent: 'email: ',
+      classNames: ['pp__email'],
+    });
+    const email = new ElementCreator({
+      tag: 'span',
+      textContent: userVariable.email,
+      classNames: ['user-main__value', 'pp__email-value'],
+    });
+    const emailButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'pp__email-button'],
+    });
+    emailButton.setCallback(() => {
+      // код для обработки клика по кнопке
+      const classOfSelectedElement = textLabelEmail.getNode().className;
+      const pattern = Object.values(patterns[2])[0];
+      const errorThis = Object.values(error[2])[0];
+      openModal(classOfSelectedElement, pattern, errorThis, () => {
+        new ProfilePageRequest(this.server, this.router).emailUpdateUser();
+      });
+    });
+    container.addInnerElement(labelEmail);
+    labelEmail.addInnerElement(textLabelEmail);
+    labelEmail.addInnerElement(email);
+    labelEmail.addInnerElement(emailButton);
   }
 }
