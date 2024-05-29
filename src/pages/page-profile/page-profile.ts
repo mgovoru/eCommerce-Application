@@ -4,6 +4,10 @@ import Router from '../../router/router';
 import { Server } from '../../server/server';
 import State from '../../state/state';
 import './page-profile.scss';
+import { ElementCreator } from '../../app/base';
+import { openModal } from './function-for-modal';
+import { patterns, error } from '../page-registration/on-input-function';
+import { userVariable } from './userVariable';
 
 const mainParams = {
   tag: 'section',
@@ -31,5 +35,135 @@ export default class ProfilePageView extends View {
     containerNew.addNameClass('page-profile');
     const container = containerNew.getElement();
     this.viewElementCreator.append(container);
+    const elemCreatContainer = new ElementCreator({
+      tag: 'div',
+      classNames: ['elem-create__container'],
+    });
+    container.appendChild(elemCreatContainer.getNode());
+    // получаю данные пользователя с сервера
+    this.server.workApi.updateUser().then(() => {
+      // отрисовываю страницу после получения данных
+      this.mainUserData(elemCreatContainer);
+    });
+  }
+
+  mainUserData(container: ElementCreator) {
+    const title = new ElementCreator({
+      tag: 'div',
+      textContent: 'User Profile',
+      classNames: ['page-profile__title'],
+    });
+    container.addInnerElement(title);
+
+    const containerUser = new ElementCreator({
+      tag: 'div',
+      classNames: ['page-profile__user-main__container'],
+    });
+    container.addInnerElement(containerUser);
+
+    const labelFirstName = new ElementCreator({
+      tag: 'div',
+      classNames: ['user-main__label', 'f-name'],
+    });
+    const textLabelFirstName = new ElementCreator({
+      tag: 'span',
+      textContent: 'First Name: ',
+      classNames: ['pp-f-name'],
+    });
+    const firstName = new ElementCreator({
+      tag: 'span',
+      textContent: userVariable.firstName,
+      classNames: ['user-main__value', 'f-name-value'],
+    });
+    const firstNameButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'f-name-button'],
+    });
+    firstNameButton.setCallback(() => {
+      // код для обработки клика по кнопке
+      const classOfSelectedElement = textLabelFirstName.getNode().className;
+      const patternFirstName = Object.values(patterns[0])[0];
+      const errorFirstName = Object.values(error[0])[0];
+      openModal(classOfSelectedElement, patternFirstName, errorFirstName, () => {
+        this.server.workApi.firstNameUpdateUser();
+      });
+    });
+    containerUser.addInnerElement(labelFirstName);
+    labelFirstName.addInnerElement(textLabelFirstName);
+    labelFirstName.addInnerElement(firstName);
+    labelFirstName.addInnerElement(firstNameButton);
+    this.lastName(containerUser);
+    this.dateOfBirth(containerUser);
+  }
+
+  lastName(container: ElementCreator) {
+    const labelLastName = new ElementCreator({
+      tag: 'div',
+      classNames: ['user-main__label', 'l-name'],
+    });
+    const textLabelLastName = new ElementCreator({
+      tag: 'span',
+      textContent: 'Last Name: ',
+      classNames: ['pp-l-name'],
+    });
+    const lastName = new ElementCreator({
+      tag: 'span',
+      textContent: userVariable.lastName,
+      classNames: ['user-main__value', 'l-name-value'],
+    });
+    const lastNameButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'l-name-button'],
+    });
+    lastNameButton.setCallback(() => {
+      // код для обработки клика по кнопке
+      const classOfSelectedElement = textLabelLastName.getNode().className;
+      const patternLastName = Object.values(patterns[1])[0];
+      const errorLastName = Object.values(error[1])[0];
+      openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
+        this.server.workApi.lastNameUpdateUser();
+      });
+    });
+    container.addInnerElement(labelLastName);
+    labelLastName.addInnerElement(textLabelLastName);
+    labelLastName.addInnerElement(lastName);
+    labelLastName.addInnerElement(lastNameButton);
+  }
+
+  dateOfBirth(container: ElementCreator) {
+    const labelDateOfBirth = new ElementCreator({
+      tag: 'div',
+      classNames: ['user-main__label', 'date-birth'],
+    });
+    const textLabelDateOfBirth = new ElementCreator({
+      tag: 'span',
+      textContent: 'Date of birth(Y-M-D): ',
+      classNames: ['pp__date-birth'],
+    });
+    const date = new ElementCreator({
+      tag: 'span',
+      textContent: userVariable.dateOfBirth,
+      classNames: ['user-main__value', 'date-birth-value'],
+    });
+    const dateButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Change',
+      classNames: ['user-main__button', 'date-birth-button'],
+    });
+    dateButton.setCallback(() => {
+      // код для обработки клика по кнопке
+      const classOfSelectedElement = textLabelDateOfBirth.getNode().className;
+      const patternLastName = Object.values(patterns[5])[0];
+      const errorLastName = Object.values(error[5])[0];
+      openModal(classOfSelectedElement, patternLastName, errorLastName, () => {
+        this.server.workApi.dateOfBirthUpdateUser();
+      });
+    });
+    container.addInnerElement(labelDateOfBirth);
+    labelDateOfBirth.addInnerElement(textLabelDateOfBirth);
+    labelDateOfBirth.addInnerElement(date);
+    labelDateOfBirth.addInnerElement(dateButton);
   }
 }

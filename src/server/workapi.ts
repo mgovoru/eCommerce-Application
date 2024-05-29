@@ -7,9 +7,12 @@ import { CardInfo, Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
+import { userVariable } from '../pages/page-profile/userVariable'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+import { successfulApply, errorApply } from '../pages/page-profile/successfulApply'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
 import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
 import CatalogView from '../pages/catalog/catalog';
+
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -100,6 +103,7 @@ export class WorkApi {
       lastName: data.data.lastName as string,
       email: data.data.email as string,
       password: data.data.password as string,
+      dateOfBirth: data.data.dateOfBirth as string, // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
       addresses: [shippingAddress, billingAddress],
       defaultShippingAddress: flagShippng,
       defaultBillingAddress: flagBilling,
@@ -118,6 +122,7 @@ export class WorkApi {
       .then((response) => {
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
+          localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
         } else {
           localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
         }
@@ -145,6 +150,7 @@ export class WorkApi {
         this.idUser = response.body.customer.id;
         console.log(this.idUser);
         if (response.body.customer.firstName) {
+          localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
           localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
@@ -159,6 +165,144 @@ export class WorkApi {
       });
   }
 
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  updateUser() {
+    const idString = localStorage.getItem('id');
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .get()
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          userVariable.firstName = response.body.firstName;
+          userVariable.lastName = response.body.lastName;
+          userVariable.dateOfBirth = response.body.dateOfBirth;
+          return response.body;
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  firstNameUpdateUser() {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: [
+              {
+                action: 'setFirstName',
+                firstName: userVariable.newFirstNameInIput,
+              },
+            ],
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
+          return response.body;
+        })
+        .catch((error) => {
+          errorApply(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  lastNameUpdateUser() {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: [
+              {
+                action: 'setLastName',
+                lastName: userVariable.newLastNameInIput,
+              },
+            ],
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
+          return response.body;
+        })
+        .catch((error) => {
+          errorApply(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
+
+  // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+  dateOfBirthUpdateUser() {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    if (idString) {
+      const id: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: [
+              {
+                action: 'setDateOfBirth',
+                dateOfBirth: userVariable.newDateOfBirth,
+              },
+            ],
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
+          return response.body;
+        })
+        .catch((error) => {
+          errorApply(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+
   requestProducts(content: CatalogView) {
     this.requestInstance.getProducts(content);
   }
@@ -169,5 +313,6 @@ export class WorkApi {
 
   requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
     this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
+
   }
 }

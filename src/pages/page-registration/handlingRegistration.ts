@@ -5,7 +5,7 @@ export interface RegistrationData {
   password: string | null;
   firstName: string | null;
   lastName: string | null;
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
 }
 export interface AddressOfRegistration {
   country: string | null;
@@ -38,9 +38,9 @@ interface ValidationResult {
   error: string;
 }
 
-function convertToDate(dateString: string): Date {
+export function convertDateAsComTool(dateString: string): string {
   const [day, month, year] = dateString.split('.').map(Number);
-  return new Date(year, month - 1, day);
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
 export function handlingRegistration(
@@ -76,7 +76,7 @@ export function handlingRegistration(
     input.classList.remove('registration-wrong-iput-field');
     // обработка даты
     if (dataField === 'dateOfBirth') {
-      mutableTargetObject[dataField] = convertToDate(value);
+      mutableTargetObject[dataField] = convertDateAsComTool(value);
       return;
     }
     mutableTargetObject[dataField] = value;

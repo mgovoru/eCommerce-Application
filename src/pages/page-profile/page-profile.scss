@@ -1,0 +1,98 @@
+.elem-create__container {
+  text-align: center;
+}
+
+.page-profile__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.page-profile__user-main__container {
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-main__label {
+  font-size: 0.7rem;
+}
+
+.user-main__value {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.modal-ok-button-profile,
+.modal-apply-button-profile,
+.modal-close-button-profile,
+.user-main__button {
+  margin: 0 0 0 1rem;
+  border: 1px solid;
+  font-size: 0.7rem;
+  padding: 3px;
+  border-radius: 3px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.modal-ok-button-profile:hover,
+.modal-apply-button-profile:hover,
+.modal-close-button-profile:hover,
+.user-main__button:hover {
+  background-color: black;
+  color: white;
+}
+
+.modal-ok-button-profile:active,
+.modal-apply-button-profile:active,
+.modal-close-button-profile:active,
+.user-main__button:active {
+  transform: scale(0.95);
+  background-color: #333;
+  color: white;
+}
+// модальное окно
+.modal-open {
+  overflow: hidden;
+}
+
+.modal-overlay-profile {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  top: 0;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container-profile {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-input-error-profile {
+  height: 40px;
+  font-size: 0.6rem;
+  color: red;
+}
+
+.modal-successful-profile {
+  color: rgb(0, 222, 0);
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.modal-errorApply-profile {
+  color: red;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
