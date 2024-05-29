@@ -22,6 +22,10 @@ export default class FilterView extends View {
 
   sizeFilter: HTMLElement | null;
 
+  rangeInputMin: HTMLInputElement | null;
+
+  rangeInputMax: HTMLInputElement | null;
+
   constructor(content: CatalogView, server: Server) {
     super(mainParams);
     this.server = server;
@@ -30,6 +34,8 @@ export default class FilterView extends View {
     this.timeFilter = null;
     this.filterColor = null;
     this.sizeFilter = null;
+    this.rangeInputMin = null;
+    this.rangeInputMax = null;
     this.configureView();
   }
 
@@ -69,22 +75,30 @@ export default class FilterView extends View {
       classNames: ['filter__price'],
     }).getNode();
     this.getElement().append(this.priceFilter);
-    const rangeInputMin = this.drawInputPrice('range-min', 20);
-    const rangeInputMax = this.drawInputPrice('range-max', 80);
-    rangeInputMin.addEventListener('input', () => {
+    this.rangeInputMin = this.drawInputPrice('range-min', 10);
+    this.rangeInputMax = this.drawInputPrice('range-max', 110);
+    this.rangeInputMin.addEventListener('input', () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
+        this.content.strFilterArray = this.content.strFilterArray.filter(
+          (el) => !el.includes(`variants.price.centAmount`)
+        );
         const filterPrice = `variants.price.centAmount:range (
-				 ${Number(rangeInputMin.value) * 100} to ${Number(rangeInputMax.value) * 100})`;
-        this.server.workApi.requestSortFilterProducts(this.content, '', filterPrice);
+				 ${Number(this.rangeInputMin?.value) * 100} to ${Number(this.rangeInputMax?.value) * 100})`;
+        this.content.strFilterArray.push(filterPrice);
+        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
       }, 1000) as unknown as number;
     });
-    rangeInputMax.addEventListener('input', () => {
+    this.rangeInputMax.addEventListener('input', () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
+        this.content.strFilterArray = this.content.strFilterArray.filter(
+          (el) => !el.includes(`variants.price.centAmount`)
+        );
         const filterPrice = `variants.price.centAmount:range (
-				 ${Number(rangeInputMin.value) * 100} to ${Number(rangeInputMax.value) * 100})`;
-        this.server.workApi.requestSortFilterProducts(this.content, '', filterPrice);
+				 ${Number(this.rangeInputMin?.value) * 100} to ${Number(this.rangeInputMax?.value) * 100})`;
+        this.content.strFilterArray.push(filterPrice);
+        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
       }, 1000) as unknown as number;
     });
   }
@@ -94,7 +108,18 @@ export default class FilterView extends View {
       tag: 'div',
       classNames: ['filter__reset'],
       textContent: 'Reset Filters',
-      callback: () => {},
+      callback: () => {
+        this.content.strSort = '';
+        this.content.strFilterArray = [];
+        document.querySelectorAll('.selected-item').forEach((el) => el.classList.remove('selected-item'));
+        (this.rangeInputMin as HTMLInputElement).value = '10';
+        (this.rangeInputMax as HTMLInputElement).value = '110';
+        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
+        const array = document.querySelectorAll('.label');
+        array[0].innerHTML = '';
+        array[1].innerHTML = '';
+        (this.content.selectSort as HTMLSelectElement).selectedIndex = 0;
+      },
     }).getNode();
     this.getElement().append(filterReset);
   }
@@ -114,7 +139,7 @@ export default class FilterView extends View {
     rangeInput.value = `${valueInput}`;
     const rangeLabel = new ElementCreator({
       tag: 'div',
-      classNames: [`${className}-label`],
+      classNames: [`${className}-label`, 'label'],
     }).getNode();
     rangeWrapper.append(rangeInput);
     rangeWrapper.append(rangeLabel);
@@ -187,6 +212,8 @@ export default class FilterView extends View {
   }
 
   addClassSelectItem(event: Event, str: string, el: string) {
+    event.preventDefault();
+    event.stopPropagation();
     const parent = (event.target as HTMLElement).parentElement;
     if (!(event.target as HTMLElement).classList.contains('selected-item')) {
       if (parent) {
@@ -195,11 +222,23 @@ export default class FilterView extends View {
           (child as HTMLElement).classList.remove('selected-item');
         });
       }
+      this.content.strFilterArray = this.content.strFilterArray.filter(
+        (ell) => !ell.includes(`variants.attributes.${str}.key`)
+      );
       (event.target as HTMLElement).classList.add('selected-item');
       const filterTime = `variants.attributes.${str}.key:"${el}"`;
-      this.server.workApi.requestSortFilterProducts(this.content, '', filterTime);
+      this.content.strFilterArray.push(filterTime);
+      console.log(this.content.strFilterArray);
+      this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
     } else {
       (event.target as HTMLElement).classList.remove('selected-item');
+      console.log(event.target);
+      const index = this.content.strFilterArray.indexOf(`variants.attributes.${str}.key:"${el}"`);
+      if (index !== -1) {
+        this.content.strFilterArray.splice(index, 1);
+        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
+        console.log(this.content.strFilterArray);
+      }
     }
   }
 }

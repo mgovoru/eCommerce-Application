@@ -44,7 +44,7 @@ export class RequestCatalog {
       });
   }
 
-  getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
+  getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string[] = ['']) {
     return this.server
       .apiRoot(credentials)
       .withProjectKey({ projectKey: credentials.projectKey })
@@ -53,7 +53,7 @@ export class RequestCatalog {
       .get({
         queryArgs: {
           sort: [strSort],
-          filter: [strFilter],
+          filter: strFilter,
         },
       })
       .execute()

@@ -32,7 +32,9 @@ export default class CatalogView extends View {
 
   strSort: string;
 
-  strFilter: string;
+  strFilterArray: string[];
+
+  selectSort: HTMLSelectElement | null;
 
   constructor(router: Router, server: Server) {
     super(mainParams);
@@ -42,7 +44,8 @@ export default class CatalogView extends View {
     this.container = null;
     this.blockTitle = null;
     this.strSort = '';
-    this.strFilter = '';
+    this.strFilterArray = [];
+    this.selectSort = null;
     this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
   }
@@ -72,11 +75,11 @@ export default class CatalogView extends View {
   }
 
   drawSelectSort() {
-    const selectSort = new ElementCreator({
+    this.selectSort = new ElementCreator({
       tag: 'select',
       classNames: ['catalog__sort'],
-    }).getNode();
-    selectSort.id = 'sort';
+    }).getNode() as HTMLSelectElement;
+    this.selectSort.id = 'sort';
     const selectSortName = new ElementCreator({ tag: 'option', textContent: 'Sort by' }).getNode() as HTMLOptionElement;
     selectSortName.disabled = true;
     selectSortName.selected = true;
@@ -92,13 +95,13 @@ export default class CatalogView extends View {
       textContent: 'price ↓',
     }).getNode() as HTMLOptionElement;
     selectPriceDown.value = 'priceZ';
-    selectSort.append(selectSortName);
-    selectSort.append(selectNameUp);
-    selectSort.append(selectNameDown);
-    selectSort.append(selectPriceUp);
-    selectSort.append(selectPriceDown);
-    this.blockTitle?.append(selectSort);
-    selectSort.addEventListener('change', (e) => {
+    this.selectSort.append(selectSortName);
+    this.selectSort.append(selectNameUp);
+    this.selectSort.append(selectNameDown);
+    this.selectSort.append(selectPriceUp);
+    this.selectSort.append(selectPriceDown);
+    this.blockTitle?.append(this.selectSort);
+    this.selectSort.addEventListener('change', (e) => {
       e.preventDefault();
       e.stopPropagation();
       const element = e.target as HTMLOptionElement;
@@ -108,7 +111,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTNAMEASC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
           break;
         }
         case 'nameZ': {
@@ -116,7 +119,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTNAMEDESC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
           break;
         }
         case 'priceA': {
@@ -124,7 +127,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTPRICEASC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
           break;
         }
         case 'priceZ': {
@@ -132,7 +135,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTPRICEDESC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
           break;
         }
         default:
@@ -156,8 +159,13 @@ export default class CatalogView extends View {
       classNames: ['catalog__filter'],
       textContent: 'filter',
       callback: () => {
-        const filterBlock = new FilterView(this, this.server);
-        this.container?.insertBefore(filterBlock.getElement(), this.items);
+        const check = document.querySelector('.filter') !== null;
+        if (!check) {
+          const filterBlock = new FilterView(this, this.server);
+          this.container?.insertBefore(filterBlock.getElement(), this.items);
+        } else {
+          document.querySelector('.filter')?.remove();
+        }
       },
     }).getNode();
     this.blockTitle?.append(filter);

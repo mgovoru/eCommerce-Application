@@ -167,7 +167,7 @@ export class WorkApi {
   //   this.requestInstance.getSortProducts(content, str);
   // }
 
-  requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
+  requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string[] = ['']) {
     this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
   }
 }

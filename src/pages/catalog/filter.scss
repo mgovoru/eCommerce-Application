@@ -50,6 +50,11 @@
   z-index: 12;
 }
 
+.range::-webkit-slider-thumb:hover {
+  background-color: rgb(210, 116, 210);
+}
+
+
 .range-label {
   font-weight: 700;
 }
@@ -82,3 +87,9 @@
 .selected-item {
   color: rgb(210, 116, 210);
 }
+
+// .filter__time li:hover,
+// .filter__size li:hover,
+// .filter__color li:hover {
+//   color: rgb(210, 116, 210);
+// }
