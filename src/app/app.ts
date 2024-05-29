@@ -1,7 +1,7 @@
 import { FooterView } from '../components/footer/footer';
 import { HeaderView } from '../components/header/header';
 import { MainView } from '../components/main/main';
-import { Pages } from '../router/pages';
+import { ID_SELECTOR, Pages } from '../router/pages';
 import Router from '../router/router';
 import { Server } from '../server/server';
 import State from '../state/state';
@@ -62,8 +62,10 @@ export class App {
       {
         path: `${Pages.LOGIN}`,
         callback: async () => {
-          const { default: LoginView } = await import('../pages/page-login/page-login');
-          this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
+          if (!localStorage.getItem('name')) {
+            const { default: LoginView } = await import('../pages/page-login/page-login');
+            this.setContent(Pages.LOGIN, new LoginView(this.router, state, this.server));
+          }
         },
       },
       {
@@ -73,6 +75,13 @@ export class App {
           this.setContent(Pages.PROFILE, new ProfilePageView(this.router, state, this.server));
         },
       },
+      // {
+      //   path: `${Pages.CATALOG}`,
+      //   callback: async () => {
+      //     const { default: CatalogView } = await import('../pages/catalog/catalog');
+      //     this.setContent(Pages.CATALOG, new CatalogView(this.router, state, this.server));
+      //   },
+      // },
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
@@ -89,20 +98,20 @@ export class App {
           this.setContent(Pages.CART, new CartView(state));
         },
       },
-      // {
-      //   path: `${Pages.PRODUCT}`,
-      //   callback: async () => {
-      //     const { default: ProductView } = await import('./temp-pages/product/product-view');
-      //     this.setContent(Pages.PRODUCT, new ProductView(this.router));
-      //   },
-      // },
-      // {
-      //   path: `${Pages.PRODUCT}/${ID_SELECTOR}`,
-      //   callback: async (id) => {
-      //     const { default: ProductView } = await import('./temp-pages/product/product-view');
-      //     this.setContent(Pages.PRODUCT, new ProductView(this.router, id));
-      //   },
-      // },
+      {
+        path: `${Pages.SHOP}`,
+        callback: async () => {
+          const { default: ShopView } = await import('../components/shop/shop');
+          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state));
+        },
+      },
+      {
+        path: `${Pages.SHOP}/${ID_SELECTOR}`,
+        callback: async (id: string) => {
+          const { default: ShopView } = await import('../components/shop/shop');
+          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, id));
+        },
+      },
       {
         path: `${Pages.NOT_FOUND}`,
         callback: async () => {
@@ -114,10 +123,8 @@ export class App {
   }
 
   setContent(page: string, view: View) {
-    if (this.header && page === 'main') {
+    if (this.header) {
       this.header.setSelectedItem(page);
-    } else if (this.header && page !== 'main') {
-      this.header.setNoSelectedItem('main');
     }
     if (this.main) {
       this.main.setContent(view);

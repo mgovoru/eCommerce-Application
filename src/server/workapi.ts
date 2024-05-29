@@ -3,12 +3,16 @@ import { Settings } from '../app/enum';
 import { UserApiServer } from './user';
 import ErrorView from './error';
 import { Server } from './server';
-import { Credentials } from '../app/type';
+import { CardInfo, Credentials } from '../app/type';
 import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { DataReturn } from '../pages/page-registration/validation';
 import { userVariable } from '../pages/page-profile/userVariable'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
 import { successfulApply, errorApply } from '../pages/page-profile/successfulApply'; // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+import { RequestDetailedProduct } from './requestDetailedProduct';
+import { RequestCatalog } from './requestCatalog';
+import CatalogView from '../pages/catalog/catalog';
+
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -22,9 +26,25 @@ export class WorkApi {
 
   router: Router;
 
+  requestProductInstance: RequestDetailedProduct;
+
+  requestInstance: RequestCatalog;
+
+  idUser: string;
+
+  cards: CardInfo[];
+
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
+    this.requestProductInstance = new RequestDetailedProduct(this.server, this.router);
+    this.requestInstance = new RequestCatalog(this.server, this.router);
+    this.cards = [];
+    this.idUser = '';
+  }
+
+  requestDetailedProduct(id: string) {
+    this.requestProductInstance.getProductById(id);
   }
 
   changeData(data: DataReturn, flagShippng: number, flagBilling: number): CustomerDraft {
@@ -127,6 +147,8 @@ export class WorkApi {
       })
       .execute()
       .then((response) => {
+        this.idUser = response.body.customer.id;
+        console.log(this.idUser);
         if (response.body.customer.firstName) {
           localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
@@ -142,6 +164,7 @@ export class WorkApi {
         errorElement.show(error.message);
       });
   }
+
 
   // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
   updateUser() {
@@ -279,5 +302,17 @@ export class WorkApi {
         });
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+
+  requestProducts(content: CatalogView) {
+    this.requestInstance.getProducts(content);
+  }
+
+  // requestSortProducts(content: CatalogView, str: string = '') {
+  //   this.requestInstance.getSortProducts(content, str);
+  // }
+
+  requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
+    this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
+
   }
 }
