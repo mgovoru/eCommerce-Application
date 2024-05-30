@@ -65,7 +65,7 @@
 }
 
 .modal-overlay-profile {
-  position: absolute;
+  position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
   height: 100%;
   width: 100%;
@@ -104,6 +104,11 @@
 }
 
 .pp__delete-address-button {
-  background-color: red;
+  background-color: rgba(255, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.page-profile__create-addresse-button {
+  background-color: rgba(0, 128, 0, 0.5);
   font-weight: bold;
 }

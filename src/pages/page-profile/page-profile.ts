@@ -53,6 +53,7 @@ export default class ProfilePageView extends View {
         this.mainUserData(elemCreatContainer);
         this.password(elemCreatContainer);
         this.addressesTitle(elemCreatContainer);
+        this.newAddresseButton(elemCreatContainer);
         r.addresses.forEach((a) => {
           this.addresseUnit(elemCreatContainer, a.country, a.postalCode || '', a.city || '', a.streetName || '');
         });
@@ -273,6 +274,20 @@ export default class ProfilePageView extends View {
       classNames: ['page-profile__addresses-title'],
     });
     container.addInnerElement(addressesTitle);
+  }
+
+  newAddresseButton(container: ElementCreator) {
+    const contForButton = new ElementCreator({
+      tag: 'div',
+      classNames: ['page-profile__container-create-addresse-button'],
+    });
+    const buttonAddAddress = new ElementCreator({
+      tag: 'button',
+      textContent: 'Add New Address',
+      classNames: ['page-profile__create-addresse-button', 'user-main__button'],
+    });
+    container.addInnerElement(contForButton);
+    contForButton.addInnerElement(buttonAddAddress);
   }
 
   ifCantUpdateDateFromServer(container: ElementCreator) {
