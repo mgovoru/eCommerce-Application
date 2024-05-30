@@ -26,6 +26,8 @@ export default class FilterView extends View {
 
   rangeInputMax: HTMLInputElement | null;
 
+  searchInput: HTMLInputElement | null;
+
   constructor(content: CatalogView, server: Server) {
     super(mainParams);
     this.server = server;
@@ -36,31 +38,32 @@ export default class FilterView extends View {
     this.sizeFilter = null;
     this.rangeInputMin = null;
     this.rangeInputMax = null;
+    this.searchInput = null;
     this.configureView();
   }
 
   configureView() {
     this.drawPrice();
-    this.drawTime();
-    this.drawColor();
-    this.drawSize();
+    this.content.arrayAtt.forEach((el) => this.drawAttGrop(el[0], el[1]));
     this.resetFilters();
+    this.createBlockSearch();
   }
 
-  drawTime() {
+  drawAttGrop(strName: string, arrayName: string[]) {
     this.timeFilter = new ElementCreator({
       tag: 'ul',
-      classNames: ['filter__time'],
+      classNames: [`filter__${strName}`],
     }).getNode();
-    const timeItems = ['TIME', 'old', 'modern', 'future'];
+    const timeItems = [`${strName.toUpperCase()}`].concat(arrayName);
+    // ['TIME', 'old', 'modern', 'future'];
     timeItems.forEach((el) => {
       const li = new ElementCreator({
         tag: 'li',
-        classNames: ['filter__time-item'],
+        classNames: [`filter__${strName}-item`],
         textContent: el,
         callback: (event) => {
-          if (el !== 'TIME') {
-            this.addClassSelectItem(event, 'time', el);
+          if (el !== `${strName.toUpperCase()}`) {
+            this.addClassSelectItem(event, `${strName}`, el);
           }
         },
       }).getNode();
@@ -86,7 +89,12 @@ export default class FilterView extends View {
         const filterPrice = `variants.price.centAmount:range (
 				 ${Number(this.rangeInputMin?.value) * 100} to ${Number(this.rangeInputMax?.value) * 100})`;
         this.content.strFilterArray.push(filterPrice);
-        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
+        this.server.workApi.requestSortFilterProducts(
+          this.content,
+          '',
+          this.content.strFilterArray,
+          this.content.textSearch
+        );
       }, 1000) as unknown as number;
     });
     this.rangeInputMax.addEventListener('input', () => {
@@ -98,7 +106,12 @@ export default class FilterView extends View {
         const filterPrice = `variants.price.centAmount:range (
 				 ${Number(this.rangeInputMin?.value) * 100} to ${Number(this.rangeInputMax?.value) * 100})`;
         this.content.strFilterArray.push(filterPrice);
-        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
+        this.server.workApi.requestSortFilterProducts(
+          this.content,
+          '',
+          this.content.strFilterArray,
+          this.content.textSearch
+        );
       }, 1000) as unknown as number;
     });
   }
@@ -114,14 +127,39 @@ export default class FilterView extends View {
         document.querySelectorAll('.selected-item').forEach((el) => el.classList.remove('selected-item'));
         (this.rangeInputMin as HTMLInputElement).value = '10';
         (this.rangeInputMax as HTMLInputElement).value = '110';
-        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
         const array = document.querySelectorAll('.label');
         array[0].innerHTML = '';
         array[1].innerHTML = '';
+        this.content.textSearch = '';
+        (this.searchInput as HTMLInputElement).value = '';
         (this.content.selectSort as HTMLSelectElement).selectedIndex = 0;
+        this.server.workApi.requestSortFilterProducts(
+          this.content,
+          '',
+          this.content.strFilterArray,
+          this.content.textSearch
+        );
       },
     }).getNode();
     this.getElement().append(filterReset);
+  }
+
+  createBlockSearch() {
+    const searchBlock = document.createElement('div');
+    this.searchInput = document.createElement('input') as HTMLInputElement;
+    this.searchInput.classList.add('catalog__search-input');
+    searchBlock.append(this.searchInput);
+    searchBlock.classList.add('catalog__search');
+    this.searchInput.addEventListener('input', () => {
+      this.content.textSearch = this.searchInput?.value as string;
+      this.server.workApi.requestSortFilterProducts(
+        this.content,
+        '',
+        this.content.strFilterArray,
+        this.content.textSearch
+      );
+    });
+    this.getElement().append(searchBlock);
   }
 
   drawInputPrice(className: string, valueInput: number): HTMLInputElement {
@@ -151,49 +189,49 @@ export default class FilterView extends View {
     return rangeInput;
   }
 
-  drawColor() {
-    this.filterColor = new ElementCreator({
-      tag: 'ul',
-      classNames: ['filter__color'],
-    }).getNode();
-    const timeItems = ['COLOR', 'multi', 'blue', 'green', 'red'];
-    timeItems.forEach((el) => {
-      const li = new ElementCreator({
-        tag: 'li',
-        classNames: ['filter__color-item'],
-        textContent: el,
-        callback: (event) => {
-          if (el !== 'COLOR') {
-            this.addClassSelectItem(event, 'color', el);
-          }
-        },
-      }).getNode();
-      this.filterColor?.append(li);
-    });
-    this.getElement().append(this.filterColor);
-  }
+  // drawColor() {
+  //   this.filterColor = new ElementCreator({
+  //     tag: 'ul',
+  //     classNames: ['filter__color'],
+  //   }).getNode();
+  //   const timeItems = ['COLOR', 'multi', 'blue', 'green', 'red'];
+  //   timeItems.forEach((el) => {
+  //     const li = new ElementCreator({
+  //       tag: 'li',
+  //       classNames: ['filter__color-item'],
+  //       textContent: el,
+  //       callback: (event) => {
+  //         if (el !== 'COLOR') {
+  //           this.addClassSelectItem(event, 'color', el);
+  //         }
+  //       },
+  //     }).getNode();
+  //     this.filterColor?.append(li);
+  //   });
+  //   this.getElement().append(this.filterColor);
+  // }
 
-  drawSize() {
-    this.sizeFilter = new ElementCreator({
-      tag: 'ul',
-      classNames: ['filter__size'],
-    }).getNode();
-    const timeItems = ['SIZE', 'small', 'normal', 'big'];
-    timeItems.forEach((el) => {
-      const li = new ElementCreator({
-        tag: 'li',
-        classNames: ['filter__size-item'],
-        textContent: el,
-        callback: (event) => {
-          if (el !== 'SIZE') {
-            this.addClassSelectItem(event, 'size', el);
-          }
-        },
-      }).getNode();
-      this.sizeFilter?.append(li);
-    });
-    this.getElement().append(this.sizeFilter);
-  }
+  // drawSize() {
+  //   this.sizeFilter = new ElementCreator({
+  //     tag: 'ul',
+  //     classNames: ['filter__size'],
+  //   }).getNode();
+  //   const timeItems = ['SIZE', 'small', 'normal', 'big'];
+  //   timeItems.forEach((el) => {
+  //     const li = new ElementCreator({
+  //       tag: 'li',
+  //       classNames: ['filter__size-item'],
+  //       textContent: el,
+  //       callback: (event) => {
+  //         if (el !== 'SIZE') {
+  //           this.addClassSelectItem(event, 'size', el);
+  //         }
+  //       },
+  //     }).getNode();
+  //     this.sizeFilter?.append(li);
+  //   });
+  //   this.getElement().append(this.sizeFilter);
+  // }
 
   drawBlock(liItems: string[], funcLi: (() => void)[]) {
     const ulElement = new ElementCreator({
@@ -228,16 +266,23 @@ export default class FilterView extends View {
       (event.target as HTMLElement).classList.add('selected-item');
       const filterTime = `variants.attributes.${str}.key:"${el}"`;
       this.content.strFilterArray.push(filterTime);
-      console.log(this.content.strFilterArray);
-      this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
+      this.server.workApi.requestSortFilterProducts(
+        this.content,
+        '',
+        this.content.strFilterArray,
+        this.content.textSearch
+      );
     } else {
       (event.target as HTMLElement).classList.remove('selected-item');
-      console.log(event.target);
       const index = this.content.strFilterArray.indexOf(`variants.attributes.${str}.key:"${el}"`);
       if (index !== -1) {
         this.content.strFilterArray.splice(index, 1);
-        this.server.workApi.requestSortFilterProducts(this.content, '', this.content.strFilterArray);
-        console.log(this.content.strFilterArray);
+        this.server.workApi.requestSortFilterProducts(
+          this.content,
+          '',
+          this.content.strFilterArray,
+          this.content.textSearch
+        );
       }
     }
   }

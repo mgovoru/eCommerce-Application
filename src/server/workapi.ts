@@ -163,11 +163,20 @@ export class WorkApi {
     this.requestInstance.getProducts(content);
   }
 
-  // requestSortProducts(content: CatalogView, str: string = '') {
-  //   this.requestInstance.getSortProducts(content, str);
-  // }
+  requestAttGroups(content: CatalogView) {
+    this.requestInstance.getAttGroups(content);
+  }
 
-  requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string[] = ['']) {
-    this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
+  requestCategories(content: CatalogView) {
+    this.requestInstance.getCategories(content);
+  }
+
+  requestSortFilterProducts(
+    content: CatalogView,
+    strSort: string = '',
+    strFilter: string[] = [''],
+    strText: string = ''
+  ) {
+    this.requestInstance.getSortFilterProducts(content, strSort, strFilter, strText);
   }
 }

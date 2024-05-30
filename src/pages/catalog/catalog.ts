@@ -1,3 +1,4 @@
+import { AttributeDefinition } from '@commercetools/platform-sdk';
 import { CardInfo } from '../../app/type';
 import { View } from '../../app/view';
 import { CardView } from '../../components/card/card';
@@ -36,6 +37,14 @@ export default class CatalogView extends View {
 
   selectSort: HTMLSelectElement | null;
 
+  textSearch: string;
+
+  contentArrayAtt: AttributeDefinition[] | undefined;
+
+  arrayAtt: [string, string[]][];
+
+  arrayCat: [string, string][];
+
   constructor(router: Router, server: Server) {
     super(mainParams);
     // this.state = state;
@@ -44,8 +53,12 @@ export default class CatalogView extends View {
     this.container = null;
     this.blockTitle = null;
     this.strSort = '';
+    this.textSearch = '';
     this.strFilterArray = [];
     this.selectSort = null;
+    this.contentArrayAtt = [];
+    this.arrayAtt = [];
+    this.arrayCat = [];
     this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
   }
@@ -55,12 +68,25 @@ export default class CatalogView extends View {
     containerV.addNameClass('page-catalog');
     this.container = containerV.getElement();
     this.server.workApi.requestProducts(this);
+    this.server.workApi.requestCategories(this);
+    this.server.workApi.requestAttGroups(this);
     this.blockTitle = new ElementCreator({ tag: 'div', classNames: ['catalog__header'] }).getNode();
     this.drawTitle();
     this.drawFilter();
     this.drawSelectSort();
     this.container.append(this.blockTitle);
     this.viewElementCreator.append(this.container);
+  }
+
+  addArray(array: AttributeDefinition[]) {
+    this.contentArrayAtt = this.contentArrayAtt?.concat(array);
+    const arrayNew: [string, string[]][] = [];
+    this.contentArrayAtt?.forEach((el) => {
+      if (el.type.name === 'enum') {
+        arrayNew.push([el.name as string, el.type.values.map((ell) => ell.key) as string[]]);
+      }
+    });
+    this.arrayAtt = this.arrayAtt.concat(arrayNew);
   }
 
   drawItems(array: CardInfo[]) {
@@ -111,7 +137,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTNAMEASC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         case 'nameZ': {
@@ -119,7 +145,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTNAMEDESC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         case 'priceA': {
@@ -127,7 +153,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTPRICEASC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         case 'priceZ': {
@@ -135,7 +161,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTPRICEDESC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         default:
@@ -149,8 +175,63 @@ export default class CatalogView extends View {
       tag: 'h1',
       classNames: ['catalog__title'],
       textContent: 'Catalog',
+      callback: () => {
+        const check = document.querySelector('.categories__items') !== null;
+        if (!check) {
+          const cataloglistBlock = this.drawCatt();
+          this.container?.insertBefore(cataloglistBlock, this.container?.firstChild);
+        } else {
+          document.querySelector('.categories__items')?.remove();
+        }
+      },
     }).getNode();
     this.blockTitle?.append(titleCatalog);
+  }
+
+  drawCatt() {
+    const cattList = new ElementCreator({
+      tag: 'ul',
+      classNames: [`categories__items`],
+    }).getNode();
+    this.arrayCat.forEach((el) => {
+      const li = new ElementCreator({
+        tag: 'li',
+        classNames: [`categories__item`],
+        textContent: el[1],
+        callback: (event) => {
+          this.addSelectItem(event, el[0]);
+        },
+      }).getNode();
+      cattList?.append(li);
+    });
+    return cattList;
+  }
+
+  addSelectItem(event: Event, strId: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    const parent = (event.target as HTMLElement).parentElement;
+    if (!(event.target as HTMLElement).classList.contains('selected-item')) {
+      if (parent) {
+        const children = parent.querySelectorAll('.selected-item');
+        children.forEach((child) => {
+          (child as HTMLElement).classList.remove('selected-item');
+        });
+      }
+      (event.target as HTMLElement).classList.add('selected-item');
+      this.strFilterArray = this.strFilterArray.filter((ell) => !ell.includes(`categories.id`));
+      const filterCat = `categories.id:"${strId}"`;
+      this.strFilterArray.push(filterCat);
+      // console.log(this.strFilterArray);
+      this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
+    } else {
+      (event.target as HTMLElement).classList.remove('selected-item');
+      const index = this.strFilterArray.indexOf(`categories.id:"${strId}"`);
+      if (index !== -1) {
+        this.strFilterArray.splice(index, 1);
+        this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
+      }
+    }
   }
 
   drawFilter() {

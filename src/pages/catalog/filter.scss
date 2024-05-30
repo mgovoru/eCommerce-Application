@@ -54,7 +54,6 @@
   background-color: rgb(210, 116, 210);
 }
 
-
 .range-label {
   font-weight: 700;
 }
@@ -93,3 +92,24 @@
 // .filter__color li:hover {
 //   color: rgb(210, 116, 210);
 // }
+.catalog__search {
+  padding-top: 8px;
+  margin-bottom: 8px;
+}
+
+.catalog__search-input {
+  width: 200px;
+  padding: 12px 0;
+  background-color: transparent;
+  font-size: 14px;
+  line-height: 18px;
+  color: #575756;
+  background-image: url('../../assets/search.svg');
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  background-position: 100% center;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #575756;
+  border-radius: 0;
+  outline: 0;
+}
