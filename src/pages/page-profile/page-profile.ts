@@ -10,6 +10,7 @@ import { patterns, error } from '../page-registration/on-input-function';
 import { userVariable } from './userVariable';
 import { ProfilePageRequest } from '../../server/profileRequest';
 import { passOpenModal } from './change-password/open-modal-for-password';
+import { addressOpenModal } from './addresse-modal/addresse-open-modal';
 
 const mainParams = {
   tag: 'section',
@@ -291,6 +292,12 @@ export default class ProfilePageView extends View {
       tag: 'button',
       textContent: 'Add New Address',
       classNames: ['page-profile__create-addresse-button', 'user-main__button'],
+    });
+    buttonAddAddress.setCallback(() => {
+      console.log('создание нового адреса')
+      addressOpenModal(() => {
+        console.log('выполнить: добавить адрес')
+      });
     });
     container.addInnerElement(contForButton);
     contForButton.addInnerElement(buttonAddAddress);
