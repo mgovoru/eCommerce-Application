@@ -54,7 +54,7 @@ export default class ProfilePageView extends View {
         this.password(elemCreatContainer);
         this.addressesTitle(elemCreatContainer);
         r.addresses.forEach((a) => {
-          this.addresseUnit(elemCreatContainer, a.country);
+          this.addresseUnit(elemCreatContainer, a.country, a.postalCode || '', a.city || '', a.streetName || '');
         });
       } else {
         // пустая страница если нет ответа от сервера
@@ -284,7 +284,7 @@ export default class ProfilePageView extends View {
     container.addInnerElement(message);
   }
 
-  addresseUnit(container: ElementCreator, country: string) {
+  addresseUnit(container: ElementCreator, country: string, postalCode: string, city: string, street: string) {
     const containerAddresse = new ElementCreator({
       tag: 'div',
       classNames: ['page-profile__user-main__container'],
@@ -299,8 +299,67 @@ export default class ProfilePageView extends View {
       textContent: country,
       classNames: ['user-main__value', 'pp__country-value'],
     });
+    const textLabelPostalCode = new ElementCreator({
+      tag: 'div',
+      textContent: 'Postal code: ',
+      classNames: ['pp__postal-code'],
+    });
+    const postalCodeValue = new ElementCreator({
+      tag: 'span',
+      textContent: postalCode,
+      classNames: ['user-main__value', 'pp__postal-value'],
+    });
+    const textLabelCity = new ElementCreator({
+      tag: 'div',
+      textContent: 'City: ',
+      classNames: ['pp__city'],
+    });
+    const cityValue = new ElementCreator({
+      tag: 'span',
+      textContent: city,
+      classNames: ['user-main__value', 'pp__city'],
+    });
+    const textLabelStreet = new ElementCreator({
+      tag: 'div',
+      textContent: 'Street: ',
+      classNames: ['pp__street'],
+    });
+    const streetValue = new ElementCreator({
+      tag: 'span',
+      textContent: street,
+      classNames: ['user-main__value', 'pp__street'],
+    });
+    const containerForButtons = new ElementCreator({
+      tag: 'div',
+      classNames: ['pp__address-cont-for-buttons'],
+    });
+    const editButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Edit',
+      classNames: ['user-main__button', 'pp__edit-address-button'],
+    });
+    editButton.setCallback(() => {
+      // console.log('калбаск для редактирования адресса')
+    });
+    const deleteButton = new ElementCreator({
+      tag: 'button',
+      textContent: 'Delete',
+      classNames: ['user-main__button', 'pp__delete-address-button'],
+    });
+    deleteButton.setCallback(() => {
+      // console.log('калбаск для УДАЛЕНИЯ адресса')
+    });
     container.addInnerElement(containerAddresse);
     containerAddresse.addInnerElement(textLabelCountry);
     textLabelCountry.addInnerElement(countryValue);
+    containerAddresse.addInnerElement(textLabelPostalCode);
+    textLabelPostalCode.addInnerElement(postalCodeValue);
+    containerAddresse.addInnerElement(textLabelCity);
+    textLabelCity.addInnerElement(cityValue);
+    containerAddresse.addInnerElement(textLabelStreet);
+    textLabelStreet.addInnerElement(streetValue);
+    containerAddresse.addInnerElement(containerForButtons);
+    containerForButtons.addInnerElement(editButton);
+    containerForButtons.addInnerElement(deleteButton);
   }
 }
