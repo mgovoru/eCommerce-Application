@@ -1,6 +1,6 @@
 import { ElementCreator } from '../../../app/base';
 import { onIputCheck, patterns, error } from '../../page-registration/on-input-function';
-// import { applyPasswordButtonOk } from './applyPassword';
+import { applyAddressButton } from './applyAddress';
 
 function createInput(
   pattern: RegExp,
@@ -97,7 +97,7 @@ export function addressCreateModal(callback: () => void) {
   });
   applyButton.getNode().addEventListener('click', () => {
     // клик на кнопку Apply
-    applyPasswordButtonOk(callback);
+    applyAddressButton(callback);
   });
 
   const closeButton = new ElementCreator({

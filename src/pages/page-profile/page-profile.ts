@@ -294,9 +294,9 @@ export default class ProfilePageView extends View {
       classNames: ['page-profile__create-addresse-button', 'user-main__button'],
     });
     buttonAddAddress.setCallback(() => {
-      console.log('создание нового адреса')
+      // console.log('создание нового адреса')
       addressOpenModal(() => {
-        console.log('выполнить: добавить адрес')
+        // console.log('выполнить: добавить адрес')
       });
     });
     container.addInnerElement(contForButton);
