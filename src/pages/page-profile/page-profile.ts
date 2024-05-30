@@ -47,10 +47,19 @@ export default class ProfilePageView extends View {
       if (r) {
         userVariable.email = r.email;
         userVariable.currentPassword = r.password;
+
+        // console.log(r.addresses)
+        // отрисовываю страницу после получения данных
+        this.mainUserData(elemCreatContainer);
+        this.password(elemCreatContainer);
+        this.addressesTitle(elemCreatContainer);
+        r.addresses.forEach((a) => {
+          this.addresseUnit(elemCreatContainer, a.country);
+        });
+      } else {
+        // пустая страница если нет ответа от сервера
+        this.ifCantUpdateDateFromServer(elemCreatContainer);
       }
-      // отрисовываю страницу после получения данных
-      this.mainUserData(elemCreatContainer);
-      this.password(elemCreatContainer);
     });
   }
 
@@ -255,5 +264,43 @@ export default class ProfilePageView extends View {
     containerPassword.addInnerElement(textLabelPassword);
     textLabelPassword.addInnerElement(password);
     textLabelPassword.addInnerElement(passwordButton);
+  }
+
+  addressesTitle(container: ElementCreator) {
+    const addressesTitle = new ElementCreator({
+      tag: 'div',
+      textContent: 'Addresses',
+      classNames: ['page-profile__addresses-title'],
+    });
+    container.addInnerElement(addressesTitle);
+  }
+
+  ifCantUpdateDateFromServer(container: ElementCreator) {
+    const message = new ElementCreator({
+      tag: 'div',
+      textContent: 'No connection to the server',
+      classNames: ['page-profile__no-response-title'],
+    });
+    container.addInnerElement(message);
+  }
+
+  addresseUnit(container: ElementCreator, country: string) {
+    const containerAddresse = new ElementCreator({
+      tag: 'div',
+      classNames: ['page-profile__user-main__container'],
+    });
+    const textLabelCountry = new ElementCreator({
+      tag: 'div',
+      textContent: 'Country: ',
+      classNames: ['pp__country'],
+    });
+    const countryValue = new ElementCreator({
+      tag: 'span',
+      textContent: country,
+      classNames: ['user-main__value', 'pp__country-value'],
+    });
+    container.addInnerElement(containerAddresse);
+    containerAddresse.addInnerElement(textLabelCountry);
+    textLabelCountry.addInnerElement(countryValue);
   }
 }
