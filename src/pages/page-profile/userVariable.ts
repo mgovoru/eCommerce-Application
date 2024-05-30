@@ -9,6 +9,10 @@ interface UserDataInterface {
   newDateOfBirth: string | undefined;
   newEmail: string;
   newPassword: string | undefined;
+  newCountry: string | undefined;
+  newPostalCode: string | undefined;
+  newCity: string | undefined;
+  newStreet: string | undefined;
 }
 
 export const userVariable: UserDataInterface = {
@@ -22,4 +26,8 @@ export const userVariable: UserDataInterface = {
   newDateOfBirth: '',
   newEmail: '',
   newPassword: '',
+  newPostalCode: '',
+  newCity: '',
+  newCountry: '',
+  newStreet: '',
 };

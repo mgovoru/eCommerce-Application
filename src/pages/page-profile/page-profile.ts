@@ -294,9 +294,21 @@ export default class ProfilePageView extends View {
       classNames: ['page-profile__create-addresse-button', 'user-main__button'],
     });
     buttonAddAddress.setCallback(() => {
-      // console.log('создание нового адреса')
       addressOpenModal(() => {
-        // console.log('выполнить: добавить адрес')
+        const request = new ProfilePageRequest(this.server, this.router).addresseCreate();
+        request.then((response) => {
+          if (response) {
+            const newAddresseData = response.addresses[response.addresses.length - 1];
+            this.addresseUnit(
+              container,
+              newAddresseData.country,
+              newAddresseData.postalCode || '',
+              newAddresseData.city || '',
+              newAddresseData.streetName || '',
+              newAddresseData.id || ''
+            );
+          }
+        });
       });
     });
     container.addInnerElement(contForButton);

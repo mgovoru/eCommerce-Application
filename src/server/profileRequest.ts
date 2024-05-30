@@ -84,4 +84,46 @@ export class ProfilePageRequest {
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
+
+  addresseCreate() {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    if (idString) {
+      const idThis: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: idThis })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: [
+              {
+                action: 'addAddress',
+                address: {
+                  streetName: userVariable.newStreet,
+                  postalCode: userVariable.newPostalCode,
+                  city: userVariable.newCity,
+                  country: userVariable.newCountry || 'RU',
+                },
+              },
+            ],
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
+          // тут заисать данные айди адреса для добавления его в билинг или шипинг
+          return response.body;
+        })
+        .catch((error) => {
+          errorApply(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
 }

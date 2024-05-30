@@ -1,4 +1,4 @@
-// import { userVariable } from '../userVariable';
+import { userVariable } from '../userVariable';
 import { patterns, error } from '../../page-registration/on-input-function';
 
 function checkThisInput(pattern: RegExp, inpVal: string, errElem: HTMLElement, errMessage: string) {
@@ -11,6 +11,9 @@ function checkThisInput(pattern: RegExp, inpVal: string, errElem: HTMLElement, e
 }
 
 export function applyAddressButton(callback: () => void) {
+  const countrySelect = document.getElementById('id-coutry-modal__pp') as HTMLInputElement | null;
+  const countrySelectValue = countrySelect?.value;
+
   const postalInput = document.getElementById('id-postal-modal__pp') as HTMLInputElement | null;
   const postalInputValue = postalInput?.value;
   const erPost = postalInput?.nextElementSibling as HTMLElement;
@@ -39,6 +42,10 @@ export function applyAddressButton(callback: () => void) {
     patternCity.test(cityInputValue || '') &&
     patternStreet.test(streetInputValue || '')
   ) {
+    userVariable.newCountry = countrySelectValue;
+    userVariable.newPostalCode = postalInputValue;
+    userVariable.newCity = cityInputValue;
+    userVariable.newStreet = streetInputValue;
     callback();
   }
 }
