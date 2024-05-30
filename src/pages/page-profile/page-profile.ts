@@ -48,14 +48,20 @@ export default class ProfilePageView extends View {
         userVariable.email = r.email;
         userVariable.currentPassword = r.password;
 
-        // console.log(r.addresses)
         // отрисовываю страницу после получения данных
         this.mainUserData(elemCreatContainer);
         this.password(elemCreatContainer);
         this.addressesTitle(elemCreatContainer);
         this.newAddresseButton(elemCreatContainer);
         r.addresses.forEach((a) => {
-          this.addresseUnit(elemCreatContainer, a.country, a.postalCode || '', a.city || '', a.streetName || '');
+          this.addresseUnit(
+            elemCreatContainer,
+            a.country,
+            a.postalCode || '',
+            a.city || '',
+            a.streetName || '',
+            a.id || ''
+          );
         });
       } else {
         // пустая страница если нет ответа от сервера
@@ -299,7 +305,17 @@ export default class ProfilePageView extends View {
     container.addInnerElement(message);
   }
 
-  addresseUnit(container: ElementCreator, country: string, postalCode: string, city: string, street: string) {
+  addresseUnit(
+    container: ElementCreator,
+    country: string,
+    postalCode: string,
+    city: string,
+    street: string,
+    id?: string
+  ) {
+    const thisAddresId = id;
+    console.log(thisAddresId);
+
     const containerAddresse = new ElementCreator({
       tag: 'div',
       classNames: ['page-profile__user-main__container'],
