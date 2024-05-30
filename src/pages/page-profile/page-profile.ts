@@ -241,8 +241,13 @@ export default class ProfilePageView extends View {
       const pattern = Object.values(patterns[3])[0];
       const errorThis = Object.values(error[3])[0];
       passOpenModal(classOfSelectedElement, pattern, errorThis, () => {
-        new ProfilePageRequest(this.server, this.router).passwordUpdateUser();
-        password.getNode().textContent = '*****';
+        const request = new ProfilePageRequest(this.server, this.router).passwordUpdateUser();
+        // правильные изменения на странице после ответа сервера, нужно изменить так же в прошлых методах
+        request.then((response) => {
+          if (response && response.password) {
+            password.getNode().textContent = response.password;
+          }
+        });
       });
     });
     container.addInnerElement(passwordTitle);
