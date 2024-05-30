@@ -5,6 +5,7 @@ import { Server } from '../../server/server';
 import State from '../../state/state';
 import { RequestDetailedProduct } from '../../server/requestDetailedProduct';
 import DetailedProductView from '../../pages/page-product/detailed-product';
+import { ProductDetail } from '../../app/type';
 
 const CssClasses = {
   SHOP: 'shop',
@@ -28,7 +29,6 @@ export default class ShopView extends View {
     this.state = state;
 
     if (id) {
-      // this.addLargeCardToView(this.router, id);
       this.loadDetailedProductView(id);
     } else {
       const catalog = new CatalogView(this.router, this.server).getElement();
@@ -39,7 +39,7 @@ export default class ShopView extends View {
   async loadDetailedProductView(id: string) {
     const requestDetailedProduct = new RequestDetailedProduct(this.server, this.router);
     try {
-      const productDetails = await requestDetailedProduct.getProductById(id);
+      const productDetails: ProductDetail = await requestDetailedProduct.getProductById(id);
       console.log('productDetails is:', productDetails);
       const detailedProductView = new DetailedProductView(this.router, new State(), this.server, productDetails);
       this.getElement().append(detailedProductView.getElement());

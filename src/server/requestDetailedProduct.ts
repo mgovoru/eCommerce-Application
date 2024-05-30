@@ -1,4 +1,3 @@
-import { ProductDetail } from '../app/type';
 import Router from '../router/router';
 import ErrorView from './error';
 import { Server } from './server';
@@ -16,24 +15,27 @@ export class RequestDetailedProduct {
 
   getProductById(id: string) {
     console.log(id);
-    return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
-      .products()
-      .withId({ ID: id })
-      .get()
-      .execute()
-      .then((response) => {
-        console.log('initial response', response);
-        const product = response.body;
+    return (
+      this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .products()
+        .withId({ ID: id })
+        // .withKey({ key: key })
+        .get()
+        .execute()
+        .then((response) => {
+          console.log('initial response', response);
+          const product = response.body;
 
-        console.log('product', product);
-        return product as ProductDetail;
-      })
-      .catch((err: Error) => {
-        const errorElement = new ErrorView();
-        errorElement.show(err.message);
-        throw err;
-      });
+          console.log('product', product);
+          return product;
+        })
+        .catch((err: Error) => {
+          const errorElement = new ErrorView();
+          errorElement.show(err.message);
+          throw err;
+        })
+    );
   }
 }

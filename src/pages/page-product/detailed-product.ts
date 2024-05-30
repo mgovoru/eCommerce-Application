@@ -1,14 +1,14 @@
+import { ProductDetail } from '../../app/type';
 import { View } from '../../app/view';
 import Router from '../../router/router';
 import { Server } from '../../server/server';
 import State from '../../state/state';
 import './detailed-product.scss';
-import { ProductDetail } from '../../app/type';
 
 const mainParams = {
   tag: 'div',
   textContent: '',
-  classNames: ['page-detailed-product', 'detailed-product'],
+  classNames: ['detailed-product'],
 };
 
 export default class DetailedProductView extends View {
@@ -40,28 +40,56 @@ export default class DetailedProductView extends View {
   }
 
   configureView() {
-    // const productDetails = this.server.workApi.requestDetailedProduct(this.id);
-    // this.renderProductDetails(this.productDetails);
+    const { name, description, masterVariant, variants } = this.productDetails.masterData.current;
+    console.log(variants);
+    // console.log(variants[0].images[0].url);
+
+    const productName = name.en;
+    const productDescription = description?.en || 'No description available';
+    const productImage = masterVariant.images ? masterVariant.images[0].url : 'No image available';
+    const productPrice = masterVariant.prices
+      ? (masterVariant.prices[0].value.centAmount / 100).toFixed(2)
+      : 'Price is not available';
+    // const variantsImages = x;
+
+    this.container = document.createElement('div');
+    this.container.className = 'product-container';
+
+    this.blockTitle = document.createElement('h1');
+    this.blockTitle.className = 'product-title';
+    this.blockTitle.textContent = productName;
+
+    const returnBtn = document.createElement('button');
+    returnBtn.className = 'return-btn';
+    returnBtn.textContent = '← Go back';
+
+    const productImageElement = document.createElement('img');
+    productImageElement.className = 'product-image';
+    productImageElement.src = productImage;
+
+    const productDescriptionElement = document.createElement('p');
+    productDescriptionElement.className = 'product-description';
+    productDescriptionElement.textContent = productDescription;
+
+    const productWrapper = document.createElement('div');
+    productWrapper.className = 'product-wrapper';
+    productWrapper.appendChild(productImageElement);
+    productWrapper.appendChild(productDescriptionElement);
+
+    const productPriceElement = document.createElement('p');
+    productPriceElement.className = 'product-price';
+    productPriceElement.textContent = productPrice;
+
+    const buyBtn = document.createElement('button');
+    buyBtn.className = 'buy-btn';
+    buyBtn.textContent = 'Buy';
+
+    this.container.appendChild(this.blockTitle);
+    this.container.appendChild(productWrapper);
+    this.container.appendChild(productPriceElement);
+    this.container.appendChild(buyBtn);
+
+    this.viewElementCreator.append(returnBtn);
+    this.viewElementCreator.append(this.container);
   }
-
-  // renderProductDetails(productDetails: ProductDetail) {
-  //   this.getElement().innerHTML = '';
-
-  //   this.container = new ElementCreator({ tag: 'div', classNames: ['product-details__container'] }).getNode();
-  //   this.blockTitle = new ElementCreator({
-  //     tag: 'h1',
-  //     classNames: ['product-details__title'],
-  //     textContent: productDetails.name,
-  //   }).getNode();
-  //   this.item = new ElementCreator({
-  //     tag: 'div',
-  //     classNames: ['product-details__description'],
-  //     textContent: productDetails.description,
-  //   }).getNode();
-
-  //   this.container.append(this.blockTitle);
-  //   this.container.append(this.item);
-
-  //   this.getElement().append(this.container);
-  // }
 }

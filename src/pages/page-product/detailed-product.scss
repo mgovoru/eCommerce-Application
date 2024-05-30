@@ -1,7 +1,23 @@
-.page-detailed-product {
-  display: block;
-}
-
 .detailed-product {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+.return-btn {
+  align-self: flex-start;
+}
+.product-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.product-wrapper {
+  display: flex;
+  gap: 1rem;
+}
+.product-title {
+  font-weight: bold;
+  text-transform: uppercase;
 }
