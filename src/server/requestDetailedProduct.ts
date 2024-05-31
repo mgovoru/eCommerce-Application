@@ -15,27 +15,24 @@ export class RequestDetailedProduct {
 
   getProductByKey(key: string) {
     console.log(key);
-    return (
-      this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .products()
-        // .withId({ ID: id })
-        .withKey({ key: key })
-        .get()
-        .execute()
-        .then((response) => {
-          console.log('initial response', response);
-          const product = response.body;
+    return this.server
+      .apiRoot(credentials)
+      .withProjectKey({ projectKey: credentials.projectKey })
+      .products()
+      .withKey({ key })
+      .get()
+      .execute()
+      .then((response) => {
+        console.log('initial response', response);
+        const product = response.body;
 
-          console.log('product', product);
-          return product;
-        })
-        .catch((err: Error) => {
-          const errorElement = new ErrorView();
-          errorElement.show(err.message);
-          throw err;
-        })
-    );
+        console.log('product', product);
+        return product;
+      })
+      .catch((err: Error) => {
+        const errorElement = new ErrorView();
+        errorElement.show(err.message);
+        throw err;
+      });
   }
 }
