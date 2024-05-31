@@ -4,6 +4,7 @@ import { credentials } from './workapi';
 import { userVariable } from '../pages/page-profile/userVariable';
 import { successfulApply, errorApply } from '../pages/page-profile/successfulApply';
 import { CustomerUpdateAction, CustomerAddAddressAction } from '../pages/page-profile/interfaces';
+import { generateRandomKey } from '../pages/page-profile/addresse-modal/generateRandomKey';
 
 export class ProfilePageRequest {
   server: Server;
@@ -90,12 +91,13 @@ export class ProfilePageRequest {
     const idString = localStorage.getItem('id');
     const versionOfCustomerString = localStorage.getItem('versionCustomer');
     const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+    const keyThis = generateRandomKey();
 
     const newAddresse: CustomerUpdateAction[] = [
       {
         action: 'addAddress',
         address: {
-          key: '123',
+          key: keyThis,
           streetName: userVariable.newStreet,
           postalCode: userVariable.newPostalCode,
           city: userVariable.newCity,
