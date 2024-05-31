@@ -3,6 +3,7 @@ import { Server } from './server';
 import { credentials } from './workapi';
 import { userVariable } from '../pages/page-profile/userVariable';
 import { successfulApply, errorApply } from '../pages/page-profile/successfulApply';
+import { CustomerUpdateAction, CustomerAddAddressAction } from '../pages/page-profile/interfaces';
 
 export class ProfilePageRequest {
   server: Server;
@@ -90,6 +91,36 @@ export class ProfilePageRequest {
     const versionOfCustomerString = localStorage.getItem('versionCustomer');
     const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
 
+    const newAddresse: CustomerUpdateAction[] = [
+      {
+        action: 'addAddress',
+        address: {
+          key: '123',
+          streetName: userVariable.newStreet,
+          postalCode: userVariable.newPostalCode,
+          city: userVariable.newCity,
+          country: userVariable.newCountry || 'RU',
+        },
+      },
+    ];
+
+    const billing: CustomerUpdateAction = {
+      action: 'setDefaultBillingAddress',
+      addressKey: (newAddresse[0] as CustomerAddAddressAction).address.key, // Используем правильное значение ключа
+    };
+    const shipping: CustomerUpdateAction = {
+      action: 'setDefaultShippingAddress',
+      addressKey: (newAddresse[0] as CustomerAddAddressAction).address.key, // Используем правильное значение ключа
+    };
+    console.log(shipping, billing);
+    // if (a) {
+    //   newAddresse.push(billing);
+    // }
+    // if (c) {
+    //   newAddresse.push(shipping);
+    // }
+    // окончание подготовки
+
     if (idString) {
       const idThis: string = JSON.parse(idString);
       return this.server
@@ -100,17 +131,7 @@ export class ProfilePageRequest {
         .post({
           body: {
             version: versionOfCustomer,
-            actions: [
-              {
-                action: 'addAddress',
-                address: {
-                  streetName: userVariable.newStreet,
-                  postalCode: userVariable.newPostalCode,
-                  city: userVariable.newCity,
-                  country: userVariable.newCountry || 'RU',
-                },
-              },
-            ],
+            actions: newAddresse,
           },
         })
         .execute()

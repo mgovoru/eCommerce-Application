@@ -85,6 +85,28 @@ export function addressCreateModal(callback: () => void) {
   createInput(patternCity, errorCity, modalContainer, 'City', 'id-city-modal__pp');
   createInput(patternStreet, errorStreet, modalContainer, 'Street', 'id-street-modal__pp');
 
+  const defaultShipping = new ElementCreator({
+    tag: 'div',
+    textContent: 'Default shipping ',
+    classNames: ['modal-adr-def-ship-text-profile'],
+  });
+  const defaultShippingCheckbox = new ElementCreator({
+    tag: 'input',
+    classNames: ['modal-adr-def-ship-checkbox-profile'],
+  });
+  defaultShippingCheckbox.setType('checkbox');
+
+  const defaultBilling = new ElementCreator({
+    tag: 'div',
+    textContent: 'Default billing ',
+    classNames: ['modal-adr-def-bil-text-profile'],
+  });
+  const defaultBillingCheckbox = new ElementCreator({
+    tag: 'input',
+    classNames: ['modal-adr-def-bil-checkbox-profile'],
+  });
+  defaultBillingCheckbox.setType('checkbox');
+
   const containerForButtons = new ElementCreator({
     tag: 'div',
     classNames: ['modal-cont-for-buttons-profile'],
@@ -111,6 +133,10 @@ export function addressCreateModal(callback: () => void) {
     modalOverlay.getNode().remove();
   });
 
+  modalContainer.addInnerElement(defaultShipping);
+  defaultShipping.addInnerElement(defaultShippingCheckbox);
+  modalContainer.addInnerElement(defaultBilling);
+  defaultBilling.addInnerElement(defaultBillingCheckbox);
   modalContainer.addInnerElement(containerForButtons);
   containerForButtons.addInnerElement(applyButton);
   containerForButtons.addInnerElement(closeButton);

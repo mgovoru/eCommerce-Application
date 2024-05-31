@@ -481,28 +481,28 @@ export default class ProfilePageView extends View {
     textLabelStreet.addInnerElement(streetValue);
 
     if (hasTrueValue(addressStatus)) {
-      const billSippStatusCont = new ElementCreator({
-        tag: 'div',
-        textContent: 'It used for:',
-        classNames: ['pp__ship-bill-cont-status'],
-      });
-      containerAddresse.addInnerElement(billSippStatusCont);
-      if (addressStatus.isBillingAddress) {
-        const billing = new ElementCreator({
-          tag: 'span',
-          textContent: ' - Billing',
-          classNames: ['pp__billing-text-status'],
-        });
-        billSippStatusCont.addInnerElement(billing);
-      }
-      if (addressStatus.isShippingAddress) {
-        const shipping = new ElementCreator({
-          tag: 'span',
-          textContent: ' - Shipping',
-          classNames: ['pp__shipping-text-status'],
-        });
-        billSippStatusCont.addInnerElement(shipping);
-      }
+      // const billSippStatusCont = new ElementCreator({
+      //   tag: 'div',
+      //   textContent: 'It used for:',
+      //   classNames: ['pp__ship-bill-cont-status'],
+      // });
+      // containerAddresse.addInnerElement(billSippStatusCont);
+      // if (addressStatus.isBillingAddress) {
+      //   const billing = new ElementCreator({
+      //     tag: 'span',
+      //     textContent: ' - Billing',
+      //     classNames: ['pp__billing-text-status'],
+      //   });
+      //   billSippStatusCont.addInnerElement(billing);
+      // }
+      // if (addressStatus.isShippingAddress) {
+      //   const shipping = new ElementCreator({
+      //     tag: 'span',
+      //     textContent: ' - Shipping',
+      //     classNames: ['pp__shipping-text-status'],
+      //   });
+      //   billSippStatusCont.addInnerElement(shipping);
+      // }
       if (addressStatus.isDefaultBillingAddress) {
         containerAddresse.addClass('pp__default-billing-addresse-status');
       }
