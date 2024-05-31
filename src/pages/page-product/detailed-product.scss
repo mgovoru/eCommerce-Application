@@ -16,6 +16,26 @@
 .product-wrapper {
   display: flex;
   gap: 1rem;
+  .product-img-wrapper {
+    flex: 1 1 50%;
+    .product-image {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+  .product-desc-wrapper {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3rem;
+    .buy-btn {
+      border: 1px solid black;
+      border-radius: 20px;
+      padding: 0.5rem 2rem;
+    }
+  }
 }
 .product-title {
   font-weight: bold;

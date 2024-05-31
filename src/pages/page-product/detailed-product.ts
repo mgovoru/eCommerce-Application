@@ -69,25 +69,32 @@ export default class DetailedProductView extends View {
 
     const productDescriptionElement = document.createElement('p');
     productDescriptionElement.className = 'product-description';
-    productDescriptionElement.textContent = productDescription;
-
-    const productWrapper = document.createElement('div');
-    productWrapper.className = 'product-wrapper';
-    productWrapper.appendChild(productImageElement);
-    productWrapper.appendChild(productDescriptionElement);
+    productDescriptionElement.textContent = `Description: ${productDescription}`;
 
     const productPriceElement = document.createElement('p');
     productPriceElement.className = 'product-price';
-    productPriceElement.textContent = productPrice;
+    productPriceElement.textContent = `Price: ${productPrice}`;
 
     const buyBtn = document.createElement('button');
     buyBtn.className = 'buy-btn';
     buyBtn.textContent = 'Buy';
 
+    const productImgWrapper = document.createElement('div');
+    productImgWrapper.className = 'product-img-wrapper';
+    productImgWrapper.appendChild(productImageElement);
+    const productDescWrapper = document.createElement('div');
+    productDescWrapper.className = 'product-desc-wrapper';
+    productDescWrapper.appendChild(productDescriptionElement);
+    productDescWrapper.appendChild(productPriceElement);
+    productDescWrapper.appendChild(buyBtn);
+
+    const productWrapper = document.createElement('div');
+    productWrapper.className = 'product-wrapper';
+    productWrapper.appendChild(productImgWrapper);
+    productWrapper.appendChild(productDescWrapper);
+
     this.container.appendChild(this.blockTitle);
     this.container.appendChild(productWrapper);
-    this.container.appendChild(productPriceElement);
-    this.container.appendChild(buyBtn);
 
     this.viewElementCreator.append(returnBtn);
     this.viewElementCreator.append(this.container);
