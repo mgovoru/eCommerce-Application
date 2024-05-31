@@ -12,6 +12,7 @@ import { ProfilePageRequest } from '../../server/profileRequest';
 import { passOpenModal } from './change-password/open-modal-for-password';
 import { addressOpenModal } from './addresse-modal/addresse-open-modal';
 import { delAddressOpenModal } from './delete-address/open-modal-del-address';
+import { IAddressStatus } from './interfaces';
 
 const mainParams = {
   tag: 'section',
@@ -56,12 +57,26 @@ export default class ProfilePageView extends View {
         this.addressesTitle(elemCreatContainer);
         this.newAddresseButton(elemCreatContainer);
         r.addresses.forEach((a) => {
+          // обрабатываю каждый полученный адрес
+          const isShippingAddress = r.shippingAddressIds?.includes(a.id || '');
+          const isDefaultShippingAddress = r.defaultShippingAddressId === a.id;
+          const isBillingAddress = r.billingAddressIds?.includes(a.id || '');
+          const isDefaultBillingAddress = r.defaultBillingAddressId === a.id;
+
+          const addressStatus = {
+            isShippingAddress,
+            isDefaultShippingAddress,
+            isBillingAddress,
+            isDefaultBillingAddress,
+          };
+          // создаю каждый полученный адрес
           this.addresseUnit(
             elemCreatContainer,
             a.country,
             a.postalCode || '',
             a.city || '',
             a.streetName || '',
+            addressStatus,
             a.id || ''
           );
         });
@@ -289,6 +304,32 @@ export default class ProfilePageView extends View {
       tag: 'div',
       classNames: ['page-profile__container-create-addresse-button'],
     });
+
+    const colorMeaningCont = new ElementCreator({
+      tag: 'div',
+      classNames: ['page-profile__color-meaning-cont'],
+    });
+    const colorMeaningMainText = new ElementCreator({
+      tag: 'div',
+      textContent: 'Address background value is:',
+      classNames: ['page-profile__color-meaning__main-text'],
+    });
+    const isDefBil = new ElementCreator({
+      tag: 'div',
+      textContent: '**Default Billing',
+      classNames: ['page-profile__color-meaning__def-bil'],
+    });
+    const isDefShip = new ElementCreator({
+      tag: 'div',
+      textContent: '**Default Shipping',
+      classNames: ['page-profile__color-meaning__def-ship'],
+    });
+    const isDefShipAndDefBil = new ElementCreator({
+      tag: 'div',
+      textContent: '**Default Shipping and Default Billing**',
+      classNames: ['page-profile__color-meaning__def-ship-and-def-bil'],
+    });
+
     const buttonAddAddress = new ElementCreator({
       tag: 'button',
       textContent: 'Add New Address',
@@ -300,12 +341,26 @@ export default class ProfilePageView extends View {
         request.then((response) => {
           if (response) {
             const newAddresseData = response.addresses[response.addresses.length - 1];
+            // обрабатываю ответ сервера относительно нового адреса
+            const isShippingAddress = response.shippingAddressIds?.includes(newAddresseData.id || '');
+            const isDefaultShippingAddress = response.defaultShippingAddressId === newAddresseData.id;
+            const isBillingAddress = response.billingAddressIds?.includes(newAddresseData.id || '');
+            const isDefaultBillingAddress = response.defaultBillingAddressId === newAddresseData.id;
+
+            const addressStatus = {
+              isShippingAddress,
+              isDefaultShippingAddress,
+              isBillingAddress,
+              isDefaultBillingAddress,
+            };
+            // создаю новый адрес на странице
             this.addresseUnit(
               container,
               newAddresseData.country,
               newAddresseData.postalCode || '',
               newAddresseData.city || '',
               newAddresseData.streetName || '',
+              addressStatus,
               newAddresseData.id || ''
             );
           }
@@ -313,6 +368,11 @@ export default class ProfilePageView extends View {
       });
     });
     container.addInnerElement(contForButton);
+    contForButton.addInnerElement(colorMeaningCont);
+    colorMeaningCont.addInnerElement(colorMeaningMainText);
+    colorMeaningCont.addInnerElement(isDefBil);
+    colorMeaningCont.addInnerElement(isDefShip);
+    colorMeaningCont.addInnerElement(isDefShipAndDefBil);
     contForButton.addInnerElement(buttonAddAddress);
   }
 
@@ -331,9 +391,14 @@ export default class ProfilePageView extends View {
     postalCode: string,
     city: string,
     street: string,
+    addressStatus: IAddressStatus,
     id?: string
   ) {
     const thisAddresId = id;
+    // функция проверки есть ли как указан адрес(билинг-шипинг)
+    function hasTrueValue(addressStatusThis: IAddressStatus): boolean {
+      return Object.values(addressStatusThis).some((value) => value === true);
+    }
 
     const containerAddresse = new ElementCreator({
       tag: 'div',
@@ -414,6 +479,40 @@ export default class ProfilePageView extends View {
     textLabelCity.addInnerElement(cityValue);
     containerAddresse.addInnerElement(textLabelStreet);
     textLabelStreet.addInnerElement(streetValue);
+
+    if (hasTrueValue(addressStatus)) {
+      const billSippStatusCont = new ElementCreator({
+        tag: 'div',
+        textContent: 'It used for:',
+        classNames: ['pp__ship-bill-cont-status'],
+      });
+      containerAddresse.addInnerElement(billSippStatusCont);
+      if (addressStatus.isBillingAddress) {
+        const billing = new ElementCreator({
+          tag: 'span',
+          textContent: ' - Billing',
+          classNames: ['pp__billing-text-status'],
+        });
+        billSippStatusCont.addInnerElement(billing);
+      }
+      if (addressStatus.isShippingAddress) {
+        const shipping = new ElementCreator({
+          tag: 'span',
+          textContent: ' - Shipping',
+          classNames: ['pp__shipping-text-status'],
+        });
+        billSippStatusCont.addInnerElement(shipping);
+      }
+      if (addressStatus.isDefaultBillingAddress) {
+        containerAddresse.addClass('pp__default-billing-addresse-status');
+      }
+      if (addressStatus.isDefaultShippingAddress) {
+        containerAddresse.addClass('pp__default-shipping-addresse-status');
+      }
+      if (addressStatus.isDefaultShippingAddress && addressStatus.isDefaultBillingAddress) {
+        containerAddresse.addClass('pp__default-shipping-and-billing-status');
+      }
+    }
     containerAddresse.addInnerElement(containerForButtons);
     containerForButtons.addInnerElement(editButton);
     containerForButtons.addInnerElement(deleteButton);

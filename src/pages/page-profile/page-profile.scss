@@ -117,3 +117,48 @@
   appearance: auto;
   all: revert;
 }
+
+.pp__ship-bill-cont-status {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 0.7rem;
+}
+
+.page-profile__color-meaning-cont {
+  margin: 0 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-profile__color-meaning__main-text {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.page-profile__color-meaning__def-bil {
+  background-color: rgba(128, 128, 128, 0.7);
+  border: dashed 1px;
+}
+
+.page-profile__color-meaning__def-ship {
+  background-color: rgba(222, 184, 135, 0.5);
+  border: dashed 1px;
+}
+
+.page-profile__color-meaning__def-ship-and-def-bil {
+  background-color: rgb(68, 64, 225, 0.7);
+  border: dashed 1px;
+}
+// цвета для обозначения статуса адресов
+.pp__default-billing-addresse-status {
+  background-color: rgba(128, 128, 128, 0.5);
+}
+
+.pp__default-shipping-addresse-status {
+  background-color: rgba(222, 184, 135, 0.5);
+}
+
+.pp__default-shipping-and-billing-status {
+  background-color: rgb(68, 64, 225, 0.5);
+}
