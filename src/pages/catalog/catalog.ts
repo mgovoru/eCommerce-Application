@@ -4,9 +4,7 @@ import { CardView } from '../../components/card/card';
 import { ContainerView } from '../../components/container/container';
 import Router from '../../router/router';
 import { Server } from '../../server/server';
-// import State from '../../state/state';
 import './catalog.scss';
-// import cardImg from '../../assets/turtle.jpg';
 import { ElementCreator } from '../../app/base';
 import { QueryRequest } from '../../app/enum';
 import FilterView from './fliter';
@@ -18,8 +16,6 @@ const mainParams = {
 };
 
 export default class CatalogView extends View {
-  // state: State;
-
   router: Router;
 
   server: Server;
@@ -36,7 +32,6 @@ export default class CatalogView extends View {
 
   constructor(router: Router, server: Server) {
     super(mainParams);
-    // this.state = state;
     this.router = router;
     this.server = server;
     this.container = null;
@@ -64,7 +59,6 @@ export default class CatalogView extends View {
     this.items.innerHTML = '';
     array.forEach((el) => {
       const card = new CardView(this.router, el);
-      // card.bodyCard.innerHTML = card.render(el);
       card.bodyCard?.insertAdjacentHTML('beforeend', card.render(el));
       this.items.append(card.bodyCard as HTMLElement);
     });

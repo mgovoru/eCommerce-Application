@@ -42,8 +42,8 @@ export class WorkApi {
     this.idUser = '';
   }
 
-  requestDetailedProduct(id: string) {
-    this.requestProductInstance.getProductById(id);
+  requestDetailedProduct(key: string) {
+    this.requestProductInstance.getProductByKey(key);
   }
 
   changeData(data: DataReturn, flagShippng: number, flagBilling: number): CustomerDraft {
@@ -305,10 +305,6 @@ export class WorkApi {
   requestProducts(content: CatalogView) {
     this.requestInstance.getProducts(content);
   }
-
-  // requestSortProducts(content: CatalogView, str: string = '') {
-  //   this.requestInstance.getSortProducts(content, str);
-  // }
 
   requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
     this.requestInstance.getSortFilterProducts(content, strSort, strFilter);

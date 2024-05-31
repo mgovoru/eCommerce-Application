@@ -13,15 +13,15 @@ export class RequestDetailedProduct {
     this.router = router;
   }
 
-  getProductById(id: string) {
-    console.log(id);
+  getProductByKey(key: string) {
+    console.log(key);
     return (
       this.server
         .apiRoot(credentials)
         .withProjectKey({ projectKey: credentials.projectKey })
         .products()
-        .withId({ ID: id })
-        // .withKey({ key: key })
+        // .withId({ ID: id })
+        .withKey({ key: key })
         .get()
         .execute()
         .then((response) => {

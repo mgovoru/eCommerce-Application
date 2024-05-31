@@ -33,6 +33,7 @@ export class RequestCatalog {
             description: el.masterData.current.description?.en as string,
             price: el.masterData.current.masterVariant.prices as Price[],
             id: el.id,
+            key: el.key ?? '',
           };
           this.server.workApi.cards.push(card);
         });
@@ -66,6 +67,7 @@ export class RequestCatalog {
             description: el.description?.en as string,
             price: el.masterVariant.prices as Price[],
             id: el.id,
+            key: el.id,
           };
           this.server.workApi.cards.push(card);
         });
@@ -76,40 +78,4 @@ export class RequestCatalog {
         errorElement.show(err.message);
       });
   }
-
-  // getFilterProducts(content: CatalogView, strFilter: string) {
-  //   // const filterPrice = 'variants.price.centAmount:range (1000 to 2000)';
-  //   // const filterTime = 'variants.attributes.time.key:"future"';
-  //   return this.server
-  //     .apiRoot(credentials)
-  //     .withProjectKey({ projectKey: credentials.projectKey })
-  //     .productProjections()
-  //     .search()
-  //     .get({
-  //       queryArgs: {
-  //         filter: strFilter,
-  //       },
-  //     })
-  //     .execute()
-  //     .then((response) => {
-  //       console.log(response.body);
-  //       this.server.workApi.cards = [];
-  //       response.body.results.forEach((el) => {
-  //         const card: CardInfo = {
-  //           src: el.masterVariant.images as Image[],
-  //           title: el.name?.en as string,
-  //           description: el.description?.en as string,
-  //           price: el.masterVariant.prices as Price[],
-  //           id: el.id,
-  //           // discount:el.variants.dis
-  //         };
-  //         this.server.workApi.cards.push(card);
-  //       });
-  //       content.drawItems(this.server.workApi.cards);
-  //     })
-  //     .catch((err: Error) => {
-  //       const errorElement = new ErrorView();
-  //       errorElement.show(err.message);
-  //     });
-  // }
 }

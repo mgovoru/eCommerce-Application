@@ -22,6 +22,7 @@ export interface CardInfo {
   description: string;
   price: Price[];
   id: string;
+  key: string;
 }
 
 interface Variant {

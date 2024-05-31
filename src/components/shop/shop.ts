@@ -18,7 +18,7 @@ export default class ShopView extends View {
 
   state: State;
 
-  constructor(router: Router, server: Server, state: State, id = '') {
+  constructor(router: Router, server: Server, state: State, key = '') {
     const params = {
       tag: 'section',
       classNames: [CssClasses.SHOP],
@@ -28,18 +28,18 @@ export default class ShopView extends View {
     this.server = server;
     this.state = state;
 
-    if (id) {
-      this.loadDetailedProductView(id);
+    if (key) {
+      this.loadDetailedProductView(key);
     } else {
       const catalog = new CatalogView(this.router, this.server).getElement();
       this.getElement().append(catalog);
     }
   }
 
-  async loadDetailedProductView(id: string) {
+  async loadDetailedProductView(key: string) {
     const requestDetailedProduct = new RequestDetailedProduct(this.server, this.router);
     try {
-      const productDetails: ProductDetail = await requestDetailedProduct.getProductById(id);
+      const productDetails: ProductDetail = await requestDetailedProduct.getProductByKey(key);
       console.log('productDetails is:', productDetails);
       const detailedProductView = new DetailedProductView(this.router, new State(), this.server, productDetails);
       this.getElement().append(detailedProductView.getElement());

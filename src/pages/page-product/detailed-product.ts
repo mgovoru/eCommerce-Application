@@ -18,7 +18,6 @@ export default class DetailedProductView extends View {
 
   server: Server;
 
-  // id: string;
   productDetails: ProductDetail;
 
   container: HTMLElement | null;
