@@ -11,6 +11,7 @@ import { userVariable } from './userVariable';
 import { ProfilePageRequest } from '../../server/profileRequest';
 import { passOpenModal } from './change-password/open-modal-for-password';
 import { addressOpenModal } from './addresse-modal/addresse-open-modal';
+import { delAddressOpenModal } from './delete-address/open-modal-del-address';
 
 const mainParams = {
   tag: 'section',
@@ -333,7 +334,6 @@ export default class ProfilePageView extends View {
     id?: string
   ) {
     const thisAddresId = id;
-    console.log(thisAddresId);
 
     const containerAddresse = new ElementCreator({
       tag: 'div',
@@ -397,7 +397,13 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'pp__delete-address-button'],
     });
     deleteButton.setCallback(() => {
-      // console.log('калбаск для УДАЛЕНИЯ адресса')
+      // удаление адреса
+      delAddressOpenModal(() => {
+        const request = new ProfilePageRequest(this.server, this.router).addresseDelete(thisAddresId || '');
+        request.then(() => {
+          containerAddresse.getNode().remove();
+        });
+      });
     });
     container.addInnerElement(containerAddresse);
     containerAddresse.addInnerElement(textLabelCountry);
