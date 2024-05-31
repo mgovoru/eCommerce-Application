@@ -1,6 +1,7 @@
 import { ElementCreator } from '../../../app/base';
 import { onIputCheck, patterns, error } from '../../page-registration/on-input-function';
 import { applyAddressButton } from './applyAddress';
+import { userVariable } from '../userVariable';
 
 function createInput(
   pattern: RegExp,
@@ -95,6 +96,12 @@ export function addressCreateModal(callback: () => void) {
     classNames: ['modal-adr-def-ship-checkbox-profile'],
   });
   defaultShippingCheckbox.setType('checkbox');
+  defaultShippingCheckbox.getNode().setAttribute('id', 'modal-adr-def-ship-checkbox-profile');
+  userVariable.isDefaultShipping = (defaultShippingCheckbox.getNode() as HTMLInputElement).checked;
+  (defaultShippingCheckbox.getNode() as HTMLInputElement).addEventListener('change', (event) => {
+    const checkbox = event.target as HTMLInputElement;
+    userVariable.isDefaultShipping = checkbox.checked;
+  });
 
   const defaultBilling = new ElementCreator({
     tag: 'div',
@@ -106,6 +113,12 @@ export function addressCreateModal(callback: () => void) {
     classNames: ['modal-adr-def-bil-checkbox-profile'],
   });
   defaultBillingCheckbox.setType('checkbox');
+  defaultBillingCheckbox.getNode().setAttribute('id', 'modal-adr-def-bil-checkbox-profile');
+  userVariable.isDefaultBilling = (defaultBillingCheckbox.getNode() as HTMLInputElement).checked;
+  (defaultBillingCheckbox.getNode() as HTMLInputElement).addEventListener('change', (event) => {
+    const checkbox = event.target as HTMLInputElement;
+    userVariable.isDefaultBilling = checkbox.checked;
+  });
 
   const containerForButtons = new ElementCreator({
     tag: 'div',

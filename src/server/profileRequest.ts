@@ -114,13 +114,12 @@ export class ProfilePageRequest {
       action: 'setDefaultShippingAddress',
       addressKey: (newAddresse[0] as CustomerAddAddressAction).address.key, // Используем правильное значение ключа
     };
-    console.log(shipping, billing);
-    // if (a) {
-    //   newAddresse.push(billing);
-    // }
-    // if (c) {
-    //   newAddresse.push(shipping);
-    // }
+    if (userVariable.isDefaultBilling) {
+      newAddresse.push(billing);
+    }
+    if (userVariable.isDefaultShipping) {
+      newAddresse.push(shipping);
+    }
     // окончание подготовки
 
     if (idString) {

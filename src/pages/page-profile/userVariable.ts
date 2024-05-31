@@ -13,6 +13,8 @@ interface UserDataInterface {
   newPostalCode: string | undefined;
   newCity: string | undefined;
   newStreet: string | undefined;
+  isDefaultShipping: boolean | undefined;
+  isDefaultBilling: boolean | undefined;
 }
 
 export const userVariable: UserDataInterface = {
@@ -30,4 +32,6 @@ export const userVariable: UserDataInterface = {
   newCity: '',
   newCountry: '',
   newStreet: '',
+  isDefaultShipping: undefined,
+  isDefaultBilling: undefined,
 };
