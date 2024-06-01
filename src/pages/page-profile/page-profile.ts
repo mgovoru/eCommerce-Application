@@ -13,6 +13,7 @@ import { passOpenModal } from './change-password/open-modal-for-password';
 import { addressOpenModal } from './addresse-modal/addresse-open-modal';
 import { delAddressOpenModal } from './delete-address/open-modal-del-address';
 import { IAddressStatus } from './interfaces';
+import { editAddressOpenModal } from './edit-addresse-modal/edit-addresse-open-modal';
 
 const mainParams = {
   tag: 'section',
@@ -454,7 +455,9 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'pp__edit-address-button'],
     });
     editButton.setCallback(() => {
-      // console.log('калбаск для редактирования адресса')
+      editAddressOpenModal(addressStatus, country, postalCode, city, street, () => {
+        // console.log('передаю данные для изменениея адреса')
+      });
     });
     const deleteButton = new ElementCreator({
       tag: 'button',

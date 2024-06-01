@@ -17,6 +17,7 @@ export function changeBackgroundAdresses() {
     deleteClassFromAllAddressContainers('pp__default-shipping-addresse-status');
     deleteClassFromAllAddressContainers('pp__default-shipping-and-billing-status');
   }
+  // ниже кажеться лишняя проверка
   if (userVariable.isDefaultShipping && userVariable.isDefaultBilling) {
     deleteClassFromAllAddressContainers('pp__default-shipping-and-billing-status');
   }
