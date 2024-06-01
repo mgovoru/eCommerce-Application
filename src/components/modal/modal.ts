@@ -12,6 +12,8 @@ export default class Modal {
 
   swiperWrapper: HTMLElement;
 
+  swiperInstance: Swiper | null;
+
   constructor() {
     this.modalElement = document.createElement('div');
     this.modalElement.className = 'modal';
@@ -50,6 +52,18 @@ export default class Modal {
 
     document.body.appendChild(this.modalElement);
 
+    this.swiperInstance = new Swiper('.swiper', {
+      modules: [Navigation, Pagination],
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    });
+
     this.modalElement.onclick = (event) => {
       if (event.target === this.modalElement) {
         this.close();
@@ -74,7 +88,7 @@ export default class Modal {
 
     this.modalElement.style.display = 'block';
 
-    new Swiper('.swiper', {
+    this.swiperInstance = new Swiper('.swiper', {
       modules: [Navigation, Pagination],
       navigation: {
         nextEl: '.swiper-button-next',
