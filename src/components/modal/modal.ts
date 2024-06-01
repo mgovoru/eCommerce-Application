@@ -74,7 +74,7 @@ export default class Modal {
 
     this.modalElement.style.display = 'block';
 
-    const swiperInstance = new Swiper('.swiper', {
+    new Swiper('.swiper', {
       modules: [Navigation, Pagination],
       navigation: {
         nextEl: '.swiper-button-next',
