@@ -5,6 +5,7 @@ import { userVariable } from '../pages/page-profile/userVariable';
 import { successfulApply, errorApply } from '../pages/page-profile/successfulApply';
 import { CustomerUpdateAction, CustomerAddAddressAction } from '../pages/page-profile/interfaces';
 import { generateRandomKey } from '../pages/page-profile/addresse-modal/generateRandomKey';
+import { changeBackgroundAdresses } from '../pages/page-profile/addresse-modal/deleteColorAddresseIfBilOrShip';
 
 export class ProfilePageRequest {
   server: Server;
@@ -139,6 +140,8 @@ export class ProfilePageRequest {
         .then((response) => {
           localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
           successfulApply();
+          // удаляю фоновый цвет адресов
+          changeBackgroundAdresses();
           // тут заисать данные айди адреса для добавления его в билинг или шипинг
           return response.body;
         })
