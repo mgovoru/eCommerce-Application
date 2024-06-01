@@ -472,11 +472,20 @@ export default class ProfilePageView extends View {
             if (thisIsDefaultBilling) {
               containerAddresse.addClass('pp__default-billing-addresse-status');
             }
+            if (!thisIsDefaultBilling) {
+              containerAddresse.removeClass('pp__default-billing-addresse-status');
+            }
             if (thisIsDefaultShipping) {
               containerAddresse.addClass('pp__default-shipping-addresse-status');
             }
+            if (!thisIsDefaultShipping) {
+              containerAddresse.removeClass('pp__default-shipping-addresse-status');
+            }
             if (thisIsDefaultShipping && thisIsDefaultBilling) {
               containerAddresse.addClass('pp__default-shipping-and-billing-status');
+            }
+            if (!thisIsDefaultShipping || !thisIsDefaultBilling) {
+              containerAddresse.removeClass('pp__default-shipping-and-billing-status');
             }
             // записываю новые значения
             thisCountry = thisAddress?.country || country;
