@@ -152,6 +152,69 @@ export class ProfilePageRequest {
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
 
+  addresseEdit(idAddresse: string) {
+    const idString = localStorage.getItem('id');
+    const versionOfCustomerString = localStorage.getItem('versionCustomer');
+    const versionOfCustomer: number = versionOfCustomerString !== null ? Number(versionOfCustomerString) : 1;
+
+    const editAddresse: CustomerUpdateAction[] = [
+      {
+        action: 'changeAddress',
+        addressId: idAddresse,
+        address: {
+          streetName: userVariable.newStreet,
+          postalCode: userVariable.newPostalCode,
+          city: userVariable.newCity,
+          country: userVariable.newCountry || 'RU',
+        },
+      },
+    ];
+
+    const billing: CustomerUpdateAction = {
+      action: 'setDefaultBillingAddress',
+      addressId: idAddresse,
+    };
+    const shipping: CustomerUpdateAction = {
+      action: 'setDefaultShippingAddress',
+      addressId: idAddresse,
+    };
+    if (userVariable.isDefaultBilling) {
+      editAddresse.push(billing);
+    }
+    if (userVariable.isDefaultShipping) {
+      editAddresse.push(shipping);
+    }
+    // окончание подготовки
+
+    if (idString) {
+      const idThis: string = JSON.parse(idString);
+      return this.server
+        .apiRoot(credentials)
+        .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .withId({ ID: idThis })
+        .post({
+          body: {
+            version: versionOfCustomer,
+            actions: editAddresse,
+          },
+        })
+        .execute()
+        .then((response) => {
+          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+          successfulApply();
+          // удаляю фоновый цвет адресов
+          changeBackgroundAdresses();
+          // тут заисать данные айди адреса для добавления его в билинг или шипинг
+          return response.body;
+        })
+        .catch((error) => {
+          errorApply(error.message);
+        });
+    }
+    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+  }
+
   addresseDelete(idAddresse: string) {
     const idString = localStorage.getItem('id');
     const versionOfCustomerString = localStorage.getItem('versionCustomer');

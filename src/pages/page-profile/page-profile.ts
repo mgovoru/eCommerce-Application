@@ -400,6 +400,11 @@ export default class ProfilePageView extends View {
     function hasTrueValue(addressStatusThis: IAddressStatus): boolean {
       return Object.values(addressStatusThis).some((value) => value === true);
     }
+    // создаю внутренние изменяемые переменные
+    let thisCountry = country;
+    let thisPostalCode = postalCode;
+    let thisCity = city;
+    let thisStreet = street;
 
     const containerAddresse = new ElementCreator({
       tag: 'div',
@@ -412,7 +417,7 @@ export default class ProfilePageView extends View {
     });
     const countryValue = new ElementCreator({
       tag: 'span',
-      textContent: country,
+      textContent: thisCountry,
       classNames: ['user-main__value', 'pp__country-value'],
     });
     const textLabelPostalCode = new ElementCreator({
@@ -422,7 +427,7 @@ export default class ProfilePageView extends View {
     });
     const postalCodeValue = new ElementCreator({
       tag: 'span',
-      textContent: postalCode,
+      textContent: thisPostalCode,
       classNames: ['user-main__value', 'pp__postal-value'],
     });
     const textLabelCity = new ElementCreator({
@@ -432,7 +437,7 @@ export default class ProfilePageView extends View {
     });
     const cityValue = new ElementCreator({
       tag: 'span',
-      textContent: city,
+      textContent: thisCity,
       classNames: ['user-main__value', 'pp__city'],
     });
     const textLabelStreet = new ElementCreator({
@@ -442,7 +447,7 @@ export default class ProfilePageView extends View {
     });
     const streetValue = new ElementCreator({
       tag: 'span',
-      textContent: street,
+      textContent: thisStreet,
       classNames: ['user-main__value', 'pp__street'],
     });
     const containerForButtons = new ElementCreator({
@@ -455,8 +460,37 @@ export default class ProfilePageView extends View {
       classNames: ['user-main__button', 'pp__edit-address-button'],
     });
     editButton.setCallback(() => {
-      editAddressOpenModal(addressStatus, country, postalCode, city, street, () => {
-        // console.log('передаю данные для изменениея адреса')
+      // запрос изменения адресса
+      editAddressOpenModal(addressStatus, thisCountry, thisPostalCode, thisCity, thisStreet, () => {
+        const request = new ProfilePageRequest(this.server, this.router).addresseEdit(thisAddresId || '');
+        request.then((r) => {
+          if (r) {
+            const thisAddress = r.addresses.find((address) => address.id === thisAddresId);
+            const thisIsDefaultShipping = r.defaultShippingAddressId?.includes(thisAddresId || '');
+            const thisIsDefaultBilling = r.defaultBillingAddressId?.includes(thisAddresId || '');
+            // console.log('измененные данные', r, thisAddress)
+            // console.log('bill: ', thisIsDefaultBilling, '***ship: ', thisIsDefaultShipping)
+            // изменяет цвет контейнера адреса
+            if (thisIsDefaultBilling) {
+              containerAddresse.addClass('pp__default-billing-addresse-status');
+            }
+            if (thisIsDefaultShipping) {
+              containerAddresse.addClass('pp__default-shipping-addresse-status');
+            }
+            if (thisIsDefaultShipping && thisIsDefaultBilling) {
+              containerAddresse.addClass('pp__default-shipping-and-billing-status');
+            }
+            // записываю новые значения
+            thisCountry = thisAddress?.country || country;
+            countryValue.getNode().textContent = thisAddress?.country || country;
+            thisPostalCode = thisAddress?.postalCode || postalCode;
+            postalCodeValue.getNode().textContent = thisAddress?.postalCode || postalCode;
+            thisCity = thisAddress?.city || city;
+            cityValue.getNode().textContent = thisAddress?.city || city;
+            thisStreet = thisAddress?.streetName || street;
+            streetValue.getNode().textContent = thisAddress?.streetName || street;
+          }
+        });
       });
     });
     const deleteButton = new ElementCreator({
