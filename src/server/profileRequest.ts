@@ -171,18 +171,42 @@ export class ProfilePageRequest {
     ];
 
     const billing: CustomerUpdateAction = {
-      action: 'setDefaultBillingAddress',
+      action: 'addBillingAddressId',
       addressId: idAddresse,
     };
     const shipping: CustomerUpdateAction = {
+      action: 'addShippingAddressId',
+      addressId: idAddresse,
+    };
+    const defaultBilling: CustomerUpdateAction = {
+      action: 'setDefaultBillingAddress',
+      addressId: idAddresse,
+    };
+    const defaultShipping: CustomerUpdateAction = {
       action: 'setDefaultShippingAddress',
       addressId: idAddresse,
     };
+    const removeBilling: CustomerUpdateAction = {
+      action: 'removeBillingAddressId',
+      addressId: idAddresse,
+    };
+    const removeShipping: CustomerUpdateAction = {
+      action: 'removeShippingAddressId',
+      addressId: idAddresse,
+    };
     if (userVariable.isDefaultBilling) {
+      editAddresse.push(defaultBilling);
+    }
+    if (!userVariable.isDefaultBilling) {
       editAddresse.push(billing);
+      editAddresse.push(removeBilling);
     }
     if (userVariable.isDefaultShipping) {
+      editAddresse.push(defaultShipping);
+    }
+    if (!userVariable.isDefaultShipping) {
       editAddresse.push(shipping);
+      editAddresse.push(removeShipping);
     }
     // окончание подготовки
 

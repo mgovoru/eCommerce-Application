@@ -468,8 +468,6 @@ export default class ProfilePageView extends View {
             const thisAddress = r.addresses.find((address) => address.id === thisAddresId);
             const thisIsDefaultShipping = r.defaultShippingAddressId?.includes(thisAddresId || '');
             const thisIsDefaultBilling = r.defaultBillingAddressId?.includes(thisAddresId || '');
-            // console.log('измененные данные', r, thisAddress)
-            // console.log('bill: ', thisIsDefaultBilling, '***ship: ', thisIsDefaultShipping)
             // изменяет цвет контейнера адреса
             if (thisIsDefaultBilling) {
               containerAddresse.addClass('pp__default-billing-addresse-status');

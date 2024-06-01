@@ -41,10 +41,30 @@ type EditSetDefaultShippingAddressAction = {
   action: 'setDefaultShippingAddress';
   addressId: string;
 };
+type EditJustBillingAddressAction = {
+  action: 'addBillingAddressId';
+  addressId: string;
+};
+type EditJustShippingAddressAction = {
+  action: 'addShippingAddressId';
+  addressId: string;
+};
+type RemoveBillingAddressAction = {
+  action: 'removeBillingAddressId';
+  addressId: string;
+};
+type RemoveShippingAddressAction = {
+  action: 'removeShippingAddressId';
+  addressId: string;
+};
 
 export type CustomerUpdateAction =
   | CustomerAddAddressAction
   | CustomerEditAction
+  | EditJustBillingAddressAction
+  | EditJustShippingAddressAction
+  | RemoveBillingAddressAction
+  | RemoveShippingAddressAction
   | EditSetDefaultBillingAddressAction
   | EditSetDefaultShippingAddressAction
   | CustomerSetDefaultBillingAddressAction
