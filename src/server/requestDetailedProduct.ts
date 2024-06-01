@@ -25,7 +25,6 @@ export class RequestDetailedProduct {
       .then((response) => {
         console.log('initial response', response);
         const product = response.body;
-
         console.log('product', product);
         return product;
       })

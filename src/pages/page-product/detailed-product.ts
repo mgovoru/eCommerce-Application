@@ -1,3 +1,4 @@
+import Modal from '../../components/modal/modal';
 import { ProductDetail } from '../../app/type';
 import { View } from '../../app/view';
 import Router from '../../router/router';
@@ -26,6 +27,8 @@ export default class DetailedProductView extends View {
 
   item: HTMLElement | null;
 
+  modal: Modal;
+
   constructor(router: Router, state: State, server: Server, productDetails: ProductDetail) {
     super(mainParams);
     this.router = router;
@@ -35,13 +38,12 @@ export default class DetailedProductView extends View {
     this.container = null;
     this.blockTitle = null;
     this.item = null;
+    this.modal = new Modal();
     this.configureView();
   }
 
   configureView() {
     const { name, description, masterVariant, variants } = this.productDetails.masterData.current;
-    console.log(variants);
-    // console.log(variants[0].images[0].url);
 
     const productName = name.en;
     const productDescription = description?.en || 'No description available';
@@ -49,7 +51,10 @@ export default class DetailedProductView extends View {
     const productPrice = masterVariant.prices
       ? (masterVariant.prices[0].value.centAmount / 100).toFixed(2)
       : 'Price is not available';
-    // const variantsImages = x;
+
+    const variantImages = variants.flatMap((variant) =>
+      variant.images ? variant.images.map((image) => image.url) : []
+    );
 
     this.container = document.createElement('div');
     this.container.className = 'product-container';
@@ -65,6 +70,7 @@ export default class DetailedProductView extends View {
     const productImageElement = document.createElement('img');
     productImageElement.className = 'product-image';
     productImageElement.src = productImage;
+    productImageElement.onclick = () => this.modal.open(variantImages);
 
     const productDescriptionElement = document.createElement('p');
     productDescriptionElement.className = 'product-description';
