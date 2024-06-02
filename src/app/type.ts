@@ -25,7 +25,7 @@ export interface CardInfo {
   key: string;
 }
 
-interface Variant {
+export interface Variant {
   id: number;
   sku?: string;
   prices?: Price[];

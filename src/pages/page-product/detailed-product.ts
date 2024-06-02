@@ -1,5 +1,5 @@
 import Modal from '../../components/modal/modal';
-import { ProductDetail } from '../../app/type';
+import { ProductDetail, Variant } from '../../app/type';
 import { View } from '../../app/view';
 import Router from '../../router/router';
 import { Server } from '../../server/server';
@@ -25,8 +25,6 @@ export default class DetailedProductView extends View {
 
   blockTitle: HTMLElement | null;
 
-  item: HTMLElement | null;
-
   modal: Modal;
 
   constructor(router: Router, state: State, server: Server, productDetails: ProductDetail) {
@@ -37,7 +35,6 @@ export default class DetailedProductView extends View {
     this.productDetails = productDetails;
     this.container = null;
     this.blockTitle = null;
-    this.item = null;
     this.modal = new Modal();
     this.configureView();
   }
@@ -51,10 +48,6 @@ export default class DetailedProductView extends View {
     const productPrice = masterVariant.prices
       ? (masterVariant.prices[0].value.centAmount / 100).toFixed(2)
       : 'Price is not available';
-
-    const variantImages = variants.flatMap((variant) =>
-      variant.images ? variant.images.map((image) => image.url) : []
-    );
 
     this.container = document.createElement('div');
     this.container.className = 'product-container';
@@ -70,7 +63,7 @@ export default class DetailedProductView extends View {
     const productImageElement = document.createElement('img');
     productImageElement.className = 'product-image';
     productImageElement.src = productImage;
-    productImageElement.onclick = () => this.modal.open(variantImages);
+    productImageElement.onclick = () => this.openModal([productImage, ...this.collectVariantImages(variants)]);
 
     const productDescriptionElement = document.createElement('p');
     productDescriptionElement.className = 'product-description';
@@ -80,18 +73,14 @@ export default class DetailedProductView extends View {
     productPriceElement.className = 'product-price';
     productPriceElement.textContent = `Price: ${productPrice}`;
 
-    const buyBtn = document.createElement('button');
-    buyBtn.className = 'buy-btn';
-    buyBtn.textContent = 'Buy';
-
     const productImgWrapper = document.createElement('div');
     productImgWrapper.className = 'product-img-wrapper';
     productImgWrapper.appendChild(productImageElement);
+
     const productDescWrapper = document.createElement('div');
     productDescWrapper.className = 'product-desc-wrapper';
     productDescWrapper.appendChild(productDescriptionElement);
     productDescWrapper.appendChild(productPriceElement);
-    productDescWrapper.appendChild(buyBtn);
 
     const productWrapper = document.createElement('div');
     productWrapper.className = 'product-wrapper';
@@ -103,5 +92,19 @@ export default class DetailedProductView extends View {
 
     this.viewElementCreator.append(returnBtn);
     this.viewElementCreator.append(this.container);
+  }
+
+  collectVariantImages(variants: Variant[]): string[] {
+    const variantImages: string[] = [];
+    variants.forEach((variant) => {
+      if (variant.images) {
+        variantImages.push(...variant.images.map((image) => image.url));
+      }
+    });
+    return variantImages;
+  }
+
+  openModal(images: string[]) {
+    this.modal.open(images);
   }
 }
