@@ -45,9 +45,15 @@ export default class CatalogView extends View {
 
   arrayCat: [string, string][];
 
-  constructor(router: Router, server: Server) {
+  treeSubCat: Map<string, [string, string][]>;
+
+  itemsCatalog: HTMLElement | null;
+
+  category: string;
+
+  constructor(router: Router, server: Server, category: string = '') {
     super(mainParams);
-    // this.state = state;
+    this.category = category;
     this.router = router;
     this.server = server;
     this.container = null;
@@ -59,16 +65,18 @@ export default class CatalogView extends View {
     this.contentArrayAtt = [];
     this.arrayAtt = [];
     this.arrayCat = [];
+    this.itemsCatalog = null;
+    this.treeSubCat = new Map();
     this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
   }
 
-  configureView() {
+  async configureView() {
     const containerV = new ContainerView();
     containerV.addNameClass('page-catalog');
     this.container = containerV.getElement();
-    this.server.workApi.requestProducts(this);
-    this.server.workApi.requestCategories(this);
+    this.arrayCat = [];
+    this.server.workApi.requestCategories(this, this.addFilterCategoryUrl.bind(this));
     this.server.workApi.requestAttGroups(this);
     this.blockTitle = new ElementCreator({ tag: 'div', classNames: ['catalog__header'] }).getNode();
     this.drawTitle();
@@ -76,6 +84,16 @@ export default class CatalogView extends View {
     this.drawSelectSort();
     this.container.append(this.blockTitle);
     this.viewElementCreator.append(this.container);
+  }
+
+  addFilterCategoryUrl(): void {
+    if (this.category) {
+      const indexCategoryFind = this.arrayCat?.filter((ell) => ell[1] === this.category);
+      this.strFilterArray.push(`categories.id:"${indexCategoryFind[0][0]}"`);
+      this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
+    } else {
+      this.server.workApi.requestProducts(this);
+    }
   }
 
   addArray(array: AttributeDefinition[]) {
@@ -171,6 +189,10 @@ export default class CatalogView extends View {
   }
 
   drawTitle() {
+    this.itemsCatalog = new ElementCreator({
+      tag: 'div',
+      classNames: ['catalog__block'],
+    }).getNode();
     const titleCatalog = new ElementCreator({
       tag: 'h1',
       classNames: ['catalog__title'],
@@ -178,10 +200,14 @@ export default class CatalogView extends View {
       callback: () => {
         const check = document.querySelector('.categories__items') !== null;
         if (!check) {
+          (this.itemsCatalog as HTMLElement).innerHTML = '';
           const cataloglistBlock = this.drawCatt();
-          this.container?.insertBefore(cataloglistBlock, this.container?.firstChild);
+          if (this.blockTitle) {
+            this.itemsCatalog?.append(cataloglistBlock);
+            this.blockTitle.insertAdjacentElement('afterend', this.itemsCatalog as HTMLElement);
+          }
         } else {
-          document.querySelector('.categories__items')?.remove();
+          this.itemsCatalog?.remove();
         }
       },
     }).getNode();
@@ -192,6 +218,12 @@ export default class CatalogView extends View {
     const cattList = new ElementCreator({
       tag: 'ul',
       classNames: [`categories__items`],
+      textContent: 'categories',
+    }).getNode();
+    const cattSubList = new ElementCreator({
+      tag: 'ul',
+      classNames: [`categories__sub-items`],
+      textContent: 'subcategories',
     }).getNode();
     this.arrayCat.forEach((el) => {
       const li = new ElementCreator({
@@ -200,6 +232,23 @@ export default class CatalogView extends View {
         textContent: el[1],
         callback: (event) => {
           this.addSelectItem(event, el[0]);
+          if (this.itemsCatalog?.contains(cattSubList)) {
+            cattSubList.remove();
+          } else if (this.treeSubCat.get(el[0])) {
+            cattSubList.querySelectorAll('li').forEach((elemli) => elemli.remove());
+            this.treeSubCat?.get(el[0])?.forEach((ell) => {
+              const subli = new ElementCreator({
+                tag: 'li',
+                classNames: [`categories__sub-item`],
+                textContent: ell[1],
+                callback: (eventSub) => {
+                  this.addSelectItem(eventSub, ell[0]);
+                },
+              }).getNode();
+              cattSubList?.append(subli);
+            });
+            this.itemsCatalog?.append(cattSubList);
+          }
         },
       }).getNode();
       cattList?.append(li);

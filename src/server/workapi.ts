@@ -10,6 +10,7 @@ import { DataReturn } from '../pages/page-registration/validation';
 import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
 import CatalogView from '../pages/catalog/catalog';
+import { App } from '../app/app';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -167,8 +168,8 @@ export class WorkApi {
     this.requestInstance.getAttGroups(content);
   }
 
-  requestCategories(content: CatalogView) {
-    this.requestInstance.getCategories(content);
+  requestCategories(content: CatalogView, callback?: () => void) {
+    this.requestInstance.getCategories(content, callback);
   }
 
   requestSortFilterProducts(
@@ -178,5 +179,36 @@ export class WorkApi {
     strText: string = ''
   ) {
     this.requestInstance.getSortFilterProducts(content, strSort, strFilter, strText);
+  }
+
+  getCategoriesforPath(content: App) {
+    return this.server
+      .apiRoot(credentials)
+      .withProjectKey({ projectKey: credentials.projectKey })
+      .categories()
+      .get()
+      .execute()
+      .then((response) => {
+        response.body.results.forEach((el) => {
+          if (el.key && !el.parent) {
+            content.arrayCateg.push([el.id as string, el.key as string]);
+          }
+          // else if (el.parent) {
+          //   if (!content.treeSubCat.has(el.parent.id)) {
+          //     const subCategories: [string, string][] = [];
+          //     subCategories.push([el.id, el.key as string]);
+          //     content.treeSubCat.set(el.parent.id, subCategories);
+          //   } else {
+          //     const subCategories = content.treeSubCat.get(el.parent.id);
+          //     if (subCategories) {
+          //       subCategories.push([el.id, el.key as string]);
+          //     }
+          //   })
+        });
+      })
+      .catch((err: Error) => {
+        const errorElement = new ErrorView();
+        errorElement.show(err.message);
+      });
   }
 }

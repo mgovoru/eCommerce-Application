@@ -97,7 +97,7 @@ export class RequestCatalog {
       });
   }
 
-  getCategories(content: CatalogView) {
+  getCategories(content: CatalogView, callback?: () => void) {
     return this.server
       .apiRoot(credentials)
       .withProjectKey({ projectKey: credentials.projectKey })
@@ -105,13 +105,26 @@ export class RequestCatalog {
       .get()
       .execute()
       .then((response) => {
-        console.log(response);
         response.body.results.forEach((el) => {
-          if (el.key) {
+          if (el.key && !el.parent) {
             content.arrayCat.push([el.id as string, el.key as string]);
+          } else if (el.parent) {
+            if (!content.treeSubCat.has(el.parent.id)) {
+              const subCategories: [string, string][] = [];
+              subCategories.push([el.id, el.key as string]);
+              content.treeSubCat.set(el.parent.id, subCategories);
+            } else {
+              const subCategories = content.treeSubCat.get(el.parent.id);
+              if (subCategories) {
+                subCategories.push([el.id, el.key as string]);
+              }
+            }
           }
         });
         console.log(content.arrayCat);
+        if (callback) {
+          callback();
+        }
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();

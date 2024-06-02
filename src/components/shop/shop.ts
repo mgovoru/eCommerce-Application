@@ -17,7 +17,7 @@ export default class ShopView extends View {
 
   state: State;
 
-  constructor(router: Router, server: Server, state: State, id = '') {
+  constructor(router: Router, server: Server, state: State, id = '', category = '') {
     const params = {
       tag: 'section',
       classNames: [CssClasses.SHOP],
@@ -30,7 +30,12 @@ export default class ShopView extends View {
     if (id) {
       // this.addLargeCardToView(this.router, id);
       this.loadDetailedProductView(id);
+    } else if (category) {
+      console.log('здесь');
+      const catalog = new CatalogView(this.router, this.server, category).getElement();
+      this.getElement().append(catalog);
     } else {
+      console.log('тут', category);
       const catalog = new CatalogView(this.router, this.server).getElement();
       this.getElement().append(catalog);
     }
