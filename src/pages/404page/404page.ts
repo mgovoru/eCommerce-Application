@@ -13,6 +13,7 @@ const mainParams = {
 
 export default class Page404View extends View {
   router: Router;
+
   errorMessage: string;
 
   constructor(router: Router, errorMessage: string = '') {
