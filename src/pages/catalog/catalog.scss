@@ -65,3 +65,51 @@
   background-position: center;
   background-size: cover;
 }
+
+.selected-item {
+  color: rgb(210, 116, 210);
+}
+
+.catalog__title {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.categories__items,
+.categories__sub-items {
+  font-weight: 700;
+  font-size: 18px;
+  color: blueviolet;
+  margin-bottom: 16px;
+}
+
+.categories__item,
+.categories__sub-item {
+  font-weight: 700;
+  font-size: 14px;
+  color: black;
+}
+
+.catalog__block {
+  display: flex;
+  gap: 24px;
+}
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  font-weight: 700;
+}
+
+.breadcrumb li {
+  margin-right: 5px;
+}
+
+.breadcrumb li::after {
+  content: '>';
+  margin-left: 5px;
+}
+
+.breadcrumb li:last-child::after {
+  content: '';
+}

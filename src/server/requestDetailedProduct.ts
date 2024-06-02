@@ -15,7 +15,6 @@ export class RequestDetailedProduct {
   }
 
   getProductById(id: string) {
-    console.log(id);
     return this.server
       .apiRoot(credentials)
       .withProjectKey({ projectKey: credentials.projectKey })
@@ -24,10 +23,7 @@ export class RequestDetailedProduct {
       .get()
       .execute()
       .then((response) => {
-        console.log('initial response', response);
         const product = response.body;
-
-        console.log('product', product);
         return product as ProductDetail;
       })
       .catch((err: Error) => {

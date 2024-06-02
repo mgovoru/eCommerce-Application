@@ -16,8 +16,11 @@ export const httpMiddlewareOptions: HttpMiddlewareOptions = {
 export class Server {
   workApi: WorkApi;
 
+  categories: [string, string][];
+
   constructor(router: Router) {
     this.workApi = new WorkApi(this, router);
+    this.categories = [];
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {

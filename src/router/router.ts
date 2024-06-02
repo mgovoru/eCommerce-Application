@@ -1,18 +1,19 @@
 import HashRouterHandler from './handler/hash/hash-router-handler';
 import HistoryRouterHandler from './handler/history-router-handler';
-import { Pages, ID_SELECTOR } from './pages';
+import { Pages } from './pages';
 
 type Route = {
   path: string;
-  callback: (resource: string) => void;
+  callback: (resource: string, category?: string) => void;
 };
 type RequestParams = {
   resource: string;
   path: string;
+  category?: string;
 };
 
 export default class Router {
-  private routes: Route[];
+  routes: Route[];
 
   private handler: HashRouterHandler | HistoryRouterHandler;
 
@@ -36,7 +37,14 @@ export default class Router {
   }
 
   urlChangedHandler(requestParams: RequestParams) {
-    const pathForFind = requestParams.resource === '' ? requestParams.path : `${requestParams.path}/${ID_SELECTOR}`;
+    let pathForFind = requestParams.path;
+
+    // if (requestParams.resource !== '') {
+    //   pathForFind = `${requestParams.path}/${ID_SELECTOR}`;
+    // }
+    if (requestParams.resource) {
+      pathForFind = `${requestParams.path}/${requestParams.resource}`;
+    }
     const route = this.routes.find((item) => item.path === pathForFind);
 
     if (!route) {

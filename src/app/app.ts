@@ -1,7 +1,7 @@
 import { FooterView } from '../components/footer/footer';
 import { HeaderView } from '../components/header/header';
 import { MainView } from '../components/main/main';
-import { ID_SELECTOR, Pages } from '../router/pages';
+import { Pages } from '../router/pages';
 import Router from '../router/router';
 import { Server } from '../server/server';
 import State from '../state/state';
@@ -21,15 +21,24 @@ export class App {
 
   server: Server;
 
+  arrayCateg: [string, string][];
+
   constructor() {
     this.header = null;
     this.main = null;
     this.footer = null;
     this.state = new State();
-    const routes = this.createRoutes(this.state);
-    this.router = new Router(routes);
+    this.arrayCateg = [];
+    const baseRoutes = this.createRoutes(this.state);
+    this.router = new Router(baseRoutes);
     this.router.setHashHandler();
     this.server = new Server(this.router);
+    this.defineRoutes(baseRoutes);
+  }
+
+  async defineRoutes(baseRoutes: { path: string; callback: () => Promise<void> }[]) {
+    const catRoutes = await this.createCategoryRoutes();
+    this.router.routes = [...baseRoutes, ...catRoutes];
   }
 
   createView() {
@@ -41,6 +50,21 @@ export class App {
     element.append(this.main.getElement());
     element.append(this.footer.getElement());
     document.body.append(element.getNode());
+  }
+
+  async createCategoryRoutes() {
+    await this.server.workApi.getCategoriesforPath(this);
+    return this.arrayCateg.map((category) => {
+      const categoryPath = `${Pages.SHOP}/${category[1]}`;
+      const categoryValue = category[1];
+      return {
+        path: categoryPath,
+        callback: async () => {
+          const { default: ShopView } = await import('../components/shop/shop');
+          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, '', categoryValue));
+        },
+      };
+    });
   }
 
   createRoutes(state: State) {
@@ -75,13 +99,6 @@ export class App {
           this.setContent(Pages.PROFILE, new ProfilePageView(this.router, state, this.server));
         },
       },
-      // {
-      //   path: `${Pages.CATALOG}`,
-      //   callback: async () => {
-      //     const { default: CatalogView } = await import('../pages/catalog/catalog');
-      //     this.setContent(Pages.CATALOG, new CatalogView(this.router, state, this.server));
-      //   },
-      // },
       {
         path: `${Pages.REGISTRATION}`,
         callback: async () => {
@@ -103,13 +120,6 @@ export class App {
         callback: async () => {
           const { default: ShopView } = await import('../components/shop/shop');
           this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state));
-        },
-      },
-      {
-        path: `${Pages.SHOP}/${ID_SELECTOR}`,
-        callback: async (id: string) => {
-          const { default: ShopView } = await import('../components/shop/shop');
-          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, id));
         },
       },
       {
