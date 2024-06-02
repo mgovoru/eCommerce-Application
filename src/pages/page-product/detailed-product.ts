@@ -63,6 +63,9 @@ export default class DetailedProductView extends View {
     const returnBtn = document.createElement('button');
     returnBtn.className = 'return-btn';
     returnBtn.textContent = '← Go back';
+    returnBtn.addEventListener('click', () => {
+      window.history.back();
+    });
 
     const productImageElement = document.createElement('img');
     productImageElement.className = 'product-image';
