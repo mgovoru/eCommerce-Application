@@ -27,7 +27,7 @@ export class CardView extends View {
       tag: 'div',
       classNames: ['cards__item'],
       callback: () => {
-        this.router.navigate(`${Pages.SHOP}/${cardInfo.id}`);
+        this.router.navigate(`${Pages.PRODUCT}/${cardInfo.key}`);
       },
     }).getNode();
   }

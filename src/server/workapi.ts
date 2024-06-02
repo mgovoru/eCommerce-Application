@@ -43,8 +43,8 @@ export class WorkApi {
     this.idUser = '';
   }
 
-  requestDetailedProduct(id: string) {
-    this.requestProductInstance.getProductById(id);
+  requestDetailedProduct(key: string) {
+    this.requestProductInstance.getProductByKey(key);
   }
 
   changeData(data: DataReturn, flagShippng: number, flagBilling: number): CustomerDraft {

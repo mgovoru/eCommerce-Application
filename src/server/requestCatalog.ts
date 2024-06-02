@@ -32,7 +32,8 @@ export class RequestCatalog {
             title: el.masterData.current.name?.en as string,
             description: el.masterData.current.description?.en as string,
             price: el.masterData.current.masterVariant.prices as Price[],
-            id: el.key as string,
+            id: el.id,
+            key: el.key ?? '',
           };
           this.server.workApi.cards.push(card);
         });
@@ -67,6 +68,7 @@ export class RequestCatalog {
             description: el.description?.en as string,
             price: el.masterVariant.prices as Price[],
             id: el.id,
+            key: el.id,
           };
           this.server.workApi.cards.push(card);
         });

@@ -1,6 +1,5 @@
-import { ProductDetail } from '../app/type';
 import Router from '../router/router';
-import ErrorView from './error';
+import Page404View from '../pages/404page/404page';
 import { Server } from './server';
 import { credentials } from './workapi';
 
@@ -14,22 +13,27 @@ export class RequestDetailedProduct {
     this.router = router;
   }
 
-  getProductById(id: string) {
+  getProductByKey(key: string) {
     return this.server
       .apiRoot(credentials)
       .withProjectKey({ projectKey: credentials.projectKey })
       .products()
-      .withId({ ID: id })
+      .withKey({ key })
       .get()
       .execute()
       .then((response) => {
         const product = response.body;
-        return product as ProductDetail;
+        return product;
       })
       .catch((err: Error) => {
-        const errorElement = new ErrorView();
-        errorElement.show(err.message);
-        throw err;
+        this.render404View(`Failed to load product details. ${err.message}`);
+        return null;
       });
+  }
+
+  render404View(errorMessage: string) {
+    const page404View = new Page404View(this.router, errorMessage);
+    document.body.innerHTML = '';
+    document.body.appendChild(page404View.getElement());
   }
 }

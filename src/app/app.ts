@@ -123,6 +123,13 @@ export class App {
         },
       },
       {
+        path: `${Pages.PRODUCT}/${ID_SELECTOR}`,
+        callback: async (key: string) => {
+          const { default: ShopView } = await import('../components/shop/shop');
+          this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, key));
+        },
+      },
+      {
         path: `${Pages.NOT_FOUND}`,
         callback: async () => {
           const { default: Page404View } = await import('../pages/404page/404page');
