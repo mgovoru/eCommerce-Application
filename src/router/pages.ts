@@ -14,4 +14,6 @@ const Pages = {
 
 const ID_SELECTOR = '{id}';
 
-export { Pages, ID_SELECTOR };
+const CATEGORY_SELECTOR = '{name}';
+
+export { Pages, ID_SELECTOR, CATEGORY_SELECTOR };

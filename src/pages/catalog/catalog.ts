@@ -1,3 +1,4 @@
+import { AttributeDefinition } from '@commercetools/platform-sdk';
 import { CardInfo } from '../../app/type';
 import { View } from '../../app/view';
 import { CardView } from '../../components/card/card';
@@ -8,6 +9,7 @@ import './catalog.scss';
 import { ElementCreator } from '../../app/base';
 import { QueryRequest } from '../../app/enum';
 import FilterView from './fliter';
+import { Pages } from '../../router/pages';
 
 const mainParams = {
   tag: 'div',
@@ -28,31 +30,97 @@ export default class CatalogView extends View {
 
   strSort: string;
 
-  strFilter: string;
+  strFilterArray: string[];
 
-  constructor(router: Router, server: Server) {
+  selectSort: HTMLSelectElement | null;
+
+  textSearch: string;
+
+  contentArrayAtt: AttributeDefinition[] | undefined;
+
+  arrayAtt: [string, string[]][];
+
+  arrayCat: [string, string][];
+
+  treeSubCat: Map<string, [string, string][]>;
+
+  itemsCatalog: HTMLElement | null;
+
+  category: string;
+
+  parentCategory: string;
+
+  constructor(router: Router, server: Server, category: string = '') {
     super(mainParams);
+    this.category = category;
+    this.parentCategory = '';
+    if (this.category.indexOf('/') !== -1) {
+      [this.parentCategory, this.category] = category.split('/');
+    }
     this.router = router;
     this.server = server;
     this.container = null;
     this.blockTitle = null;
     this.strSort = '';
-    this.strFilter = '';
+    this.textSearch = '';
+    this.strFilterArray = [];
+    this.selectSort = null;
+    this.contentArrayAtt = [];
+    this.arrayAtt = [];
+    this.arrayCat = [];
+    this.itemsCatalog = null;
+    this.treeSubCat = new Map();
     this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
   }
 
-  configureView() {
+  async configureView() {
     const containerV = new ContainerView();
     containerV.addNameClass('page-catalog');
     this.container = containerV.getElement();
-    this.server.workApi.requestProducts(this);
+    this.arrayCat = [];
+    this.server.workApi.requestCategories(this, this.addFilterCategoryUrl.bind(this));
+    this.server.workApi.requestAttGroups(this);
     this.blockTitle = new ElementCreator({ tag: 'div', classNames: ['catalog__header'] }).getNode();
     this.drawTitle();
     this.drawFilter();
     this.drawSelectSort();
+    this.drawHeadWays();
     this.container.append(this.blockTitle);
     this.viewElementCreator.append(this.container);
+  }
+
+  addFilterCategoryUrl(): void {
+    if (this.category && !this.parentCategory) {
+      const indexCategoryFind = this.arrayCat?.filter((ell) => ell[1] === this.category);
+      if (indexCategoryFind) {
+        this.strFilterArray.push(`categories.id:"${indexCategoryFind[0][0]}"`);
+        this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
+      }
+    } else if (this.category && this.parentCategory) {
+      const indexParentCategoryFind = this.arrayCat?.filter((ell) => ell[1] === this.parentCategory);
+      if (this.treeSubCat && this.treeSubCat.get(indexParentCategoryFind[0][0])) {
+        const needCat = this.treeSubCat.get(indexParentCategoryFind[0][0]);
+        const needId = needCat?.filter((subcategory) => subcategory[1] === this.category)[0];
+        if (needId) {
+          this.strFilterArray.push(`categories.id:"${needId[0]}"`);
+          this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
+        }
+      }
+    } else {
+      this.server.workApi.requestProducts(this);
+    }
+  }
+
+  addArray(array: AttributeDefinition[]) {
+    this.contentArrayAtt = this.contentArrayAtt?.concat(array);
+    const arrayNew: [string, string[]][] = [];
+    this.contentArrayAtt?.forEach((el) => {
+      if (el.type.name === 'enum') {
+        arrayNew.push([el.name as string, el.type.values.map((ell) => ell.key) as string[]]);
+      }
+    });
+    this.arrayAtt = this.arrayAtt.concat(arrayNew);
   }
 
   drawItems(array: CardInfo[]) {
@@ -66,11 +134,11 @@ export default class CatalogView extends View {
   }
 
   drawSelectSort() {
-    const selectSort = new ElementCreator({
+    this.selectSort = new ElementCreator({
       tag: 'select',
       classNames: ['catalog__sort'],
-    }).getNode();
-    selectSort.id = 'sort';
+    }).getNode() as HTMLSelectElement;
+    this.selectSort.id = 'sort';
     const selectSortName = new ElementCreator({ tag: 'option', textContent: 'Sort by' }).getNode() as HTMLOptionElement;
     selectSortName.disabled = true;
     selectSortName.selected = true;
@@ -86,13 +154,13 @@ export default class CatalogView extends View {
       textContent: 'price ↓',
     }).getNode() as HTMLOptionElement;
     selectPriceDown.value = 'priceZ';
-    selectSort.append(selectSortName);
-    selectSort.append(selectNameUp);
-    selectSort.append(selectNameDown);
-    selectSort.append(selectPriceUp);
-    selectSort.append(selectPriceDown);
-    this.blockTitle?.append(selectSort);
-    selectSort.addEventListener('change', (e) => {
+    this.selectSort.append(selectSortName);
+    this.selectSort.append(selectNameUp);
+    this.selectSort.append(selectNameDown);
+    this.selectSort.append(selectPriceUp);
+    this.selectSort.append(selectPriceDown);
+    this.blockTitle?.append(this.selectSort);
+    this.selectSort.addEventListener('change', (e) => {
       e.preventDefault();
       e.stopPropagation();
       const element = e.target as HTMLOptionElement;
@@ -102,7 +170,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTNAMEASC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         case 'nameZ': {
@@ -110,7 +178,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTNAMEDESC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         case 'priceA': {
@@ -118,7 +186,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTPRICEASC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         case 'priceZ': {
@@ -126,7 +194,7 @@ export default class CatalogView extends View {
             this.items.innerHTML = '';
           }
           this.strSort = QueryRequest.SORTPRICEDESC;
-          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilter);
+          this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
           break;
         }
         default:
@@ -136,12 +204,154 @@ export default class CatalogView extends View {
   }
 
   drawTitle() {
+    this.itemsCatalog = new ElementCreator({
+      tag: 'div',
+      classNames: ['catalog__block'],
+    }).getNode();
     const titleCatalog = new ElementCreator({
       tag: 'h1',
       classNames: ['catalog__title'],
       textContent: 'Catalog',
+      callback: () => {
+        const check = document.querySelector('.categories__items') !== null;
+        if (!check) {
+          (this.itemsCatalog as HTMLElement).innerHTML = '';
+          const cataloglistBlock = this.drawCatt();
+          if (this.blockTitle) {
+            this.itemsCatalog?.append(cataloglistBlock);
+            this.blockTitle.insertAdjacentElement('afterend', this.itemsCatalog as HTMLElement);
+            this.checkStr(`.categories__item`);
+          }
+        } else {
+          this.itemsCatalog?.remove();
+        }
+      },
     }).getNode();
     this.blockTitle?.append(titleCatalog);
+  }
+
+  drawHeadWays() {
+    const wayCatalog = new ElementCreator({
+      tag: 'div',
+      classNames: ['catalog__way'],
+    }).getNode();
+    const breadcrumbs = [{ path: '#shop', name: 'shop' }];
+    if (this.category && !this.parentCategory) {
+      breadcrumbs.push({ path: `#shop/${this.category}`, name: `${this.category}` });
+    } else if (this.category && this.parentCategory) {
+      breadcrumbs.push({ path: `#shop/${this.parentCategory}`, name: `${this.parentCategory}` });
+      breadcrumbs.push({ path: `#shop/${this.parentCategory}/${this.category}`, name: `${this.category}` });
+    }
+    const ul = document.createElement('ul');
+    ul.className = 'breadcrumb';
+    breadcrumbs.forEach((crumb) => {
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = crumb.path;
+      link.textContent = crumb.name;
+      li.appendChild(link);
+      ul.appendChild(li);
+    });
+
+    wayCatalog.innerHTML = '';
+    wayCatalog.appendChild(ul);
+    this.blockTitle?.append(wayCatalog);
+  }
+
+  drawCatt() {
+    const cattList = new ElementCreator({
+      tag: 'ul',
+      classNames: [`categories__items`],
+      textContent: 'categories',
+    }).getNode();
+    const cattSubList = new ElementCreator({
+      tag: 'ul',
+      classNames: [`categories__sub-items`],
+      textContent: 'subcategories',
+    }).getNode();
+    this.arrayCat.forEach((el) => {
+      const li = new ElementCreator({
+        tag: 'li',
+        classNames: [`categories__item`],
+        textContent: el[1],
+        callback: (event) => {
+          // this.checkStr(`.categories__sub-item`);
+          this.addSelectItem(event, el[1], el[0]);
+          if (this.itemsCatalog?.contains(cattSubList)) {
+            cattSubList.remove();
+          } else if (this.treeSubCat.get(el[0])) {
+            cattSubList.querySelectorAll('li').forEach((elemli) => elemli.remove());
+            this.treeSubCat?.get(el[0])?.forEach((ell) => {
+              const subli = new ElementCreator({
+                tag: 'li',
+                classNames: [`categories__sub-item`],
+                textContent: ell[1],
+                callback: (eventSub) => {
+                  this.addSelectItem(eventSub, ell[1], ell[0], el[1]);
+                },
+              }).getNode();
+              cattSubList?.append(subli);
+            });
+            this.itemsCatalog?.append(cattSubList);
+          }
+        },
+      }).getNode();
+      cattList?.append(li);
+    });
+    return cattList;
+  }
+
+  addSelectItem(event: Event, str: string, strId: string, strParent?: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    const parent = (event.target as HTMLElement).parentElement;
+    if (!(event.target as HTMLElement).classList.contains('selected-item')) {
+      if (parent) {
+        const children = parent.querySelectorAll('.selected-item');
+        children.forEach((child) => {
+          (child as HTMLElement).classList.remove('selected-item');
+        });
+      }
+      (event.target as HTMLElement).classList.add('selected-item');
+      this.strFilterArray.push(`categories.id:"${strId}"`);
+      if (strParent) {
+        this.router.navigate(`${Pages.SHOP}/${strParent}/${str}`);
+      } else {
+        this.router.navigate(`${Pages.SHOP}/${str}`);
+      }
+    } else if (!this.treeSubCat.get(strId)) {
+      (event.target as HTMLElement).classList.remove('selected-item');
+      const index = this.strFilterArray.indexOf(`categories.id:"${strId}"`);
+      if (index !== -1) {
+        this.strFilterArray.splice(index, 1);
+        this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
+      }
+    }
+  }
+
+  checkStr(strNameClass: string) {
+    if (this.category) {
+      const children = this.getElement().querySelectorAll(`${strNameClass}`);
+      children.forEach((child) => {
+        if (child.classList.contains('selected-item')) {
+          (child as HTMLElement).classList.remove('selected-item');
+        }
+      });
+      let elementCat = null;
+      children.forEach((child) => {
+        if (child.innerHTML === this.category) {
+          elementCat = child;
+        }
+      });
+      if (elementCat) {
+        (elementCat as HTMLElement).classList.add('selected-item');
+      }
+    } else {
+      const children = document.querySelectorAll('.selected-item');
+      children.forEach((child) => {
+        (child as HTMLElement).classList.remove('selected-item');
+      });
+    }
   }
 
   drawFilter() {
@@ -150,8 +360,13 @@ export default class CatalogView extends View {
       classNames: ['catalog__filter'],
       textContent: 'filter',
       callback: () => {
-        const filterBlock = new FilterView(this, this.server);
-        this.container?.insertBefore(filterBlock.getElement(), this.items);
+        const check = document.querySelector('.filter') !== null;
+        if (!check) {
+          const filterBlock = new FilterView(this, this.server);
+          this.container?.insertBefore(filterBlock.getElement(), this.items);
+        } else {
+          document.querySelector('.filter')?.remove();
+        }
       },
     }).getNode();
     this.blockTitle?.append(filter);

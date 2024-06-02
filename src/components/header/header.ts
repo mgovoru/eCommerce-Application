@@ -1,6 +1,6 @@
 import { View } from '../../app/view';
 import elementImageSrc from '../../assets/AIPainterShop.png';
-import srcSearch from '../../assets/search.svg';
+// import srcSearch from '../../assets/search.svg';
 import srcProfile from '../../assets/profile.svg';
 import srcCart from '../../assets/basket.svg';
 import srcSignIn from '../../assets/sign-in.svg';
@@ -46,7 +46,6 @@ export class HeaderView extends View {
     this.logoCreate();
     this.navCreate();
     this.addButtons();
-    this.buttonSeachCreate(srcSearch);
     this.buttonLoginCreate(srcProfile);
     this.buttonSignInCreate(srcSignIn);
     this.buttonSignOutCreate(srcSignOut);
@@ -72,9 +71,7 @@ export class HeaderView extends View {
       textContent: '',
       classNames: ['header__img'],
       callback: async () => {
-        // this.router.navigate('');
-        // this.server.workApi.requestFilterProducts();
-        // this.server.workApi.requestSortProducts();
+        this.router.navigate(``);
       },
     };
     this.drawImageElement(logoParams, elementImageSrc, 'logo', this.container as HTMLElement);
@@ -148,23 +145,6 @@ export class HeaderView extends View {
       classNames: ['header__group-buttons'],
     };
     this.elementButtons = this.drawElement(butParams, this.container as HTMLElement);
-  }
-
-  buttonSeachCreate(src: string): HTMLButtonElement {
-    const seachParams = {
-      tag: 'button',
-      textContent: '',
-      classNames: ['header__search'],
-    };
-    const imgParams = {
-      tag: 'img',
-      textContent: '',
-      classNames: ['header__img-search'],
-    };
-    const element = this.drawButtonElement(seachParams, 'button', this.elementButtons as HTMLElement);
-    const elementImage = this.drawImageElement(imgParams, src, 'search', element);
-    elementImage.title = 'seach';
-    return element;
   }
 
   buttonLoginCreate(src: string): HTMLButtonElement {

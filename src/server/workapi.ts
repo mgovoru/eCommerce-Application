@@ -12,6 +12,7 @@ import { successfulApply, errorApply } from '../pages/page-profile/successfulApp
 import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
 import CatalogView from '../pages/catalog/catalog';
+import { App } from '../app/app';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -147,7 +148,6 @@ export class WorkApi {
       .execute()
       .then((response) => {
         this.idUser = response.body.customer.id;
-        console.log(this.idUser);
         if (response.body.customer.firstName) {
           localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
@@ -306,7 +306,45 @@ export class WorkApi {
     this.requestInstance.getProducts(content);
   }
 
-  requestSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string = '') {
-    this.requestInstance.getSortFilterProducts(content, strSort, strFilter);
+  requestAttGroups(content: CatalogView) {
+    this.requestInstance.getAttGroups(content);
+  }
+
+  requestCategories(content: CatalogView, callback?: () => void) {
+    this.requestInstance.getCategories(content, callback);
+  }
+
+  requestSortFilterProducts(
+    content: CatalogView,
+    strSort: string = '',
+    strFilter: string[] = [''],
+    strText: string = ''
+  ) {
+    this.requestInstance.getSortFilterProducts(content, strSort, strFilter, strText);
+  }
+
+  getCategoriesforPath(content: App) {
+    return this.server
+      .apiRoot(credentials)
+      .withProjectKey({ projectKey: credentials.projectKey })
+      .categories()
+      .get()
+      .execute()
+      .then((response) => {
+        response.body.results.forEach((el) => {
+          if (el.key && !el.parent) {
+            content.arrayCateg.push([el.id as string, el.key as string]);
+          } else if (el.parent) {
+            const elem = content.arrayCateg.find((ell) => ell[0] === el.parent?.id);
+            if (elem && elem[1]) {
+              content.arrayCateg.push([el.id, `${elem[1]}/${el.key}`]);
+            }
+          }
+        });
+      })
+      .catch((err: Error) => {
+        const errorElement = new ErrorView();
+        errorElement.show(err.message);
+      });
   }
 }
