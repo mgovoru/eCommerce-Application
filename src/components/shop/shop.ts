@@ -39,10 +39,13 @@ export default class ShopView extends View {
   async loadDetailedProductView(key: string) {
     const requestDetailedProduct = new RequestDetailedProduct(this.server, this.router);
     try {
-      const productDetails: ProductDetail = await requestDetailedProduct.getProductByKey(key);
-      console.log('productDetails is:', productDetails);
-      const detailedProductView = new DetailedProductView(this.router, new State(), this.server, productDetails);
-      this.getElement().append(detailedProductView.getElement());
+      const productDetails: ProductDetail | null = await requestDetailedProduct.getProductByKey(key);
+      if (productDetails) {
+        const detailedProductView = new DetailedProductView(this.router, new State(), this.server, productDetails);
+        this.getElement().append(detailedProductView.getElement());
+      } else {
+        console.error('Product details are null');
+      }
     } catch (err) {
       console.error('Failed to load product details:', err);
     }

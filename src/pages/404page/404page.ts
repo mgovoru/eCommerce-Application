@@ -13,10 +13,12 @@ const mainParams = {
 
 export default class Page404View extends View {
   router: Router;
+  errorMessage: string;
 
-  constructor(router: Router) {
+  constructor(router: Router, errorMessage: string = '') {
     super(mainParams);
     this.router = router;
+    this.errorMessage = errorMessage;
     this.configureView();
   }
 
@@ -27,11 +29,13 @@ export default class Page404View extends View {
     const contentBlock = this.drawElement({ tag: 'div', classNames: ['page-404__block', '-ibg'] }, container);
     this.drawImageElement({ tag: 'img', classNames: ['page-404__img'] }, srcImg, 'cow', contentBlock);
     const textBlock = this.drawElement({ tag: 'div', classNames: ['page-404__text-block'] }, container);
+    const errorMessageText =
+      this.errorMessage ||
+      `We’ve hit a snag. The page you’re looking for isn’t here. Maybe it moved somewhere else, or you mistyped the address. How about we take you back to our homepage?`;
     this.drawElement(
       {
         tag: 'div',
-        textContent: `We’ve hit a snag. The page you’re looking for isn’t here. Maybe it moved somewhere else, or you mistyped the address. How about we take you back to our homepage?
-`,
+        textContent: errorMessageText,
         classNames: ['page-404__text'],
       },
       textBlock
@@ -41,7 +45,10 @@ export default class Page404View extends View {
         tag: 'button',
         textContent: 'MAIN',
         classNames: ['page-404__button', 'button'],
-        callback: () => this.router.navigate(Pages.MAIN),
+        callback: () => {
+          console.log('clicked on main btn', this.router.navigate(''));
+          this.router.navigate(Pages.MAIN);
+        },
       },
       'button',
       textBlock
