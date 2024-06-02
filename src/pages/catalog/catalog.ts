@@ -220,7 +220,7 @@ export default class CatalogView extends View {
           if (this.blockTitle) {
             this.itemsCatalog?.append(cataloglistBlock);
             this.blockTitle.insertAdjacentElement('afterend', this.itemsCatalog as HTMLElement);
-            this.checkStr();
+            this.checkStr(`.categories__item`);
           }
         } else {
           this.itemsCatalog?.remove();
@@ -275,6 +275,7 @@ export default class CatalogView extends View {
         classNames: [`categories__item`],
         textContent: el[1],
         callback: (event) => {
+          // this.checkStr(`.categories__sub-item`);
           this.addSelectItem(event, el[1], el[0]);
           if (this.itemsCatalog?.contains(cattSubList)) {
             cattSubList.remove();
@@ -318,7 +319,7 @@ export default class CatalogView extends View {
       } else {
         this.router.navigate(`${Pages.SHOP}/${str}`);
       }
-    } else {
+    } else if (!this.treeSubCat.get(strId)) {
       (event.target as HTMLElement).classList.remove('selected-item');
       const index = this.strFilterArray.indexOf(`categories.id:"${strId}"`);
       if (index !== -1) {
@@ -328,9 +329,9 @@ export default class CatalogView extends View {
     }
   }
 
-  checkStr() {
+  checkStr(strNameClass: string) {
     if (this.category) {
-      const children = this.getElement().querySelectorAll('.categories__item');
+      const children = this.getElement().querySelectorAll(`${strNameClass}`);
       children.forEach((child) => {
         if (child.classList.contains('selected-item')) {
           (child as HTMLElement).classList.remove('selected-item');
