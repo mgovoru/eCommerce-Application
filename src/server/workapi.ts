@@ -203,7 +203,14 @@ export class WorkApi {
           //     if (subCategories) {
           //       subCategories.push([el.id, el.key as string]);
           //     }
-          //   })
+          //   }
+          // }
+          else if (el.parent) {
+            const elem = content.arrayCateg.find((ell) => ell[0] === el.parent?.id);
+            if (elem && elem[1]) {
+              content.arrayCateg.push([el.id, `${elem[1]}/${el.key}`]);
+            }
+          }
         });
       })
       .catch((err: Error) => {

@@ -11,6 +11,7 @@ import './catalog.scss';
 import { ElementCreator } from '../../app/base';
 import { QueryRequest } from '../../app/enum';
 import FilterView from './fliter';
+import { Pages } from '../../router/pages';
 
 const mainParams = {
   tag: 'div',
@@ -205,6 +206,7 @@ export default class CatalogView extends View {
           if (this.blockTitle) {
             this.itemsCatalog?.append(cataloglistBlock);
             this.blockTitle.insertAdjacentElement('afterend', this.itemsCatalog as HTMLElement);
+            this.checkStr();
           }
         } else {
           this.itemsCatalog?.remove();
@@ -231,7 +233,7 @@ export default class CatalogView extends View {
         classNames: [`categories__item`],
         textContent: el[1],
         callback: (event) => {
-          this.addSelectItem(event, el[0]);
+          this.addSelectItem(event, el[1], el[0]);
           if (this.itemsCatalog?.contains(cattSubList)) {
             cattSubList.remove();
           } else if (this.treeSubCat.get(el[0])) {
@@ -242,7 +244,7 @@ export default class CatalogView extends View {
                 classNames: [`categories__sub-item`],
                 textContent: ell[1],
                 callback: (eventSub) => {
-                  this.addSelectItem(eventSub, ell[0]);
+                  this.addSelectItem(eventSub, ell[1], ell[0]);
                 },
               }).getNode();
               cattSubList?.append(subli);
@@ -256,7 +258,7 @@ export default class CatalogView extends View {
     return cattList;
   }
 
-  addSelectItem(event: Event, strId: string) {
+  addSelectItem(event: Event, str: string, strId: string) {
     event.preventDefault();
     event.stopPropagation();
     const parent = (event.target as HTMLElement).parentElement;
@@ -268,11 +270,13 @@ export default class CatalogView extends View {
         });
       }
       (event.target as HTMLElement).classList.add('selected-item');
-      this.strFilterArray = this.strFilterArray.filter((ell) => !ell.includes(`categories.id`));
-      const filterCat = `categories.id:"${strId}"`;
-      this.strFilterArray.push(filterCat);
-      // console.log(this.strFilterArray);
-      this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
+      // this.strFilterArray = this.strFilterArray.filter((ell) => !ell.includes(`categories.id`));
+      // const filterCat = `categories.id:"${strId}"`;
+      // this.strFilterArray.push(filterCat);
+      // // console.log(this.strFilterArray);
+      // this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
+      this.strFilterArray.push(`categories.id:"${strId}"`);
+      this.router.navigate(`${Pages.SHOP}/${str}`);
     } else {
       (event.target as HTMLElement).classList.remove('selected-item');
       const index = this.strFilterArray.indexOf(`categories.id:"${strId}"`);
@@ -280,6 +284,32 @@ export default class CatalogView extends View {
         this.strFilterArray.splice(index, 1);
         this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
       }
+    }
+  }
+
+  checkStr() {
+    if (this.category) {
+      const children = this.getElement().querySelectorAll('.categories__item');
+      children.forEach((child) => {
+        if (child.classList.contains('selected-item')) {
+          (child as HTMLElement).classList.remove('selected-item');
+        }
+      });
+      let elementCat = null;
+      children.forEach((child) => {
+        if (child.innerHTML === this.category) {
+          elementCat = child;
+        }
+      });
+      console.log(elementCat, 'elem');
+      if (elementCat) {
+        (elementCat as HTMLElement).classList.add('selected-item');
+      }
+    } else {
+      const children = document.querySelectorAll('.selected-item');
+      children.forEach((child) => {
+        (child as HTMLElement).classList.remove('selected-item');
+      });
     }
   }
 
