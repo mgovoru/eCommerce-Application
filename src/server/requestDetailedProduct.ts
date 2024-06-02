@@ -30,9 +30,9 @@ export class RequestDetailedProduct {
         return null;
       });
   }
+
   render404View(errorMessage: string) {
     const page404View = new Page404View(this.router, errorMessage);
-
     document.body.innerHTML = '';
     document.body.appendChild(page404View.getElement());
   }
