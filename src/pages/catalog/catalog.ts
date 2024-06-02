@@ -5,9 +5,7 @@ import { CardView } from '../../components/card/card';
 import { ContainerView } from '../../components/container/container';
 import Router from '../../router/router';
 import { Server } from '../../server/server';
-// import State from '../../state/state';
 import './catalog.scss';
-// import cardImg from '../../assets/turtle.jpg';
 import { ElementCreator } from '../../app/base';
 import { QueryRequest } from '../../app/enum';
 import FilterView from './fliter';
@@ -20,8 +18,6 @@ const mainParams = {
 };
 
 export default class CatalogView extends View {
-  // state: State;
-
   router: Router;
 
   server: Server;
@@ -52,9 +48,15 @@ export default class CatalogView extends View {
 
   category: string;
 
+  parentCategory: string;
+
   constructor(router: Router, server: Server, category: string = '') {
     super(mainParams);
     this.category = category;
+    this.parentCategory = '';
+    if (this.category.indexOf('/') !== -1) {
+      [this.parentCategory, this.category] = category.split('/');
+    }
     this.router = router;
     this.server = server;
     this.container = null;
@@ -83,15 +85,28 @@ export default class CatalogView extends View {
     this.drawTitle();
     this.drawFilter();
     this.drawSelectSort();
+    this.drawHeadWays();
     this.container.append(this.blockTitle);
     this.viewElementCreator.append(this.container);
   }
 
   addFilterCategoryUrl(): void {
-    if (this.category) {
+    if (this.category && !this.parentCategory) {
       const indexCategoryFind = this.arrayCat?.filter((ell) => ell[1] === this.category);
-      this.strFilterArray.push(`categories.id:"${indexCategoryFind[0][0]}"`);
-      this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
+      if (indexCategoryFind) {
+        this.strFilterArray.push(`categories.id:"${indexCategoryFind[0][0]}"`);
+        this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
+      }
+    } else if (this.category && this.parentCategory) {
+      const indexParentCategoryFind = this.arrayCat?.filter((ell) => ell[1] === this.parentCategory);
+      if (this.treeSubCat && this.treeSubCat.get(indexParentCategoryFind[0][0])) {
+        const needCat = this.treeSubCat.get(indexParentCategoryFind[0][0]);
+        const needId = needCat?.filter((subcategory) => subcategory[1] === this.category)[0];
+        if (needId) {
+          this.strFilterArray.push(`categories.id:"${needId[0]}"`);
+          this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
+        }
+      }
     } else {
       this.server.workApi.requestProducts(this);
     }
@@ -112,7 +127,6 @@ export default class CatalogView extends View {
     this.items.innerHTML = '';
     array.forEach((el) => {
       const card = new CardView(this.router, el);
-      // card.bodyCard.innerHTML = card.render(el);
       card.bodyCard?.insertAdjacentHTML('beforeend', card.render(el));
       this.items.append(card.bodyCard as HTMLElement);
     });
@@ -216,6 +230,34 @@ export default class CatalogView extends View {
     this.blockTitle?.append(titleCatalog);
   }
 
+  drawHeadWays() {
+    const wayCatalog = new ElementCreator({
+      tag: 'div',
+      classNames: ['catalog__way'],
+    }).getNode();
+    const breadcrumbs = [{ path: '#shop', name: 'shop' }];
+    if (this.category && !this.parentCategory) {
+      breadcrumbs.push({ path: `#shop/${this.category}`, name: `${this.category}` });
+    } else if (this.category && this.parentCategory) {
+      breadcrumbs.push({ path: `#shop/${this.parentCategory}`, name: `${this.parentCategory}` });
+      breadcrumbs.push({ path: `#shop/${this.parentCategory}/${this.category}`, name: `${this.category}` });
+    }
+    const ul = document.createElement('ul');
+    ul.className = 'breadcrumb';
+    breadcrumbs.forEach((crumb) => {
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = crumb.path;
+      link.textContent = crumb.name;
+      li.appendChild(link);
+      ul.appendChild(li);
+    });
+
+    wayCatalog.innerHTML = '';
+    wayCatalog.appendChild(ul);
+    this.blockTitle?.append(wayCatalog);
+  }
+
   drawCatt() {
     const cattList = new ElementCreator({
       tag: 'ul',
@@ -244,7 +286,7 @@ export default class CatalogView extends View {
                 classNames: [`categories__sub-item`],
                 textContent: ell[1],
                 callback: (eventSub) => {
-                  this.addSelectItem(eventSub, ell[1], ell[0]);
+                  this.addSelectItem(eventSub, ell[1], ell[0], el[1]);
                 },
               }).getNode();
               cattSubList?.append(subli);
@@ -258,7 +300,7 @@ export default class CatalogView extends View {
     return cattList;
   }
 
-  addSelectItem(event: Event, str: string, strId: string) {
+  addSelectItem(event: Event, str: string, strId: string, strParent?: string) {
     event.preventDefault();
     event.stopPropagation();
     const parent = (event.target as HTMLElement).parentElement;
@@ -270,13 +312,12 @@ export default class CatalogView extends View {
         });
       }
       (event.target as HTMLElement).classList.add('selected-item');
-      // this.strFilterArray = this.strFilterArray.filter((ell) => !ell.includes(`categories.id`));
-      // const filterCat = `categories.id:"${strId}"`;
-      // this.strFilterArray.push(filterCat);
-      // // console.log(this.strFilterArray);
-      // this.server.workApi.requestSortFilterProducts(this, this.strSort, this.strFilterArray, this.textSearch);
       this.strFilterArray.push(`categories.id:"${strId}"`);
-      this.router.navigate(`${Pages.SHOP}/${str}`);
+      if (strParent) {
+        this.router.navigate(`${Pages.SHOP}/${strParent}/${str}`);
+      } else {
+        this.router.navigate(`${Pages.SHOP}/${str}`);
+      }
     } else {
       (event.target as HTMLElement).classList.remove('selected-item');
       const index = this.strFilterArray.indexOf(`categories.id:"${strId}"`);
@@ -301,7 +342,6 @@ export default class CatalogView extends View {
           elementCat = child;
         }
       });
-      console.log(elementCat, 'elem');
       if (elementCat) {
         (elementCat as HTMLElement).classList.add('selected-item');
       }

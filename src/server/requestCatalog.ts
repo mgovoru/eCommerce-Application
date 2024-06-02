@@ -59,7 +59,6 @@ export class RequestCatalog {
       })
       .execute()
       .then((response) => {
-        console.log(response);
         this.server.workApi.cards = [];
         response.body.results.forEach((el) => {
           const card: CardInfo = {
@@ -121,7 +120,6 @@ export class RequestCatalog {
             }
           }
         });
-        console.log(content.arrayCat);
         if (callback) {
           callback();
         }

@@ -55,7 +55,6 @@ export default class FilterView extends View {
       classNames: [`filter__${strName}`],
     }).getNode();
     const timeItems = [`${strName.toUpperCase()}`].concat(arrayName);
-    // ['TIME', 'old', 'modern', 'future'];
     timeItems.forEach((el) => {
       const li = new ElementCreator({
         tag: 'li',
@@ -188,50 +187,6 @@ export default class FilterView extends View {
     this.priceFilter?.append(rangeWrapper);
     return rangeInput;
   }
-
-  // drawColor() {
-  //   this.filterColor = new ElementCreator({
-  //     tag: 'ul',
-  //     classNames: ['filter__color'],
-  //   }).getNode();
-  //   const timeItems = ['COLOR', 'multi', 'blue', 'green', 'red'];
-  //   timeItems.forEach((el) => {
-  //     const li = new ElementCreator({
-  //       tag: 'li',
-  //       classNames: ['filter__color-item'],
-  //       textContent: el,
-  //       callback: (event) => {
-  //         if (el !== 'COLOR') {
-  //           this.addClassSelectItem(event, 'color', el);
-  //         }
-  //       },
-  //     }).getNode();
-  //     this.filterColor?.append(li);
-  //   });
-  //   this.getElement().append(this.filterColor);
-  // }
-
-  // drawSize() {
-  //   this.sizeFilter = new ElementCreator({
-  //     tag: 'ul',
-  //     classNames: ['filter__size'],
-  //   }).getNode();
-  //   const timeItems = ['SIZE', 'small', 'normal', 'big'];
-  //   timeItems.forEach((el) => {
-  //     const li = new ElementCreator({
-  //       tag: 'li',
-  //       classNames: ['filter__size-item'],
-  //       textContent: el,
-  //       callback: (event) => {
-  //         if (el !== 'SIZE') {
-  //           this.addClassSelectItem(event, 'size', el);
-  //         }
-  //       },
-  //     }).getNode();
-  //     this.sizeFilter?.append(li);
-  //   });
-  //   this.getElement().append(this.sizeFilter);
-  // }
 
   drawBlock(liItems: string[], funcLi: (() => void)[]) {
     const ulElement = new ElementCreator({

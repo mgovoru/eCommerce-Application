@@ -39,7 +39,6 @@ export class App {
   async defineRoutes(baseRoutes: { path: string; callback: () => Promise<void> }[]) {
     const catRoutes = await this.createCategoryRoutes();
     this.router.routes = [...baseRoutes, ...catRoutes];
-    console.log(this.router.routes);
   }
 
   createView() {
@@ -62,7 +61,6 @@ export class App {
         path: categoryPath,
         callback: async () => {
           const { default: ShopView } = await import('../components/shop/shop');
-          console.log(categoryValue);
           this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, '', categoryValue));
         },
       };
@@ -121,7 +119,6 @@ export class App {
         path: `${Pages.SHOP}`,
         callback: async () => {
           const { default: ShopView } = await import('../components/shop/shop');
-          console.log('это');
           this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state));
         },
       },

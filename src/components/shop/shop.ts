@@ -31,11 +31,9 @@ export default class ShopView extends View {
       // this.addLargeCardToView(this.router, id);
       this.loadDetailedProductView(id);
     } else if (category) {
-      console.log('здесь');
       const catalog = new CatalogView(this.router, this.server, category).getElement();
       this.getElement().append(catalog);
     } else {
-      console.log('тут', category);
       const catalog = new CatalogView(this.router, this.server).getElement();
       this.getElement().append(catalog);
     }

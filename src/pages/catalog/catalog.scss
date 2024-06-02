@@ -94,3 +94,22 @@
   display: flex;
   gap: 24px;
 }
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  font-weight: 700;
+}
+
+.breadcrumb li {
+  margin-right: 5px;
+}
+
+.breadcrumb li::after {
+  content: '>';
+  margin-left: 5px;
+}
+
+.breadcrumb li:last-child::after {
+  content: '';
+}

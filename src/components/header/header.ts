@@ -46,7 +46,6 @@ export class HeaderView extends View {
     this.logoCreate();
     this.navCreate();
     this.addButtons();
-    // this.buttonSeachCreate(srcSearch);
     this.buttonLoginCreate(srcProfile);
     this.buttonSignInCreate(srcSignIn);
     this.buttonSignOutCreate(srcSignOut);

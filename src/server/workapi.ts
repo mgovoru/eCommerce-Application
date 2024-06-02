@@ -144,7 +144,6 @@ export class WorkApi {
       .execute()
       .then((response) => {
         this.idUser = response.body.customer.id;
-        console.log(this.idUser);
         if (response.body.customer.firstName) {
           localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
         } else {
@@ -192,20 +191,7 @@ export class WorkApi {
         response.body.results.forEach((el) => {
           if (el.key && !el.parent) {
             content.arrayCateg.push([el.id as string, el.key as string]);
-          }
-          // else if (el.parent) {
-          //   if (!content.treeSubCat.has(el.parent.id)) {
-          //     const subCategories: [string, string][] = [];
-          //     subCategories.push([el.id, el.key as string]);
-          //     content.treeSubCat.set(el.parent.id, subCategories);
-          //   } else {
-          //     const subCategories = content.treeSubCat.get(el.parent.id);
-          //     if (subCategories) {
-          //       subCategories.push([el.id, el.key as string]);
-          //     }
-          //   }
-          // }
-          else if (el.parent) {
+          } else if (el.parent) {
             const elem = content.arrayCateg.find((ell) => ell[0] === el.parent?.id);
             if (elem && elem[1]) {
               content.arrayCateg.push([el.id, `${elem[1]}/${el.key}`]);
