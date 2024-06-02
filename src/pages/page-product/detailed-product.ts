@@ -48,6 +48,10 @@ export default class DetailedProductView extends View {
     const productPrice = masterVariant.prices
       ? (masterVariant.prices[0].value.centAmount / 100).toFixed(2)
       : 'Price is not available';
+    const discountPrice =
+      masterVariant.prices && masterVariant.prices[0].discounted
+        ? (masterVariant.prices[0].discounted.value.centAmount / 100).toFixed(2)
+        : null;
 
     this.container = document.createElement('div');
     this.container.className = 'product-container';
@@ -70,8 +74,16 @@ export default class DetailedProductView extends View {
     productDescriptionElement.textContent = `Description: ${productDescription}`;
 
     const productPriceElement = document.createElement('p');
-    productPriceElement.className = 'product-price';
-    productPriceElement.textContent = `Price: ${productPrice}`;
+    if (discountPrice) {
+      productPriceElement.innerHTML = `Price: <span class="regular-price">${productPrice}</span> `;
+
+      const discountedPriceElement = document.createElement('span');
+      discountedPriceElement.className = 'discounted-price';
+      discountedPriceElement.textContent = ` ${discountPrice}`;
+      productPriceElement.appendChild(discountedPriceElement);
+    } else {
+      productPriceElement.textContent = `Price: ${productPrice}`;
+    }
 
     const productImgWrapper = document.createElement('div');
     productImgWrapper.className = 'product-img-wrapper';

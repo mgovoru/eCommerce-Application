@@ -31,6 +31,18 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 3rem;
+    .product-price {
+      font-size: 16px; /* or your desired font size */
+    }
+
+    .regular-price {
+      text-decoration: line-through;
+    }
+
+    .discounted-price {
+      color: red;
+    }
+
     .buy-btn {
       border: 1px solid black;
       border-radius: 20px;
