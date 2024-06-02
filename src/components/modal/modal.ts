@@ -25,6 +25,7 @@ export default class Modal {
     closeBtn.className = 'close-btn';
     closeBtn.innerHTML = '&times;';
     closeBtn.onclick = () => this.close();
+    this.modalElement.appendChild(closeBtn);
 
     this.swiperWrapper = document.createElement('div');
     this.swiperWrapper.className = 'swiper';
@@ -46,7 +47,6 @@ export default class Modal {
     this.swiperWrapper.appendChild(swiperButtonPrev);
     this.swiperWrapper.appendChild(swiperPagination);
 
-    this.modalContent.appendChild(closeBtn);
     this.modalContent.appendChild(this.swiperWrapper);
     this.modalElement.appendChild(this.modalContent);
 
