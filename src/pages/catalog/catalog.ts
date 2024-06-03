@@ -224,6 +224,7 @@ export default class CatalogView extends View {
           }
         } else {
           this.itemsCatalog?.remove();
+          this.router.navigate(Pages.SHOP);
         }
       },
     }).getNode();
@@ -292,7 +293,8 @@ export default class CatalogView extends View {
               }).getNode();
               cattSubList?.append(subli);
             });
-            this.itemsCatalog?.append(cattSubList);
+            // this.itemsCatalog?.append(cattSubList);
+            li.append(cattSubList);
           }
         },
       }).getNode();
@@ -362,7 +364,7 @@ export default class CatalogView extends View {
       callback: () => {
         const check = document.querySelector('.filter') !== null;
         if (!check) {
-          const filterBlock = new FilterView(this, this.server);
+          const filterBlock = new FilterView(this, this.server, this.router);
           this.container?.insertBefore(filterBlock.getElement(), this.items);
         } else {
           document.querySelector('.filter')?.remove();

@@ -1,7 +1,7 @@
 import { FooterView } from '../components/footer/footer';
 import { HeaderView } from '../components/header/header';
 import { MainView } from '../components/main/main';
-import { Pages } from '../router/pages';
+import { ID_SELECTOR, Pages } from '../router/pages';
 import Router from '../router/router';
 import { Server } from '../server/server';
 import State from '../state/state';
@@ -124,7 +124,8 @@ export class App {
       },
       {
         path: `${Pages.PRODUCT}/${ID_SELECTOR}`,
-        callback: async (key: string) => {
+        callback: async (key: string = '') => {
+          console.log('работает');
           const { default: ShopView } = await import('../components/shop/shop');
           this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state, key));
         },

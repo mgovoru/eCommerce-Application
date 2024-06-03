@@ -5,6 +5,7 @@ export type Params = {
   textContent?: string;
   classNames?: Array<string>;
   callback?: (event: Event) => void;
+  key?: string;
 };
 export type Credentials = {
   projectKey: string;
