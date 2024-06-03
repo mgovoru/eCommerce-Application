@@ -137,12 +137,6 @@ export default class FilterView extends View {
         this.content.textSearch = '';
         (this.searchInput as HTMLInputElement).value = '';
         (this.content.selectSort as HTMLSelectElement).selectedIndex = 0;
-        // this.server.workApi.requestSortFilterProducts(
-        //   this.content,
-        //   '',
-        //   this.content.strFilterArray,
-        //   this.content.textSearch
-        // );
         this.router.navigate(Pages.SHOP);
       },
     }).getNode();
