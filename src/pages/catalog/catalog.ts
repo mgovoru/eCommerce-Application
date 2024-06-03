@@ -276,7 +276,6 @@ export default class CatalogView extends View {
         classNames: [`categories__item`],
         textContent: el[1],
         callback: (event) => {
-          // this.checkStr(`.categories__sub-item`);
           this.addSelectItem(event, el[1], el[0]);
           if (this.itemsCatalog?.contains(cattSubList)) {
             cattSubList.remove();
@@ -293,9 +292,9 @@ export default class CatalogView extends View {
               }).getNode();
               cattSubList?.append(subli);
             });
-            // this.itemsCatalog?.append(cattSubList);
             li.append(cattSubList);
           }
+          li.append(cattSubList);
         },
       }).getNode();
       cattList?.append(li);
@@ -332,7 +331,8 @@ export default class CatalogView extends View {
   }
 
   checkStr(strNameClass: string) {
-    if (this.category) {
+    const strC = this.parentCategory ? this.parentCategory : this.category;
+    if (strC) {
       const children = this.getElement().querySelectorAll(`${strNameClass}`);
       children.forEach((child) => {
         if (child.classList.contains('selected-item')) {
@@ -341,14 +341,14 @@ export default class CatalogView extends View {
       });
       let elementCat = null;
       children.forEach((child) => {
-        if (child.innerHTML === this.category) {
+        if (child.innerHTML === strC) {
           elementCat = child;
         }
       });
       if (elementCat) {
         (elementCat as HTMLElement).classList.add('selected-item');
       }
-    } else {
+    } else if (!strC) {
       const children = document.querySelectorAll('.selected-item');
       children.forEach((child) => {
         (child as HTMLElement).classList.remove('selected-item');
