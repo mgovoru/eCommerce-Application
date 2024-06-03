@@ -1,6 +1,6 @@
 import HashRouterHandler from './handler/hash/hash-router-handler';
 import HistoryRouterHandler from './handler/history-router-handler';
-import { Pages } from './pages';
+import { ID_SELECTOR, Pages } from './pages';
 
 type Route = {
   path: string;
@@ -39,14 +39,12 @@ export default class Router {
   urlChangedHandler(requestParams: RequestParams) {
     let pathForFind = requestParams.path;
 
-    // if (requestParams.resource !== '') {
-    //   pathForFind = `${requestParams.path}/${ID_SELECTOR}`;
-    // }
-    if (requestParams.resource) {
+    if (requestParams.resource !== '' && requestParams.path === 'product') {
+      pathForFind = `${requestParams.path}/${ID_SELECTOR}`;
+    } else if (requestParams.resource) {
       pathForFind = `${requestParams.path}/${requestParams.resource}`;
     }
     const route = this.routes.find((item) => item.path === pathForFind);
-
     if (!route) {
       this.redirectToNotFoundPage();
       return;

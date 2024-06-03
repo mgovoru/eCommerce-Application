@@ -56,6 +56,7 @@ export class RequestCatalog {
           sort: [strSort],
           filter: strFilter,
           'text.en': strText,
+          fuzzy: true,
         },
       })
       .execute()
@@ -68,7 +69,7 @@ export class RequestCatalog {
             description: el.description?.en as string,
             price: el.masterVariant.prices as Price[],
             id: el.id,
-            key: el.id,
+            key: el.key as string,
           };
           this.server.workApi.cards.push(card);
         });

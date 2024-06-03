@@ -1,5 +1,7 @@
 import { ElementCreator } from '../../app/base';
 import { View } from '../../app/view';
+import { Pages } from '../../router/pages';
+import Router from '../../router/router';
 import { Server } from '../../server/server';
 import CatalogView from './catalog';
 import './filter.scss';
@@ -10,6 +12,8 @@ const mainParams = {
 };
 
 export default class FilterView extends View {
+  router: Router;
+
   server: Server;
 
   priceFilter: HTMLElement | null;
@@ -28,9 +32,10 @@ export default class FilterView extends View {
 
   searchInput: HTMLInputElement | null;
 
-  constructor(content: CatalogView, server: Server) {
+  constructor(content: CatalogView, server: Server, router: Router) {
     super(mainParams);
     this.server = server;
+    this.router = router;
     this.content = content;
     this.priceFilter = null;
     this.timeFilter = null;
@@ -132,12 +137,13 @@ export default class FilterView extends View {
         this.content.textSearch = '';
         (this.searchInput as HTMLInputElement).value = '';
         (this.content.selectSort as HTMLSelectElement).selectedIndex = 0;
-        this.server.workApi.requestSortFilterProducts(
-          this.content,
-          '',
-          this.content.strFilterArray,
-          this.content.textSearch
-        );
+        // this.server.workApi.requestSortFilterProducts(
+        //   this.content,
+        //   '',
+        //   this.content.strFilterArray,
+        //   this.content.textSearch
+        // );
+        this.router.navigate(Pages.SHOP);
       },
     }).getNode();
     this.getElement().append(filterReset);

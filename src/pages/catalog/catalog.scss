@@ -4,9 +4,12 @@
 
 .catalog__header {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
+  margin-bottom: 8px;
 }
 
 .catalog__sort {
@@ -20,7 +23,7 @@
   letter-spacing: 0px;
   text-align: left;
   border: none;
-  padding: 4px;
+  padding: 0px 4px;
 }
 
 .catalog__sort option {
@@ -73,6 +76,7 @@
 .catalog__title {
   font-weight: 700;
   font-size: 24px;
+  cursor: pointer;
 }
 
 .categories__items,
@@ -81,6 +85,7 @@
   font-size: 18px;
   color: blueviolet;
   margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .categories__item,
@@ -112,4 +117,9 @@
 
 .breadcrumb li:last-child::after {
   content: '';
+}
+
+.categories__sub-items,
+.categories__sub-item {
+  text-align: right;
 }
