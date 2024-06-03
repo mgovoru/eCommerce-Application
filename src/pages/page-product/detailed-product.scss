@@ -32,7 +32,7 @@
     align-items: flex-start;
     gap: 3rem;
     .product-price {
-      font-size: 16px; /* or your desired font size */
+      font-size: 16px;
     }
 
     .regular-price {
@@ -53,4 +53,17 @@
 .product-title {
   font-weight: bold;
   text-transform: uppercase;
+}
+.product-attributes {
+  margin-top: 10px;
+}
+
+.product-attribute-tag {
+  display: inline-block;
+  background-color: #f3f3f3;
+  color: #333;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  font-size: 14px;
 }

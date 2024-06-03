@@ -23,6 +23,7 @@ export class RequestDetailedProduct {
       .execute()
       .then((response) => {
         const product = response.body;
+        console.log(product);
         return product;
       })
       .catch((err: Error) => {

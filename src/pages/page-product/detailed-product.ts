@@ -88,6 +88,15 @@ export default class DetailedProductView extends View {
       productPriceElement.textContent = `Price: ${productPrice}`;
     }
 
+    const attributesContainer = document.createElement('div');
+    attributesContainer.className = 'product-attributes';
+    masterVariant.attributes?.forEach((attr) => {
+      const attributeTag = document.createElement('span');
+      attributeTag.className = 'product-attribute-tag';
+      attributeTag.textContent = `${attr.name}: ${attr.value.label}`;
+      attributesContainer.appendChild(attributeTag);
+    });
+
     const productImgWrapper = document.createElement('div');
     productImgWrapper.className = 'product-img-wrapper';
     productImgWrapper.appendChild(productImageElement);
@@ -96,6 +105,7 @@ export default class DetailedProductView extends View {
     productDescWrapper.className = 'product-desc-wrapper';
     productDescWrapper.appendChild(productDescriptionElement);
     productDescWrapper.appendChild(productPriceElement);
+    productDescWrapper.appendChild(attributesContainer);
 
     const productWrapper = document.createElement('div');
     productWrapper.className = 'product-wrapper';
