@@ -1,4 +1,4 @@
-import { Image, Price, LocalizedString } from '@commercetools/platform-sdk';
+import { Image, Price, Attribute, LocalizedString } from '@commercetools/platform-sdk';
 
 export type Params = {
   tag?: string;
@@ -31,7 +31,9 @@ export interface Variant {
   sku?: string;
   prices?: Price[];
   images?: Image[];
+  attributes?: Attribute[];
 }
+
 interface MasterData {
   current: {
     name: LocalizedString;
