@@ -37,8 +37,11 @@ export default class HistoryRouterHandler {
       resource: '',
     };
     const path = urlString.split('/');
-    [result.path = '', result.resource = ''] = path;
-
+    if (path.length <= 2) {
+      [result.path = '', result.resource = ''] = path;
+    } else if (path.length === 3) {
+      [result.path = '', result.resource = ''] = [`${path[0]}/${path[1]}`, path[2]];
+    }
     this.callback(result);
   }
 
