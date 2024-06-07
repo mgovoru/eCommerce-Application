@@ -105,4 +105,24 @@ describe('RegistrationValidation', () => {
       expect(response.result).toBe(true);
     });
   });
+
+  // проверка ввода даты рождения
+  describe('validBirthDate', () => {
+    test('should return true for a valid birth date in the format dd.mm.yyyy and user older than 13 years old', () => {
+      const response = validation.validBirthDate('01.01.2000');
+      expect(response.result).toBe(true);
+    });
+
+    test('should return false for an invalid birth date format', () => {
+      const response = validation.validBirthDate('01-01-2000');
+      expect(response.result).toBe(false);
+      expect(response.error).toBe('Correct format: dd.mm.yyyy');
+    });
+
+    test('should return false for a birth date that makes the user under 13 years old', () => {
+      const response = validation.validBirthDate('01.01.2015');
+      expect(response.result).toBe(false);
+      expect(response.error).toBe('Not eligible for users under 13 years old');
+    });
+  });
 });
