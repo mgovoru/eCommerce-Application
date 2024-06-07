@@ -77,4 +77,32 @@ describe('RegistrationValidation', () => {
       expect(response.result).toBe(false);
     });
   });
+
+  // проверка для ввода имени и фамилии
+  describe('validFirstAndLastName', () => {
+    test('should return true for a valid first/last name with only letters', () => {
+      const response = validation.validFirstAndLastName('John');
+      expect(response.result).toBe(true);
+    });
+
+    test('should return false for a first/last name with digits', () => {
+      const response = validation.validFirstAndLastName('John123');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for a first/last name with special characters', () => {
+      const response = validation.validFirstAndLastName('John#');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for an empty first/last name', () => {
+      const response = validation.validFirstAndLastName('');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return true for a valid first/last name with only one letter', () => {
+      const response = validation.validFirstAndLastName('q');
+      expect(response.result).toBe(true);
+    });
+  });
 });
