@@ -125,4 +125,27 @@ describe('RegistrationValidation', () => {
       expect(response.error).toBe('Not eligible for users under 13 years old');
     });
   });
+
+  // проверка ввода улицы
+  describe('validStreet', () => {
+    test('should return true for a valid street with letters and  digits', () => {
+      const response = validation.validStreet('123MainSt');
+      expect(response.result).toBe(true);
+    });
+
+    test('should return false for a street with special characters', () => {
+      const response = validation.validStreet('123MainSt#');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for an empty street', () => {
+      const response = validation.validStreet('');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for a street with spaces', () => {
+      const response = validation.validStreet('123 Main St');
+      expect(response.result).toBe(false);
+    });
+  });
 });
