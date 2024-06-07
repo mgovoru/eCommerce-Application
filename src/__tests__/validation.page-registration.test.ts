@@ -175,4 +175,31 @@ describe('RegistrationValidation', () => {
       expect(response.result).toBe(false);
     });
   });
+  // для почтового индекса
+  describe('validPostalCode', () => {
+    test('should return true for a valid postal code with 6 digits', () => {
+      const response = validation.validPostalCode('123456');
+      expect(response.result).toBe(true);
+    });
+
+    test('should return false for a postal code with less than 6 digits', () => {
+      const response = validation.validPostalCode('12345');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for a postal code with more than 6 digits', () => {
+      const response = validation.validPostalCode('1234567');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for a postal code with non-numeric characters', () => {
+      const response = validation.validPostalCode('12345a');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for an empty postal code', () => {
+      const response = validation.validPostalCode('');
+      expect(response.result).toBe(false);
+    });
+  });
 });
