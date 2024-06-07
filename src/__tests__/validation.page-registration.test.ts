@@ -148,4 +148,31 @@ describe('RegistrationValidation', () => {
       expect(response.result).toBe(false);
     });
   });
+  // проверка ввода города
+  describe('validCity', () => {
+    test('should return true for a valid city with only letters', () => {
+      const response = validation.validCity('NewYork');
+      expect(response.result).toBe(true);
+    });
+
+    test('should return false for a city with digits', () => {
+      const response = validation.validCity('SanFrancisco1');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for a city with special characters', () => {
+      const response = validation.validCity('LosAngeles!');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for an empty city', () => {
+      const response = validation.validCity('');
+      expect(response.result).toBe(false);
+    });
+
+    test('should return false for a city with spaces', () => {
+      const response = validation.validCity('Los Angeles');
+      expect(response.result).toBe(false);
+    });
+  });
 });
