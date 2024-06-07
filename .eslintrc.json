@@ -41,6 +41,6 @@
       "typescript": {}
     }
   },
-  "ignorePatterns": ["dist/"],
+  "ignorePatterns": ["dist/", "coverage/"],
   "noInlineConfig": true
 }
