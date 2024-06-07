@@ -31,7 +31,7 @@ export class App {
     this.arrayCateg = [];
     const baseRoutes = this.createRoutes(this.state);
     this.router = new Router(baseRoutes);
-    this.router.setHashHandler();
+    // this.router.setHashHandler();
     this.server = new Server(this.router);
     this.defineRoutes(baseRoutes);
   }
@@ -118,6 +118,7 @@ export class App {
       {
         path: `${Pages.SHOP}`,
         callback: async () => {
+          console.log('переход на тсраницы');
           const { default: ShopView } = await import('../components/shop/shop');
           this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state));
         },

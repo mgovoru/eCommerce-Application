@@ -1,12 +1,12 @@
-import { ApiRoot, createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
   type Client,
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
-import { Credentials } from '../app/type';
-import { WorkApi } from './workapi';
+// import { Credentials } from '../app/type';
+import { WorkApi, credentials } from './workapi';
 import Router from '../router/router';
 
 export const httpMiddlewareOptions: HttpMiddlewareOptions = {
@@ -18,9 +18,17 @@ export class Server {
 
   categories: [string, string][];
 
+  clientNew: Client;
+
   constructor(router: Router) {
     this.workApi = new WorkApi(this, router);
     this.categories = [];
+    this.clientNew = this.client(
+      credentials.projectKey,
+      credentials.clientID,
+      credentials.clientSecret,
+      credentials.scopes
+    );
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {
@@ -34,7 +42,7 @@ export class Server {
       },
       fetch,
     };
-
+    console.log('coздание клиента');
     return new ClientBuilder()
       .withProjectKey(projectKey)
       .withHttpMiddleware(httpMiddlewareOptions)
@@ -42,7 +50,10 @@ export class Server {
       .build();
   }
 
-  apiRoot({ projectKey, clientID, clientSecret, scopes }: Credentials): ApiRoot {
-    return createApiBuilderFromCtpClient(this.client(projectKey, clientID, clientSecret, scopes));
+  apiRoot() {
+    console.log('apiroot');
+    return createApiBuilderFromCtpClient(this.clientNew).withProjectKey({
+      projectKey: credentials.projectKey,
+    });
   }
 }

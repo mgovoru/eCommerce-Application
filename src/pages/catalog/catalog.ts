@@ -50,6 +50,14 @@ export default class CatalogView extends View {
 
   parentCategory: string;
 
+  offset: number;
+
+  scrollHandler: boolean;
+
+  isLoading: boolean;
+
+  loaderElement: HTMLElement | null;
+
   constructor(router: Router, server: Server, category: string = '') {
     super(mainParams);
     this.category = category;
@@ -69,9 +77,13 @@ export default class CatalogView extends View {
     this.arrayAtt = [];
     this.arrayCat = [];
     this.itemsCatalog = null;
+    this.offset = 0;
     this.treeSubCat = new Map();
     this.items = new ElementCreator({ tag: 'div', classNames: ['cards__items'] }).getNode() as HTMLElement;
     this.configureView();
+    this.scrollHandler = false;
+    this.isLoading = false;
+    this.loaderElement = null;
   }
 
   async configureView() {
@@ -87,7 +99,9 @@ export default class CatalogView extends View {
     this.drawSelectSort();
     this.drawHeadWays();
     this.container.append(this.blockTitle);
+    this.container?.append(this.items);
     this.viewElementCreator.append(this.container);
+    this.addScroll();
   }
 
   addFilterCategoryUrl(): void {
@@ -108,8 +122,32 @@ export default class CatalogView extends View {
         }
       }
     } else {
+      console.log('срабатывает здесь');
       this.server.workApi.requestProducts(this);
+      this.offset += 5;
     }
+  }
+
+  addScroll() {
+    if (this.scrollHandler) {
+      return;
+    }
+    if (this.offset > 25) {
+      return;
+    }
+
+    window.addEventListener('scroll', () => {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 5 && !this.isLoading) {
+        this.isLoading = true;
+        this.loaderElement?.remove();
+        console.log('сработало', this.offset);
+        this.server.workApi.requestProducts(this);
+        // this.showLoader();
+        // this.items.append(this.loaderElement as HTMLElement);
+        this.offset += 5;
+      }
+    });
   }
 
   addArray(array: AttributeDefinition[]) {
@@ -124,13 +162,20 @@ export default class CatalogView extends View {
   }
 
   drawItems(array: CardInfo[]) {
-    this.items.innerHTML = '';
+    // this.items.innerHTML = '';
     array.forEach((el) => {
       const card = new CardView(this.router, el);
       card.bodyCard?.insertAdjacentHTML('beforeend', card.render(el));
       this.items.append(card.bodyCard as HTMLElement);
     });
-    this.container?.append(this.items);
+    // this.offset += 5;
+    // console.log(this.offset);
+    this.isLoading = false;
+    // this.loaderElement?.remove();
+  }
+
+  showLoader() {
+    this.loaderElement = new ElementCreator({ tag: 'div', classNames: ['loader-block'] }).getNode();
   }
 
   drawSelectSort() {
