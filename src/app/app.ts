@@ -84,6 +84,13 @@ export class App {
         },
       },
       {
+        path: `${Pages.ABOUT}`,
+        callback: async () => {
+          const { default: AboutPageView } = await import('../pages/page-about/about-page');
+          this.setContent(Pages.ABOUT, new AboutPageView(state));
+        },
+      },
+      {
         path: `${Pages.LOGIN}`,
         callback: async () => {
           if (!localStorage.getItem('name')) {
