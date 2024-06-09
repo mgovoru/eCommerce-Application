@@ -20,3 +20,9 @@ export enum QueryRequest {
   SORTPRICEASC = 'price asc',
   SORTPRICEDESC = 'price desc',
 }
+export enum LimitImages {
+  EIGHT = 8,
+  SIX = 6,
+  FOUR = 4,
+  FIVE = 5,
+}

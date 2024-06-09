@@ -17,14 +17,15 @@ export default class Router {
 
   private handler: HashRouterHandler | HistoryRouterHandler;
 
+  private currentHash: string;
+
   constructor(routes: Route[]) {
     this.routes = routes;
 
     this.handler = new HistoryRouterHandler(this.urlChangedHandler.bind(this));
 
-    document.addEventListener('DOMContentLoaded', () => {
-      this.handler.navigate('');
-    });
+    this.currentHash = window.location.hash;
+    this.handler.navigate('');
   }
 
   setHashHandler() {
@@ -49,7 +50,6 @@ export default class Router {
       this.redirectToNotFoundPage();
       return;
     }
-
     route.callback(requestParams.resource);
   }
 

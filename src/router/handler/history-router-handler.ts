@@ -29,13 +29,13 @@ export default class HistoryRouterHandler {
     if (typeof url === 'string') {
       this.setHistory(url);
     }
-
     const urlString = (window.location[this.params.locationField] as string).slice(1);
 
     const result: RequestParams = {
       path: '',
       resource: '',
     };
+
     const path = urlString.split('/');
     if (path.length <= 2) {
       [result.path = '', result.resource = ''] = path;
@@ -50,7 +50,6 @@ export default class HistoryRouterHandler {
   }
 
   setHistory(url: string) {
-    // window.history.pushState(null, '', `/${url}`);
     window.history.pushState(null, '', url);
   }
 }

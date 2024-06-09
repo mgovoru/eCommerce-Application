@@ -7,10 +7,28 @@
 }
 
 .cards__item {
-  flex: 1 1 25%;
+  flex: 0 0 25%;
   min-width: 280px;
   padding: 0 10px;
   cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .cards__item {
+    flex: 0 0 33.33%;
+  }
+}
+
+@media (max-width: 900px) {
+  .cards__item {
+    flex: 0 0 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .cards__item {
+    flex: 0 0 100%;
+  }
 }
 
 .cards__element {

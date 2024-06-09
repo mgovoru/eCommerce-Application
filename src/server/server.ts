@@ -42,7 +42,6 @@ export class Server {
       },
       fetch,
     };
-    console.log('coздание клиента');
     return new ClientBuilder()
       .withProjectKey(projectKey)
       .withHttpMiddleware(httpMiddlewareOptions)
@@ -51,7 +50,6 @@ export class Server {
   }
 
   apiRoot() {
-    console.log('apiroot');
     return createApiBuilderFromCtpClient(this.clientNew).withProjectKey({
       projectKey: credentials.projectKey,
     });

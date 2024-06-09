@@ -29,10 +29,6 @@ export class MainView extends View {
   addlenis() {
     const lenis = new Lenis();
 
-    // lenis.on('scroll', (e: unknown) => {
-    //   console.log(e);
-    // });
-
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);

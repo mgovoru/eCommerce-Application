@@ -314,9 +314,13 @@ export class WorkApi {
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
 
-  requestProducts(content: CatalogView) {
-    this.requestInstance.getProducts(content);
+  getAllProductsCount(content: CatalogView) {
+    this.requestInstance.getAllProductsCount(content);
   }
+
+  // requestProducts(content: CatalogView) {
+  //   this.requestInstance.getProducts(content);
+  // }
 
   requestAttGroups(content: CatalogView) {
     this.requestInstance.getAttGroups(content);

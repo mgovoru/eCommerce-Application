@@ -52,6 +52,12 @@ export default class FilterView extends View {
     this.content.arrayAtt.forEach((el) => this.drawAttGrop(el[0], el[1]));
     this.resetFilters();
     this.createBlockSearch();
+    this.drawNewScreen();
+  }
+
+  drawNewScreen() {
+    this.content.offsetZero();
+    (this.content.items as HTMLElement).innerHTML = '';
   }
 
   drawAttGrop(strName: string, arrayName: string[]) {
@@ -85,6 +91,7 @@ export default class FilterView extends View {
     this.rangeInputMin = this.drawInputPrice('range-min', 10);
     this.rangeInputMax = this.drawInputPrice('range-max', 110);
     this.rangeInputMin.addEventListener('input', () => {
+      this.drawNewScreen();
       clearTimeout(timer);
       timer = setTimeout(() => {
         this.content.strFilterArray = this.content.strFilterArray.filter(
@@ -102,6 +109,7 @@ export default class FilterView extends View {
       }, 1000) as unknown as number;
     });
     this.rangeInputMax.addEventListener('input', () => {
+      this.drawNewScreen();
       clearTimeout(timer);
       timer = setTimeout(() => {
         this.content.strFilterArray = this.content.strFilterArray.filter(
@@ -126,6 +134,7 @@ export default class FilterView extends View {
       classNames: ['filter__reset'],
       textContent: 'Reset Filters',
       callback: () => {
+        this.drawNewScreen();
         this.content.strSort = '';
         this.content.strFilterArray = [];
         document.querySelectorAll('.selected-item').forEach((el) => el.classList.remove('selected-item'));
@@ -150,6 +159,7 @@ export default class FilterView extends View {
     searchBlock.append(this.searchInput);
     searchBlock.classList.add('catalog__search');
     this.searchInput.addEventListener('input', () => {
+      this.drawNewScreen();
       this.content.textSearch = this.searchInput?.value as string;
       this.server.workApi.requestSortFilterProducts(
         this.content,
@@ -207,6 +217,7 @@ export default class FilterView extends View {
   addClassSelectItem(event: Event, str: string, el: string) {
     event.preventDefault();
     event.stopPropagation();
+    this.drawNewScreen();
     const parent = (event.target as HTMLElement).parentElement;
     if (!(event.target as HTMLElement).classList.contains('selected-item')) {
       if (parent) {
