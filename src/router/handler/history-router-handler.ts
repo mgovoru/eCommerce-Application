@@ -9,8 +9,11 @@ type RouterHandlerParam = {
 
 export default class HistoryRouterHandler {
   protected params: RouterHandlerParam;
+
   private callback: (params: RequestParams) => void;
+
   protected handler: EventListener;
+
   private isNavigating: boolean = false;
 
   constructor(callback: (params: RequestParams) => void) {

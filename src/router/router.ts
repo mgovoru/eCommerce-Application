@@ -14,7 +14,9 @@ type RequestParams = {
 
 export default class Router {
   routes: Route[];
+
   private handler: HashRouterHandler | HistoryRouterHandler;
+
   private isHandling: boolean = false;
 
   constructor(routes: Route[]) {
