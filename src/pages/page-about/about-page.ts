@@ -47,23 +47,32 @@ export default class AboutPageView extends View {
       cont,
       'Maria Govorukhina',
       'https://github.com/mgovoru',
-      'https://avatars.githubusercontent.com/u/98209094?v=4'
+      'https://avatars.githubusercontent.com/u/98209094?v=4',
+      'Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text.'
     );
     this.teamMemberUnit(
       cont,
       'Maria Klyass',
       'https://github.com/mariaklyass',
-      'https://avatars.githubusercontent.com/u/110608602?v=4'
+      'https://avatars.githubusercontent.com/u/110608602?v=4',
+      'Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text.'
     );
     this.teamMemberUnit(
       cont,
       'Sergey Melnechuk',
       'https://github.com/lex010',
-      'https://avatars.githubusercontent.com/u/127429514?v=4'
+      'https://avatars.githubusercontent.com/u/127429514?v=4',
+      'Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text.'
     );
   }
 
-  teamMemberUnit(container: ElementCreator, memberName: string, gitOfMember: string, fotoOfMember: string) {
+  teamMemberUnit(
+    container: ElementCreator,
+    memberName: string,
+    gitOfMember: string,
+    fotoOfMember: string,
+    textAboutMember: string
+  ) {
     const cont = new ElementCreator({
       tag: 'div',
       classNames: ['page-about__member-unit'],
@@ -82,10 +91,16 @@ export default class AboutPageView extends View {
     });
     foto.getNode().setAttribute('alt', `${memberName} foto`);
     foto.getNode().setAttribute('src', fotoOfMember);
-    // foto.getNode().setAttribute('src', 'https://avatars.githubusercontent.com/u/98209094?v=4');
+
+    const aboutMember = new ElementCreator({
+      tag: 'div',
+      textContent: textAboutMember,
+      classNames: ['page-about__member-unit_text-about-member'],
+    });
 
     container.addInnerElement(cont);
     cont.addInnerElement(name);
     cont.addInnerElement(foto);
+    cont.addInnerElement(aboutMember);
   }
 }

@@ -36,6 +36,25 @@
 }
 
 .page-about__member-unit_foto {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
+  transition:
+    width 0.9s,
+    height 0.9s;
+}
+
+.page-about__member-unit_text-about-member {
+  max-width: 400px;
+  transition: max-width 0.9s;
+}
+
+@media (max-width: 500px) {
+  .page-about__member-unit_foto {
+    width: 200px;
+    height: 200px;
+  }
+
+  .page-about__member-unit_text-about-member {
+    max-width: 200px;
+  }
 }
