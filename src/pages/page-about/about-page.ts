@@ -58,7 +58,7 @@ export default class AboutPageView extends View {
       'Maria Klyass',
       'https://github.com/mariaklyass',
       'https://avatars.githubusercontent.com/u/110608602?v=4',
-      'Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text.'
+      `My name is Maria. I've been into programming for over a year now. I love making things work and I like both visual and technical parts of Frontend. My role in the final task is providing the smooth routing between different pages of our application and also creating the Detailed Product Page & the Basket Page.`
     );
     this.teamMemberUnit(
       cont,
