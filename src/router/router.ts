@@ -17,15 +17,15 @@ export default class Router {
 
   private handler: HashRouterHandler | HistoryRouterHandler;
 
-  private currentHash: string;
+  private isHandling: boolean = false;
 
   constructor(routes: Route[]) {
     this.routes = routes;
-
     this.handler = new HistoryRouterHandler(this.urlChangedHandler.bind(this));
 
-    this.currentHash = window.location.hash;
-    this.handler.navigate('');
+    document.addEventListener('DOMContentLoaded', () => {
+      this.handler.navigate('');
+    });
   }
 
   setHashHandler() {
@@ -38,6 +38,10 @@ export default class Router {
   }
 
   urlChangedHandler(requestParams: RequestParams) {
+    if (this.isHandling) return;
+    this.isHandling = true;
+    console.log('urlChangedHandler called ONCE with:', requestParams);
+
     let pathForFind = requestParams.path;
 
     if (requestParams.resource !== '' && requestParams.path === 'product') {
@@ -48,9 +52,12 @@ export default class Router {
     const route = this.routes.find((item) => item.path === pathForFind);
     if (!route) {
       this.redirectToNotFoundPage();
+      this.isHandling = false;
       return;
     }
+
     route.callback(requestParams.resource);
+    this.isHandling = false;
   }
 
   redirectToNotFoundPage() {

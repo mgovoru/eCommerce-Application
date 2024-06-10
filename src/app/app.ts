@@ -118,7 +118,6 @@ export class App {
       {
         path: `${Pages.SHOP}`,
         callback: async () => {
-          console.log('переход');
           const { default: ShopView } = await import('../components/shop/shop');
           this.setContent(Pages.SHOP, new ShopView(this.router, this.server, this.state));
         },

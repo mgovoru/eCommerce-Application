@@ -101,20 +101,13 @@ export class RequestCatalog {
         if (content.offset <= (response.body.total || 0)) {
           content.drawItems(this.server.workApi.cards);
           content.setPlusOffset();
-          this.addElements(content);
+          content.addElements();
         }
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();
         errorElement.show(err.message);
       });
-  }
-
-  addElements(content: CatalogView) {
-    if (!content.loaderElement) {
-      content.showLoader();
-      content.container?.insertAdjacentElement('beforeend', content.loaderElement as unknown as HTMLElement);
-    }
   }
 
   getAttGroups(content: CatalogView) {

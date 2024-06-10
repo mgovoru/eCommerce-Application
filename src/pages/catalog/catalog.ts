@@ -172,11 +172,9 @@ export default class CatalogView extends View {
   drawItems(array: CardInfo[]) {
     array.forEach((el) => {
       const card = new CardView(this.router, el);
-      card.bodyCard?.insertAdjacentHTML('beforeend', card.render(el));
-      this.items?.append(card.bodyCard as HTMLElement);
+      this.items?.appendChild(card.getElement());
     });
     this.isLoading = false;
-    console.log(array);
   }
 
   showLoader() {
@@ -210,6 +208,14 @@ export default class CatalogView extends View {
       limit = LimitImages.FIVE;
     }
     return limit;
+  }
+
+  addElements() {
+    const numberCount = this.count - (this.count % this.limitCount());
+    if (!this.loaderElement && this.offset <= numberCount) {
+      this.showLoader();
+      this.container?.insertAdjacentElement('beforeend', this.loaderElement as unknown as HTMLElement);
+    }
   }
 
   drawSelectSort() {

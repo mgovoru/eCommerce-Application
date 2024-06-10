@@ -63,13 +63,14 @@
   line-height: 1.2;
   letter-spacing: 0px;
   text-align: left;
+  min-height: 57px;
 }
 
-@media (max-width: 640px) {
-  .cards__title {
-    font-size: 12px;
-  }
-}
+// @media (max-width: 640px) {
+//   .cards__title {
+//     font-size: 12px;
+//   }
+// }
 
 .cards__sub-title {
   font-size: 14px;
@@ -78,6 +79,7 @@
   letter-spacing: 0px;
   text-align: left;
   max-height: 80px;
+  min-height: 54px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -85,11 +87,11 @@
   text-overflow: ellipsis;
 }
 
-@media (max-width: 640px) {
-  .cards__sub-title {
-    font-size: 11px;
-  }
-}
+// @media (max-width: 640px) {
+//   .cards__sub-title {
+//     font-size: 11px;
+//   }
+// }
 
 .cards__price {
   font-size: 24px;
@@ -98,3 +100,83 @@
   letter-spacing: 0px;
   text-align: left;
 }
+
+.cards__buttons {
+  padding: 8px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.cards__button {
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  background-color: white;
+  width: 140px;
+  height: 30px;
+  border: 1px solid black;
+  position: relative;
+}
+
+.add-cart::after,
+.remove-cart::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.add-cart::after {
+  background-image: url('../../assets/add-to-cart.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.remove-cart::after {
+  background-image: url('../../assets/remove-from-cart.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.add-cart::before {
+  content: 'Add to cart';
+}
+
+.remove-cart::before {
+  content: 'Remove';
+}
+
+.in-cart::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.in-cart::after {
+  background-image: url('../../assets/cart-large.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+.in-cart::before {
+  content: 'In cart';
+}
+
+.in-cart {
+  background-color: rgb(210, 116, 210);
+}
+

@@ -1,8 +1,6 @@
 import HistoryRouterHandler from '../history-router-handler';
 
 export default class HashRouterHandler extends HistoryRouterHandler {
-  private isInitialized = false;
-
   constructor(callbackRouter: (params: { path: string; resource: string }) => void) {
     super(callbackRouter);
 
@@ -11,10 +9,7 @@ export default class HashRouterHandler extends HistoryRouterHandler {
       locationField: 'hash',
     };
 
-    if (!this.isInitialized) {
-      window.addEventListener(this.params.nameEvent as keyof WindowEventMap, this.handler);
-      this.isInitialized = true;
-    }
+    window.addEventListener(this.params.nameEvent as keyof WindowEventMap, this.handler);
   }
 
   setHistory(url: string) {
