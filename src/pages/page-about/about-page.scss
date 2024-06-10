@@ -29,11 +29,22 @@
   border: 1px solid;
   padding: 0.1rem 0.3rem;
   text-align: center;
+  transition:
+    color 0.7s ease,
+    background-color 0.7s ease;
 }
 
 .page-about__member-unit_name:hover {
   color: white;
   background-color: black;
+}
+
+.member-unit_foto-link {
+  transition: opacity 0.3s ease;
+}
+
+.member-unit_foto-link:hover {
+  opacity: 0.7;
 }
 
 .page-about__member-unit_foto {

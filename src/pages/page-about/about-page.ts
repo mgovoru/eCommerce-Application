@@ -88,6 +88,13 @@ export default class AboutPageView extends View {
     name.getNode().setAttribute('href', gitOfMember);
     name.getNode().setAttribute('target', '_blanck');
 
+    const fotoLink = new ElementCreator({
+      tag: 'a',
+      classNames: ['member-unit_foto-link'],
+    });
+    fotoLink.getNode().setAttribute('href', gitOfMember);
+    fotoLink.getNode().setAttribute('target', '_blanck');
+
     const foto = new ElementCreator({
       tag: 'img',
       classNames: ['page-about__member-unit_foto'],
@@ -103,7 +110,8 @@ export default class AboutPageView extends View {
 
     container.addInnerElement(cont);
     cont.addInnerElement(name);
-    cont.addInnerElement(foto);
+    cont.addInnerElement(fotoLink);
+    fotoLink.addInnerElement(foto);
     cont.addInnerElement(aboutMember);
   }
 
