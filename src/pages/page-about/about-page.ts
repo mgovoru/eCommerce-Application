@@ -51,7 +51,7 @@ export default class AboutPageView extends View {
       'Maria Govorukhina',
       'https://github.com/mgovoru',
       'https://avatars.githubusercontent.com/u/98209094?v=4',
-      'Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text. Just a text.'
+      'My name is Maria. I developed an interest in web development a few years ago. I am fascinated by the concept of hypertext, where videos, images, and text come together as a unified structure. I began my hobby with web page layout design. By chance, I discovered RSSchool that offered courses in web development, and I enrolled as a preparatory student. Currently, I am participating in the final project of the second stage of my studies. My contributions include general design, creating the catalog page,  the header and footer, and integrating commercial tools.'
     );
     this.teamMemberUnit(
       cont,
