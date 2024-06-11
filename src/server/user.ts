@@ -43,7 +43,6 @@ export class UserApiServer {
       .get()
       .execute()
       .then(() => {
-        console.log(myTokenCache);
         localStorage.setItem('tokenCashe', JSON.stringify(myTokenCache));
       })
       .catch((err) => {

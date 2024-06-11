@@ -24,6 +24,8 @@ export class CardView extends View {
 
   server: Server;
 
+  idProduct: string;
+
   constructor(server: Server, router: Router, cardInfo: CardInfo) {
     super(containerParams);
     this.router = router;
@@ -35,6 +37,7 @@ export class CardView extends View {
     this.configureView();
     this.render(cardInfo);
     this.createButtonAdd();
+    this.idProduct = cardInfo.id;
   }
 
   configureView() {
@@ -124,18 +127,23 @@ export class CardView extends View {
         this.buttonAdd?.classList.toggle('in-cart');
         this.buttonAdd?.classList.toggle('add-cart');
         buttonRemove.style.display = 'none';
+        console.log('удаляется', this.server.cart);
+        this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
+        this.server.workApi.getCarts(this.server.cart);
       },
     }).getNode();
     buttonRemove.style.display = 'none';
     this.buttonAdd = new ElementCreator({
       tag: 'button',
       classNames: ['cards__button', 'add-cart'],
-      callback: (e: Event) => {
+      callback: async (e: Event) => {
         if (!(e.target as HTMLElement).classList.contains('in-cart')) {
           (e.target as HTMLElement).classList.toggle('add-cart');
           (e.target as HTMLElement).classList.toggle('in-cart');
           buttonRemove.style.display = 'flex';
-          this.server.workApi.createToCart();
+          await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
+          console.log(this.server.cart);
+          this.server.workApi.getCarts(this.server.cart);
         }
       },
     }).getNode();

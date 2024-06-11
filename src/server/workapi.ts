@@ -318,8 +318,20 @@ export class WorkApi {
     this.requestInstance.getAllProductsCount(content);
   }
 
-  createToCart() {
-    this.requestInstance.createToCart();
+  async getToCart() {
+    await this.requestInstance.getToCart();
+  }
+
+  async addToCart(cartId: string, productID: string, versionCart: number) {
+    await this.requestInstance.addProductToCart(cartId, productID, versionCart);
+  }
+
+  async getCarts(cartId: string) {
+    await this.requestInstance.getCarts(cartId);
+  }
+
+  async removeFromCart(cartId: string, idItem: string, versionCart: number) {
+    await this.requestInstance.addProductToCart(cartId, idItem, versionCart);
   }
 
   requestAttGroups(content: CatalogView) {
