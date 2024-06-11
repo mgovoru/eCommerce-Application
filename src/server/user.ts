@@ -36,7 +36,7 @@ export class UserApiServer {
       .build();
 
     const clientApiUser = createApiBuilderFromCtpClient(clientUser);
-    return clientApiUser
+    clientApiUser
       .withProjectKey({
         projectKey: credentials.projectKey,
       })

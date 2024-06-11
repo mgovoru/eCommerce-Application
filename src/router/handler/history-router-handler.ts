@@ -14,6 +14,8 @@ export default class HistoryRouterHandler {
 
   protected handler: EventListener;
 
+  private isNavigating: boolean = false;
+
   constructor(callback: (params: RequestParams) => void) {
     this.params = {
       nameEvent: 'popstate',
@@ -26,6 +28,9 @@ export default class HistoryRouterHandler {
   }
 
   navigate(url: PopStateEvent | string): void {
+    if (this.isNavigating) return;
+    this.isNavigating = true;
+
     if (typeof url === 'string') {
       this.setHistory(url);
     }
@@ -43,6 +48,10 @@ export default class HistoryRouterHandler {
       [result.path = '', result.resource = ''] = [`${path[0]}/${path[1]}`, path[2]];
     }
     this.callback(result);
+
+    setTimeout(() => {
+      this.isNavigating = false;
+    }, 0);
   }
 
   disable() {
@@ -50,7 +59,6 @@ export default class HistoryRouterHandler {
   }
 
   setHistory(url: string) {
-    // window.history.pushState(null, '', `/${url}`);
     window.history.pushState(null, '', url);
   }
 }

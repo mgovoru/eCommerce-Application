@@ -111,57 +111,61 @@ export class WorkApi {
   }
 
   registerCustomer(customerDraft: CustomerDraft) {
-    return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
-      .customers()
-      .post({
-        body: customerDraft,
-      })
-      .execute()
-      .then((response) => {
-        if (response.body.customer.firstName) {
-          localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
-          localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
-        } else {
-          localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
-        }
-        this.router.navigate(Pages.MAIN);
-      })
-      .catch((err: Error) => {
-        const errorElement = new ErrorView();
-        errorElement.show(err.message);
-      });
+    return (
+      this.server
+        .apiRoot()
+        // .withProjectKey({ projectKey: credentials.projectKey })
+        .customers()
+        .post({
+          body: customerDraft,
+        })
+        .execute()
+        .then((response) => {
+          if (response.body.customer.firstName) {
+            localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
+            localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+          } else {
+            localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
+          }
+          this.router.navigate(Pages.MAIN);
+        })
+        .catch((err: Error) => {
+          const errorElement = new ErrorView();
+          errorElement.show(err.message);
+        })
+    );
   }
 
   loginCustomer(emailUser: string, passwordUser: string) {
-    return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
-      .login()
-      .post({
-        body: {
-          email: emailUser,
-          password: passwordUser,
-        },
-      })
-      .execute()
-      .then((response) => {
-        this.idUser = response.body.customer.id;
-        if (response.body.customer.firstName) {
-          localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
-          localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
-        } else {
-          localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
-        }
-        const userApi = new UserApiServer(this.server);
-        userApi.createCustomerApiClient(emailUser, passwordUser);
-        this.router.navigate(Pages.MAIN);
-      })
-      .catch((error) => {
-        const errorElement = new ErrorView();
-        errorElement.show(error.message);
-      });
+    return (
+      this.server
+        .apiRoot()
+        // .withProjectKey({ projectKey: credentials.projectKey })
+        .login()
+        .post({
+          body: {
+            email: emailUser,
+            password: passwordUser,
+          },
+        })
+        .execute()
+        .then((response) => {
+          this.idUser = response.body.customer.id;
+          if (response.body.customer.firstName) {
+            localStorage.setItem('id', JSON.stringify(response.body.customer.id)); // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
+            localStorage.setItem('name', JSON.stringify(response.body.customer.firstName));
+          } else {
+            localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
+          }
+          const userApi = new UserApiServer(this.server);
+          userApi.createCustomerApiClient(emailUser, passwordUser);
+          this.router.navigate(Pages.MAIN);
+        })
+        .catch((error) => {
+          const errorElement = new ErrorView();
+          errorElement.show(error.message);
+        })
+    );
   }
 
   // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
@@ -170,23 +174,25 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .get()
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          userVariable.firstName = response.body.firstName;
-          userVariable.lastName = response.body.lastName;
-          userVariable.dateOfBirth = response.body.dateOfBirth;
-          return response.body;
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .get()
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            userVariable.firstName = response.body.firstName;
+            userVariable.lastName = response.body.lastName;
+            userVariable.dateOfBirth = response.body.dateOfBirth;
+            return response.body;
+          })
+          .catch((error) => {
+            console.log(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
@@ -199,31 +205,33 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .post({
-          body: {
-            version: versionOfCustomer,
-            actions: [
-              {
-                action: 'setFirstName',
-                firstName: userVariable.newFirstNameInIput,
-              },
-            ],
-          },
-        })
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          successfulApply();
-          return response.body;
-        })
-        .catch((error) => {
-          errorApply(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .post({
+            body: {
+              version: versionOfCustomer,
+              actions: [
+                {
+                  action: 'setFirstName',
+                  firstName: userVariable.newFirstNameInIput,
+                },
+              ],
+            },
+          })
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            successfulApply();
+            return response.body;
+          })
+          .catch((error) => {
+            errorApply(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
@@ -236,31 +244,33 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .post({
-          body: {
-            version: versionOfCustomer,
-            actions: [
-              {
-                action: 'setLastName',
-                lastName: userVariable.newLastNameInIput,
-              },
-            ],
-          },
-        })
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          successfulApply();
-          return response.body;
-        })
-        .catch((error) => {
-          errorApply(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .post({
+            body: {
+              version: versionOfCustomer,
+              actions: [
+                {
+                  action: 'setLastName',
+                  lastName: userVariable.newLastNameInIput,
+                },
+              ],
+            },
+          })
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            successfulApply();
+            return response.body;
+          })
+          .catch((error) => {
+            errorApply(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
@@ -273,37 +283,55 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .post({
-          body: {
-            version: versionOfCustomer,
-            actions: [
-              {
-                action: 'setDateOfBirth',
-                dateOfBirth: userVariable.newDateOfBirth,
-              },
-            ],
-          },
-        })
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          successfulApply();
-          return response.body;
-        })
-        .catch((error) => {
-          errorApply(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .post({
+            body: {
+              version: versionOfCustomer,
+              actions: [
+                {
+                  action: 'setDateOfBirth',
+                  dateOfBirth: userVariable.newDateOfBirth,
+                },
+              ],
+            },
+          })
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            successfulApply();
+            return response.body;
+          })
+          .catch((error) => {
+            errorApply(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
 
-  requestProducts(content: CatalogView) {
-    this.requestInstance.getProducts(content);
+  getAllProductsCount(content: CatalogView) {
+    this.requestInstance.getAllProductsCount(content);
+  }
+
+  async getToCart() {
+    await this.requestInstance.getToCart();
+  }
+
+  async addToCart(cartId: string, productID: string, versionCart: number) {
+    await this.requestInstance.addProductToCart(cartId, productID, versionCart);
+  }
+
+  async getCarts(cartId: string) {
+    await this.requestInstance.getCarts(cartId);
+  }
+
+  async removeFromCart(cartId: string, idItem: string, versionCart: number) {
+    await this.requestInstance.addProductToCart(cartId, idItem, versionCart);
   }
 
   requestAttGroups(content: CatalogView) {
@@ -324,27 +352,29 @@ export class WorkApi {
   }
 
   getCategoriesforPath(content: App) {
-    return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
-      .categories()
-      .get()
-      .execute()
-      .then((response) => {
-        response.body.results.forEach((el) => {
-          if (el.key && !el.parent) {
-            content.arrayCateg.push([el.id as string, el.key as string]);
-          } else if (el.parent) {
-            const elem = content.arrayCateg.find((ell) => ell[0] === el.parent?.id);
-            if (elem && elem[1]) {
-              content.arrayCateg.push([el.id, `${elem[1]}/${el.key}`]);
+    return (
+      this.server
+        .apiRoot()
+        // .withProjectKey({ projectKey: credentials.projectKey })
+        .categories()
+        .get()
+        .execute()
+        .then((response) => {
+          response.body.results.forEach((el) => {
+            if (el.key && !el.parent) {
+              content.arrayCateg.push([el.id as string, el.key as string]);
+            } else if (el.parent) {
+              const elem = content.arrayCateg.find((ell) => ell[0] === el.parent?.id);
+              if (elem && elem[1]) {
+                content.arrayCateg.push([el.id, `${elem[1]}/${el.key}`]);
+              }
             }
-          }
-        });
-      })
-      .catch((err: Error) => {
-        const errorElement = new ErrorView();
-        errorElement.show(err.message);
-      });
+          });
+        })
+        .catch((err: Error) => {
+          const errorElement = new ErrorView();
+          errorElement.show(err.message);
+        })
+    );
   }
 }
