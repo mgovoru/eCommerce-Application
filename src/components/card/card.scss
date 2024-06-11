@@ -50,6 +50,7 @@
 .cards__content {
   padding: 8px 16px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   position: relative;
   top: 0;
@@ -57,7 +58,16 @@
   transition: all 1s ease 0s;
 }
 
+.cards__text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .cards__title {
+  flex: 1 1 60%;
+  display: flex;
+  align-items: center;
   font-size: 24px;
   font-weight: 700;
   line-height: 1.2;
@@ -94,6 +104,9 @@
 // }
 
 .cards__price {
+  flex: 0 0 40%;
+  display: flex;
+  justify-content: flex-end;
   font-size: 24px;
   font-weight: 700;
   line-height: 41.58px;
@@ -171,7 +184,6 @@
   background-repeat: no-repeat;
 }
 
-
 .in-cart::before {
   content: 'In cart';
 }
@@ -179,4 +191,3 @@
 .in-cart {
   background-color: rgb(210, 116, 210);
 }
-

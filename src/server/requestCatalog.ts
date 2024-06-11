@@ -31,43 +31,6 @@ export class RequestCatalog {
       });
   }
 
-  // getProducts(content: CatalogView) {
-  //   const limitFromWidth = content.limitCount();
-  //   return this.server
-  //     .apiRoot()
-  //     .products()
-  //     .get({
-  //       queryArgs: {
-  //         offset: content.offset,
-  //         limit: limitFromWidth,
-  //       },
-  //     })
-  //     .execute()
-  //     .then((response) => {
-  //       this.server.workApi.cards = [];
-  //       response.body.results.forEach((el) => {
-  //         const card: CardInfo = {
-  //           src: el.masterData.current.masterVariant.images as Image[],
-  //           title: el.masterData.current.name?.en as string,
-  //           description: el.masterData.current.description?.en as string,
-  //           price: el.masterData.current.masterVariant.prices as Price[],
-  //           id: el.id,
-  //           key: el.key ?? '',
-  //         };
-  //         this.server.workApi.cards.push(card);
-  //       });
-  //       content.drawItems(this.server.workApi.cards);
-  //       content.setPlusOffset();
-  //       if (content.offset < content.count) {
-  //         this.addElements(content);
-  //       }
-  //     })
-  //     .catch((err: Error) => {
-  //       const errorElement = new ErrorView();
-  //       errorElement.show(err.message);
-  //     });
-  // }
-
   getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string[] = [''], strText: string = '') {
     const limitFromWidth = content.limitCount();
     return this.server
@@ -153,6 +116,21 @@ export class RequestCatalog {
         if (callback) {
           callback();
         }
+      })
+      .catch((err: Error) => {
+        const errorElement = new ErrorView();
+        errorElement.show(err.message);
+      });
+  }
+
+  createToCart() {
+    return this.server
+      .apiRoot()
+      .carts()
+      .get()
+      .execute()
+      .then((response) => {
+        console.log(response);
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();

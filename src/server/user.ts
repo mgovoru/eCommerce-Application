@@ -36,13 +36,14 @@ export class UserApiServer {
       .build();
 
     const clientApiUser = createApiBuilderFromCtpClient(clientUser);
-    return clientApiUser
+    clientApiUser
       .withProjectKey({
         projectKey: credentials.projectKey,
       })
       .get()
       .execute()
       .then(() => {
+        console.log(myTokenCache);
         localStorage.setItem('tokenCashe', JSON.stringify(myTokenCache));
       })
       .catch((err) => {

@@ -171,7 +171,7 @@ export default class CatalogView extends View {
 
   drawItems(array: CardInfo[]) {
     array.forEach((el) => {
-      const card = new CardView(this.router, el);
+      const card = new CardView(this.server, this.router, el);
       this.items?.appendChild(card.getElement());
     });
     this.isLoading = false;

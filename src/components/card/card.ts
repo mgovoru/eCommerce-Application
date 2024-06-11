@@ -3,6 +3,7 @@ import { CardInfo } from '../../app/type';
 import { View } from '../../app/view';
 import { Pages } from '../../router/pages';
 import Router from '../../router/router';
+import { Server } from '../../server/server';
 import './card.scss';
 
 const containerParams = {
@@ -21,9 +22,12 @@ export class CardView extends View {
 
   bodyElement: HTMLElement | null;
 
-  constructor(router: Router, cardInfo: CardInfo) {
+  server: Server;
+
+  constructor(server: Server, router: Router, cardInfo: CardInfo) {
     super(containerParams);
     this.router = router;
+    this.server = server;
     this.bodyCard = null;
     this.buttonAdd = null;
     this.buttons = null;
@@ -85,16 +89,15 @@ export class CardView extends View {
     }).getNode();
     subtitleCard.innerHTML = cardInfo?.description;
     textCard.appendChild(titleCard);
-    textCard.appendChild(subtitleCard);
     contentCard.appendChild(textCard);
     const priceCard = new ElementCreator({
       tag: 'div',
       classNames: ['cards__price'],
-      textContent: cardInfo.price[0]?.value?.currencyCode,
+      textContent: `  ${cardInfo.price[0]?.value?.currencyCode}`,
     }).getNode();
     const spanCard = new ElementCreator({
       tag: 'span',
-      textContent: price,
+      textContent: `  ${price}`,
     }).getNode();
     spanCard.style.cssText = styleline;
     priceCard.prepend(spanCard);
@@ -104,7 +107,8 @@ export class CardView extends View {
     }).getNode();
     spanNextCard.style.cssText = stylecolor;
     priceCard.prepend(spanNextCard);
-    contentCard.appendChild(priceCard);
+    textCard.appendChild(priceCard);
+    contentCard.appendChild(subtitleCard);
     this.bodyElement?.appendChild(contentCard);
   }
 
@@ -131,6 +135,7 @@ export class CardView extends View {
           (e.target as HTMLElement).classList.toggle('add-cart');
           (e.target as HTMLElement).classList.toggle('in-cart');
           buttonRemove.style.display = 'flex';
+          this.server.workApi.createToCart();
         }
       },
     }).getNode();
@@ -139,14 +144,3 @@ export class CardView extends View {
     this.bodyElement?.appendChild(this.buttons);
   }
 }
-// return `
-// 				<div class="cards__image -ibg">
-// 					<img src="${cardInfo.src[0]?.url}" alt="фото" class="cards__img">
-// 			</div>
-// 			<div class="cards__content">
-// 				<div class="cards__text">
-// 					<h3 class="cards__title">${cardInfo?.title}</h3>
-// 						<h4 class="cards__sub-title">${cardInfo?.description}</h4>
-// 							</div>
-// 							<div class="cards__price"><span style=${styleline}>${price}</span><span style=${stylecolor}>${discount}</span>${cardInfo.price[0]?.value?.currencyCode}</div>
-// 			</div>`;

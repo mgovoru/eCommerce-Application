@@ -318,9 +318,9 @@ export class WorkApi {
     this.requestInstance.getAllProductsCount(content);
   }
 
-  // requestProducts(content: CatalogView) {
-  //   this.requestInstance.getProducts(content);
-  // }
+  createToCart() {
+    this.requestInstance.createToCart();
+  }
 
   requestAttGroups(content: CatalogView) {
     this.requestInstance.getAttGroups(content);
