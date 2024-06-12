@@ -331,7 +331,7 @@ export class WorkApi {
   }
 
   async removeFromCart(cartId: string, idItem: string, versionCart: number) {
-    await this.requestInstance.addProductToCart(cartId, idItem, versionCart);
+    await this.requestInstance.removeFromCart(cartId, idItem, versionCart);
   }
 
   requestAttGroups(content: CatalogView) {

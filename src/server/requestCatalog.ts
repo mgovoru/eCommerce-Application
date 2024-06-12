@@ -163,8 +163,6 @@ export class RequestCatalog {
         .execute();
       this.server.idAddItem = response.body.lineItems.find((el) => el.productId === productID)?.id as string;
       this.server.versionCart = response.body.version;
-      console.log('исразу удаяем');
-      this.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
     } catch (err) {
       const errorElement = new ErrorView();
       errorElement.show(err as string);

@@ -120,19 +120,6 @@ export class CardView extends View {
       tag: 'div',
       classNames: ['cards__buttons'],
     }).getNode();
-    const buttonRemove = new ElementCreator({
-      tag: 'button',
-      classNames: ['cards__button', 'remove-cart'],
-      callback: () => {
-        this.buttonAdd?.classList.toggle('in-cart');
-        this.buttonAdd?.classList.toggle('add-cart');
-        buttonRemove.style.display = 'none';
-        console.log('удаляется', this.server.cart);
-        this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
-        this.server.workApi.getCarts(this.server.cart);
-      },
-    }).getNode();
-    buttonRemove.style.display = 'none';
     this.buttonAdd = new ElementCreator({
       tag: 'button',
       classNames: ['cards__button', 'add-cart'],
@@ -140,15 +127,29 @@ export class CardView extends View {
         if (!(e.target as HTMLElement).classList.contains('in-cart')) {
           (e.target as HTMLElement).classList.toggle('add-cart');
           (e.target as HTMLElement).classList.toggle('in-cart');
-          buttonRemove.style.display = 'flex';
           await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
           console.log(this.server.cart);
-          this.server.workApi.getCarts(this.server.cart);
+          await this.server.workApi.getCarts(this.server.cart);
+          this.buttonRemove();
         }
       },
     }).getNode();
     this.buttons?.append(this.buttonAdd);
-    this.buttons?.append(buttonRemove);
     this.bodyElement?.appendChild(this.buttons);
+  }
+
+  buttonRemove() {
+    const buttonRemove = new ElementCreator({
+      tag: 'button',
+      classNames: ['cards__button', 'remove-cart'],
+      callback: async () => {
+        this.buttonAdd?.classList.toggle('in-cart');
+        this.buttonAdd?.classList.toggle('add-cart');
+        buttonRemove.remove();
+        await this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
+        await this.server.workApi.getCarts(this.server.cart);
+      },
+    }).getNode();
+    this.buttons?.append(buttonRemove);
   }
 }
