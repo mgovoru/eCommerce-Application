@@ -125,21 +125,28 @@ export class RequestCatalog {
 
   async getToCart(): Promise<void> {
     try {
-      const response = await this.server
-        .apiRoot()
-        .carts()
-        .post({
-          body: {
-            currency: 'USD',
-          },
-        })
-        .execute();
-      this.server.cart = response.body.id;
-      this.server.versionCart = response.body.version;
+      const response = await this.server.workApi?.userApi?.apiRoot()?.me().get().execute();
+      console.log('me', response?.body);
     } catch (err) {
-      const errorElement = new ErrorView();
-      errorElement.show(err as string);
+      console.error(err);
     }
+
+    // try {
+    //   const response = await this.server
+    //     .apiRoot()
+    //     .carts()
+    //     .post({
+    //       body: {
+    //         currency: 'USD',
+    //       },
+    //     })
+    //     .execute();
+    //   this.server.cart = response.body.id;
+    //   this.server.versionCart = response.body.version;
+    // } catch (err) {
+    //   const errorElement = new ErrorView();
+    //   errorElement.show(err as string);
+    // }
   }
 
   async addProductToCart(cartId: string, productID: string, versionCart: number) {

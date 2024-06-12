@@ -1,5 +1,5 @@
 import { ClientBuilder, PasswordAuthMiddlewareOptions } from '@commercetools/sdk-client-v2';
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { ApiRoot, createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { credentials } from './workapi';
 import { Server, httpMiddlewareOptions } from './server';
 import { MyTokenCache } from './token';
@@ -9,8 +9,11 @@ const myTokenCache = new MyTokenCache();
 export class UserApiServer {
   server: Server;
 
+  clientApiUser: ApiRoot | null;
+
   constructor(server: Server) {
     this.server = server;
+    this.clientApiUser = null;
   }
 
   createCustomerApiClient(emailUser: string, passwordUser: string) {
@@ -35,8 +38,8 @@ export class UserApiServer {
       .withPasswordFlow(passwordAuthMiddlewareOptions)
       .build();
 
-    const clientApiUser = createApiBuilderFromCtpClient(clientUser);
-    clientApiUser
+    this.clientApiUser = createApiBuilderFromCtpClient(clientUser);
+    this.clientApiUser
       .withProjectKey({
         projectKey: credentials.projectKey,
       })
@@ -49,5 +52,11 @@ export class UserApiServer {
         const errorElement = new ErrorView();
         errorElement.show(err.message);
       });
+  }
+
+  apiRoot() {
+    return this.clientApiUser?.withProjectKey({
+      projectKey: credentials.projectKey,
+    });
   }
 }

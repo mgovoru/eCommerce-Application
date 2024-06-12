@@ -34,6 +34,8 @@ export class WorkApi {
 
   cards: CardInfo[];
 
+  userApi: UserApiServer | null;
+
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
@@ -41,6 +43,7 @@ export class WorkApi {
     this.requestInstance = new RequestCatalog(this.server, this.router);
     this.cards = [];
     this.idUser = '';
+    this.userApi = null;
   }
 
   requestDetailedProduct(key: string) {
@@ -157,8 +160,9 @@ export class WorkApi {
           } else {
             localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
           }
-          const userApi = new UserApiServer(this.server);
-          userApi.createCustomerApiClient(emailUser, passwordUser);
+          this.userApi = new UserApiServer(this.server);
+          this.userApi.createCustomerApiClient(emailUser, passwordUser);
+          this.getToCart();
           this.router.navigate(Pages.MAIN);
         })
         .catch((error) => {

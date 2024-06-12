@@ -38,7 +38,7 @@ export class Server {
     this.cart = '';
     this.versionCart = 1;
     this.idAddItem = '';
-    this.workApi.getToCart();
+    // this.workApi.getToCart();
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {
