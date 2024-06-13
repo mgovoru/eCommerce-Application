@@ -15,8 +15,7 @@ export class RequestDetailedProduct {
 
   getProductByKey(key: string) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .products()
       .withKey({ key })
       .get()

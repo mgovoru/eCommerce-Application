@@ -107,8 +107,6 @@ export default class CatalogView extends View {
           this.server.workApi.requestSortFilterProducts(this, '', this.strFilterArray, '');
         }
       }
-    } else {
-      this.server.workApi.requestProducts(this);
     }
   }
 

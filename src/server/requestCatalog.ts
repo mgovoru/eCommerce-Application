@@ -19,8 +19,7 @@ export class RequestCatalog {
 
   getProducts(content: CatalogView) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .products()
       .get()
       .execute()
@@ -47,8 +46,7 @@ export class RequestCatalog {
 
   getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string[] = [''], strText: string = '') {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .productProjections()
       .search()
       .get({
@@ -83,8 +81,7 @@ export class RequestCatalog {
 
   getAttGroups(content: CatalogView) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .productTypes()
       .get()
       .execute()
@@ -101,8 +98,7 @@ export class RequestCatalog {
 
   getCategories(content: CatalogView, callback?: () => void) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .categories()
       .get()
       .execute()

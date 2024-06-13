@@ -13,6 +13,7 @@ import { RequestDetailedProduct } from './requestDetailedProduct';
 import { RequestCatalog } from './requestCatalog';
 import CatalogView from '../pages/catalog/catalog';
 import { App } from '../app/app';
+import { RequestCart } from './requestCart';
 
 export const credentials: Credentials = {
   projectKey: Settings.PROJECTKEY,
@@ -34,13 +35,19 @@ export class WorkApi {
 
   cards: CardInfo[];
 
+  userApi: UserApiServer | null;
+
+  requestCart: RequestCart;
+
   constructor(server: Server, router: Router) {
     this.server = server;
     this.router = router;
     this.requestProductInstance = new RequestDetailedProduct(this.server, this.router);
     this.requestInstance = new RequestCatalog(this.server, this.router);
+    this.requestCart = new RequestCart(this.server);
     this.cards = [];
     this.idUser = '';
+    this.userApi = null;
   }
 
   requestDetailedProduct(key: string) {
@@ -112,8 +119,7 @@ export class WorkApi {
 
   registerCustomer(customerDraft: CustomerDraft) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .customers()
       .post({
         body: customerDraft,
@@ -136,8 +142,8 @@ export class WorkApi {
 
   loginCustomer(emailUser: string, passwordUser: string) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
+      .me() // внесено изменение
       .login()
       .post({
         body: {
@@ -154,8 +160,9 @@ export class WorkApi {
         } else {
           localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
         }
-        const userApi = new UserApiServer(this.server);
-        userApi.createCustomerApiClient(emailUser, passwordUser);
+        this.userApi = new UserApiServer(this.server);
+        this.userApi.createCustomerApiClient(emailUser, passwordUser);
+        // this.getToCart();
         this.router.navigate(Pages.MAIN);
       })
       .catch((error) => {
@@ -170,23 +177,25 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .get()
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          userVariable.firstName = response.body.firstName;
-          userVariable.lastName = response.body.lastName;
-          userVariable.dateOfBirth = response.body.dateOfBirth;
-          return response.body;
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .get()
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            userVariable.firstName = response.body.firstName;
+            userVariable.lastName = response.body.lastName;
+            userVariable.dateOfBirth = response.body.dateOfBirth;
+            return response.body;
+          })
+          .catch((error) => {
+            console.log(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
@@ -199,31 +208,33 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .post({
-          body: {
-            version: versionOfCustomer,
-            actions: [
-              {
-                action: 'setFirstName',
-                firstName: userVariable.newFirstNameInIput,
-              },
-            ],
-          },
-        })
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          successfulApply();
-          return response.body;
-        })
-        .catch((error) => {
-          errorApply(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .post({
+            body: {
+              version: versionOfCustomer,
+              actions: [
+                {
+                  action: 'setFirstName',
+                  firstName: userVariable.newFirstNameInIput,
+                },
+              ],
+            },
+          })
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            successfulApply();
+            return response.body;
+          })
+          .catch((error) => {
+            errorApply(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
@@ -236,31 +247,33 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .post({
-          body: {
-            version: versionOfCustomer,
-            actions: [
-              {
-                action: 'setLastName',
-                lastName: userVariable.newLastNameInIput,
-              },
-            ],
-          },
-        })
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          successfulApply();
-          return response.body;
-        })
-        .catch((error) => {
-          errorApply(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .post({
+            body: {
+              version: versionOfCustomer,
+              actions: [
+                {
+                  action: 'setLastName',
+                  lastName: userVariable.newLastNameInIput,
+                },
+              ],
+            },
+          })
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            successfulApply();
+            return response.body;
+          })
+          .catch((error) => {
+            errorApply(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
@@ -273,37 +286,40 @@ export class WorkApi {
 
     if (idString) {
       const id: string = JSON.parse(idString);
-      return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
-        .customers()
-        .withId({ ID: id })
-        .post({
-          body: {
-            version: versionOfCustomer,
-            actions: [
-              {
-                action: 'setDateOfBirth',
-                dateOfBirth: userVariable.newDateOfBirth,
-              },
-            ],
-          },
-        })
-        .execute()
-        .then((response) => {
-          localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
-          successfulApply();
-          return response.body;
-        })
-        .catch((error) => {
-          errorApply(error.message);
-        });
+      return (
+        this.server
+          .apiRoot()
+          // .withProjectKey({ projectKey: credentials.projectKey })
+          .customers()
+          .withId({ ID: id })
+          .post({
+            body: {
+              version: versionOfCustomer,
+              actions: [
+                {
+                  action: 'setDateOfBirth',
+                  dateOfBirth: userVariable.newDateOfBirth,
+                },
+              ],
+            },
+          })
+          .execute()
+          .then((response) => {
+            localStorage.setItem('versionCustomer', JSON.stringify(response.body.version));
+            successfulApply();
+            return response.body;
+          })
+          .catch((error) => {
+            errorApply(error.message);
+          })
+      );
     }
     return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
   }
 
-  requestProducts(content: CatalogView) {
-    this.requestInstance.getProducts(content);
+  async fetchCartItems() {
+    console.log('test from workapi', console.log(await this.requestCart.fetchCartItems()));
+    return await this.requestCart.fetchCartItems();
   }
 
   requestAttGroups(content: CatalogView) {
@@ -325,8 +341,7 @@ export class WorkApi {
 
   getCategoriesforPath(content: App) {
     return this.server
-      .apiRoot(credentials)
-      .withProjectKey({ projectKey: credentials.projectKey })
+      .apiRoot()
       .categories()
       .get()
       .execute()

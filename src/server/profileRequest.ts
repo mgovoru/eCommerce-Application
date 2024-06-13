@@ -26,8 +26,7 @@ export class ProfilePageRequest {
     if (idString) {
       const id: string = JSON.parse(idString);
       return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
+        .apiRoot()
         .customers()
         .withId({ ID: id })
         .post({
@@ -62,8 +61,7 @@ export class ProfilePageRequest {
     if (idString) {
       const idThis: string = JSON.parse(idString);
       return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
+        .apiRoot()
         .customers()
         .password()
         .post({
@@ -126,8 +124,7 @@ export class ProfilePageRequest {
     if (idString) {
       const idThis: string = JSON.parse(idString);
       return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
+        .apiRoot()
         .customers()
         .withId({ ID: idThis })
         .post({
@@ -213,8 +210,7 @@ export class ProfilePageRequest {
     if (idString) {
       const idThis: string = JSON.parse(idString);
       return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
+        .apiRoot()
         .customers()
         .withId({ ID: idThis })
         .post({
@@ -247,8 +243,7 @@ export class ProfilePageRequest {
     if (idString) {
       const idThis: string = JSON.parse(idString);
       return this.server
-        .apiRoot(credentials)
-        .withProjectKey({ projectKey: credentials.projectKey })
+        .apiRoot()
         .customers()
         .withId({ ID: idThis })
         .post({
