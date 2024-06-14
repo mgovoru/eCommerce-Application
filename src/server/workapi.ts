@@ -344,8 +344,8 @@ export class WorkApi {
     return result;
   }
 
-  async addProductToCartNoLogUser(cartId: string, productID: string, versionCart: number) {
-    await this.requestCart.addProductToCartNoLogUser(cartId, productID, versionCart);
+  async addProductToCartNoLogUser(cartId: string, productID: string) {
+    await this.requestCart.addProductToCartNoLogUser(cartId, productID);
   }
 
   async addProductToCartLogUser(cartId: string, productID: string, versionCart: number) {
@@ -361,8 +361,8 @@ export class WorkApi {
     await this.requestCart.removeFromCartLogUser(cartId, idItem, versionCart);
   }
 
-  async removeFromCartNoLogUser(cartId: string, idItem: string, versionCart: number) {
-    await this.requestCart.removeFromCartNoLogUser(cartId, idItem, versionCart);
+  async removeFromCartNoLogUser(cartId: string, idItem: string) {
+    await this.requestCart.removeFromCartNoLogUser(cartId, idItem);
   }
 
   async createCartLogUser() {

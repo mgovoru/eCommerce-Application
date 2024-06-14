@@ -88,7 +88,7 @@ export class RequestCart {
     }
   }
 
-  async addProductToCartNoLogUser(cartId: string, productID: string, versionCart: number) {
+  async addProductToCartNoLogUser(cartId: string, productID: string) {
     if (await this.checkExitProductinCartNoLog(cartId, productID)) {
       return;
     }
@@ -120,7 +120,7 @@ export class RequestCart {
     }
   }
 
-  async removeFromCartNoLogUser(cartId: string, IdlineItem: string, versionCart: number) {
+  async removeFromCartNoLogUser(cartId: string, IdlineItem: string) {
     try {
       const response = await this.server
         .apiRoot()

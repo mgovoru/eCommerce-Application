@@ -188,19 +188,11 @@ export class CardView extends View {
       if (!this.server.cartAnonimus) {
         console.log('первый раз');
         await this.server.workApi.createCartNoLogUser();
-        await this.server.workApi.addProductToCartNoLogUser(
-          this.server.cartAnonimus,
-          this.idProduct,
-          this.server.versionCartAnonimus
-        );
+        await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
         await this.server.workApi.getCartId(this.server.cartAnonimus);
       } else {
         console.log('не первый раз');
-        await this.server.workApi.addProductToCartNoLogUser(
-          this.server.cartAnonimus,
-          this.idProduct,
-          this.server.versionCartAnonimus
-        );
+        await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
         await this.server.workApi.getCartId(this.server.cartAnonimus);
       }
     }
@@ -221,11 +213,7 @@ export class CardView extends View {
         this.idProduct
       );
       if (idAddItem) {
-        await this.server.workApi.removeFromCartNoLogUser(
-          this.server.cartAnonimus,
-          idAddItem,
-          this.server.versionCartAnonimus
-        );
+        await this.server.workApi.removeFromCartNoLogUser(this.server.cartAnonimus, idAddItem);
         await this.server.workApi.getCartId(this.server.cartAnonimus);
       }
     }
