@@ -5,7 +5,6 @@ import {
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
-// import { Credentials } from '../app/type';
 import { WorkApi, credentials } from './workapi';
 import Router from '../router/router';
 
@@ -20,11 +19,19 @@ export class Server {
 
   clientNew: Client;
 
-  cart: string;
+  cartLogin: string;
 
-  versionCart: number;
+  versionCartLogin: number;
+
+  versionCartAnonimus: number;
 
   idAddItem: string;
+
+  firstTime: number;
+
+  cartAnonimus: string;
+
+  anonimousId: string;
 
   constructor(router: Router) {
     this.workApi = new WorkApi(this, router);
@@ -35,10 +42,16 @@ export class Server {
       credentials.clientSecret,
       credentials.scopes
     );
-    this.cart = '';
-    this.versionCart = 1;
+    this.cartLogin = '';
+    this.cartAnonimus = '';
+    this.versionCartLogin = 1;
+    this.versionCartAnonimus = 1;
     this.idAddItem = '';
-    // this.workApi.getToCart();
+    this.firstTime = 0;
+    this.anonimousId = '';
+    this.workApi.checkIdCart();
+    console.log(this.cartAnonimus);
+    this.workApi.checkLogin();
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {

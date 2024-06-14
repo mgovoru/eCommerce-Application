@@ -1,7 +1,6 @@
 import Router from '../router/router';
 import Page404View from '../pages/404page/404page';
 import { Server } from './server';
-import { credentials } from './workapi';
 
 export class RequestDetailedProduct {
   server: Server;

@@ -3,7 +3,6 @@ import { CardInfo } from '../app/type';
 import Router from '../router/router';
 import ErrorView from './error';
 import { Server } from './server';
-import { credentials } from './workapi';
 import CatalogView from '../pages/catalog/catalog';
 
 export class RequestCatalog {
@@ -17,26 +16,14 @@ export class RequestCatalog {
     this.router = router;
   }
 
-  getProducts(content: CatalogView) {
+  getAllProductsCount(content: CatalogView) {
     return this.server
       .apiRoot()
       .products()
       .get()
       .execute()
       .then((response) => {
-        this.server.workApi.cards = [];
-        response.body.results.forEach((el) => {
-          const card: CardInfo = {
-            src: el.masterData.current.masterVariant.images as Image[],
-            title: el.masterData.current.name?.en as string,
-            description: el.masterData.current.description?.en as string,
-            price: el.masterData.current.masterVariant.prices as Price[],
-            id: el.id,
-            key: el.key ?? '',
-          };
-          this.server.workApi.cards.push(card);
-        });
-        content.drawItems(this.server.workApi.cards);
+        content.setCountProduct(response.body.total || 0);
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();
@@ -45,12 +32,15 @@ export class RequestCatalog {
   }
 
   getSortFilterProducts(content: CatalogView, strSort: string = '', strFilter: string[] = [''], strText: string = '') {
+    const limitFromWidth = content.limitCount();
     return this.server
       .apiRoot()
       .productProjections()
       .search()
       .get({
         queryArgs: {
+          offset: content.offset,
+          limit: limitFromWidth,
           sort: [strSort],
           filter: strFilter,
           'text.en': strText,
@@ -71,7 +61,11 @@ export class RequestCatalog {
           };
           this.server.workApi.cards.push(card);
         });
-        content.drawItems(this.server.workApi.cards);
+        if (content.offset <= (response.body.total || 0)) {
+          content.drawItems(this.server.workApi.cards);
+          content.setPlusOffset();
+          content.addElements();
+        }
       })
       .catch((err: Error) => {
         const errorElement = new ErrorView();

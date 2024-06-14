@@ -1,9 +1,16 @@
+import { LineItem, LocalizedString } from '@commercetools/platform-sdk';
 import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
-import ErrorView from '../../server/error';
-import { RequestCart } from '../../server/requestCart';
+import Router from '../../router/router';
 import { Server } from '../../server/server';
+import State from '../../state/state';
+import ErrorView from '../../server/error';
+import { ElementCreator } from '../../app/base';
 import './cart.scss';
+
+function getLocalizedString(localizedString: LocalizedString, locale: string = 'en'): string {
+  return localizedString[locale] || Object.values(localizedString)[0];
+}
 
 const mainParams = {
   tag: 'section',
@@ -14,13 +21,17 @@ const mainParams = {
 export default class CartView extends View {
   server: Server;
 
-  requestCart: RequestCart;
+  state: State;
 
-  constructor(server: Server) {
+  router: Router;
+
+  clearCartButton: ElementCreator | null = null;
+
+  constructor(server: Server, state: State, router: Router) {
     super(mainParams);
     this.server = server;
-
-    this.requestCart = new RequestCart(this.server);
+    this.state = state;
+    this.router = router;
     this.configureView();
   }
 
@@ -34,6 +45,10 @@ export default class CartView extends View {
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
+    const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartContainer);
+    clearCartButton.textContent = 'Clear Shopping Cart';
+    // clearCartButton.addEventListener('click', () => this.clearCart());
+
     this.renderCartItems(cartItemsContainer);
 
     this.viewElementCreator.append(cartContainer);
@@ -41,59 +56,75 @@ export default class CartView extends View {
 
   async renderCartItems(container: HTMLElement) {
     try {
-      const test = await this.requestCart.fetchCartItems();
-      console.log('test from cart.ts: ', test);
-      // const cartItems = await this.requestCart.getCartItems();
-      // console.log('Cart Items:', cartItems);
+      let cartItems: LineItem[] | undefined;
+      if (!this.server.workApi?.userApi) {
+        const cartId = localStorage.getItem('idCart');
+        if (cartId) {
+          const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
+          cartItems = fetchCartResult?.body.lineItems;
+        } else {
+          cartItems = [];
+        }
+      }
 
-      // if (cartItems.length === 0) {
-      //   const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
-      //   emptyMessage.textContent = 'Your cart is empty.';
-      // } else {
-      //   cartItems.forEach((item) => {
-      //     const itemElement = this.createCartItemElement(item);
-      //     container.appendChild(itemElement);
-      //   });
-      // }
+      if (this.server.workApi?.userApi) {
+        const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
+        cartItems = fetchCartResult?.body.lineItems;
+        console.log(cartItems);
+      }
+
+      if (cartItems?.length === 0) {
+        const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
+        emptyMessage.textContent = 'Your cart is empty.';
+        const linkToCatalog = this.drawElement({ tag: 'button', classNames: ['page-cart__button'] }, container);
+        linkToCatalog.textContent = 'Try to find something you like here ->';
+      } else {
+        cartItems?.forEach((item) => {
+          const itemElement = this.createCartItemElement(item);
+          container.appendChild(itemElement);
+        });
+      }
     } catch (err) {
       console.error(err);
-      // const errorElement = new ErrorView();
+      const errorElement = new ErrorView();
+      console.log(errorElement);
       // errorElement.show(err.message);
     }
   }
 
-  // createCartItemElement(item) {
-  //   const itemElement = this.drawElement({ tag: 'div', classNames: ['cart-item'] });
+  createCartItemElement(item: LineItem) {
+    const itemElement = this.drawElement({ tag: 'div', classNames: ['cart-item'] });
 
-  //   const itemName = this.drawElement({ tag: 'div', classNames: ['cart-item__name'] }, itemElement);
-  //   itemName.textContent = item.name;
+    const itemName = this.drawElement({ tag: 'div', classNames: ['cart-item__name'] }, itemElement);
+    itemName.textContent = getLocalizedString(item.name);
 
-  //   const itemQuantity = this.drawElement({ tag: 'div', classNames: ['cart-item__quantity'] }, itemElement);
-  //   itemQuantity.textContent = `Quantity: ${item.quantity}`;
+    const itemQuantity = this.drawElement({ tag: 'div', classNames: ['cart-item__quantity'] }, itemElement);
+    itemQuantity.textContent = `Quantity: ${item.quantity}`;
 
-  //   const increaseButton = this.drawElement(
-  //     { tag: 'button', classNames: ['cart-item__button', 'cart-item__increase'] },
-  //     itemElement
-  //   );
-  //   increaseButton.textContent = '+';
-  //   // increaseButton.addEventListener('click', () => this.handleQuantityChange(item.id, 'increase'));
+    const increaseButton = this.drawElement(
+      { tag: 'button', classNames: ['cart-item__button', 'cart-item__increase'] },
+      itemElement
+    );
+    increaseButton.textContent = '+';
+    // increaseButton.addEventListener('click', () => this.handleQuantityChange(item.id, 'increase'));
 
-  //   const decreaseButton = this.drawElement(
-  //     { tag: 'button', classNames: ['cart-item__button', 'cart-item__decrease'] },
-  //     itemElement
-  //   );
-  //   decreaseButton.textContent = '-';
-  //   // decreaseButton.addEventListener('click', () => this.handleQuantityChange(item.id, 'decrease'));
+    const decreaseButton = this.drawElement(
+      { tag: 'button', classNames: ['cart-item__button', 'cart-item__decrease'] },
+      itemElement
+    );
+    decreaseButton.textContent = '-';
+    // decreaseButton.addEventListener('click', () => this.handleQuantityChange(item.id, 'decrease'));
 
-  //   const itemPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
-  //   itemPrice.textContent = `Price: $${item.price}`;
+    const itemPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
+    const price = item.price.value.centAmount / 100;
+    itemPrice.textContent = `Price: $ ${price.toFixed(2)}`;
 
-  //   const removeButton = this.drawElement({ tag: 'button', classNames: ['cart-item__remove'] }, itemElement);
-  //   removeButton.textContent = 'Remove';
-  //   // removeButton.addEventListener('click', () => this.handleRemoveItem(item.id));
+    const removeButton = this.drawElement({ tag: 'button', classNames: ['cart-item__remove'] }, itemElement);
+    removeButton.textContent = 'Remove';
+    // removeButton.addEventListener('click', () => this.handleRemoveItem(item.id));
 
-  //   return itemElement;
-  // }
+    return itemElement;
+  }
 
   // async handleQuantityChange(itemId: number, action: 'increase' | 'decrease') {
   //   try {

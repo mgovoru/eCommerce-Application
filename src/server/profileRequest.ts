@@ -1,6 +1,5 @@
 import Router from '../router/router';
 import { Server } from './server';
-import { credentials } from './workapi';
 import { userVariable } from '../pages/page-profile/userVariable';
 import { successfulApply, errorApply } from '../pages/page-profile/successfulApply';
 import { CustomerUpdateAction, CustomerAddAddressAction } from '../pages/page-profile/interfaces';

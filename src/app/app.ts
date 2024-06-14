@@ -119,7 +119,7 @@ export class App {
         path: `${Pages.CART}`,
         callback: async () => {
           const { default: CartView } = await import('../pages/cart/cart');
-          this.setContent(Pages.CART, new CartView(this.server));
+          this.setContent(Pages.CART, new CartView(this.server, state, this.router));
         },
       },
       {

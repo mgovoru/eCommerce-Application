@@ -5,7 +5,6 @@ import { Server, httpMiddlewareOptions } from './server';
 import { MyTokenCache } from './token';
 import ErrorView from './error';
 
-const myTokenCache = new MyTokenCache();
 export class UserApiServer {
   server: Server;
 
@@ -17,6 +16,7 @@ export class UserApiServer {
   }
 
   createCustomerApiClient(emailUser: string, passwordUser: string) {
+    const myTokenCache = new MyTokenCache();
     const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
       host: 'https://auth.europe-west1.gcp.commercetools.com',
       projectKey: credentials.projectKey,
@@ -46,7 +46,7 @@ export class UserApiServer {
       .get()
       .execute()
       .then(() => {
-        localStorage.setItem('tokenCashe', JSON.stringify(myTokenCache));
+        localStorage.setItem('tokenCashe', JSON.stringify(myTokenCache.getToken()));
       })
       .catch((err) => {
         const errorElement = new ErrorView();
@@ -58,5 +58,25 @@ export class UserApiServer {
     return this.clientApiUser?.withProjectKey({
       projectKey: credentials.projectKey,
     });
+  }
+
+  createCustomerApiClientWithToken(token: string) {
+    type ExistingTokenMiddlewareOptions = {
+      force?: boolean;
+    };
+
+    const authorization: string = `Bearer ${token}`;
+    const options: ExistingTokenMiddlewareOptions = {
+      force: true,
+    };
+
+    const clientUser = new ClientBuilder()
+      .withExistingTokenFlow(authorization, options)
+      .withProjectKey(credentials.projectKey)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .build();
+    console.log('создали нового клиента со старыми данными');
+
+    this.clientApiUser = createApiBuilderFromCtpClient(clientUser);
   }
 }
