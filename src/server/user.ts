@@ -5,7 +5,6 @@ import { Server, httpMiddlewareOptions } from './server';
 import { MyTokenCache } from './token';
 import ErrorView from './error';
 
-const myTokenCache = new MyTokenCache();
 export class UserApiServer {
   server: Server;
 
@@ -17,6 +16,7 @@ export class UserApiServer {
   }
 
   createCustomerApiClient(emailUser: string, passwordUser: string) {
+    const myTokenCache = new MyTokenCache();
     const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
       host: 'https://auth.europe-west1.gcp.commercetools.com',
       projectKey: credentials.projectKey,
