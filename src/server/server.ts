@@ -20,11 +20,17 @@ export class Server {
 
   clientNew: Client;
 
-  cart: string;
+  cartLogin: string;
 
-  versionCart: number;
+  versionCartLogin: number;
+
+  versionCartAnonimus: number;
 
   idAddItem: string;
+
+  firstTime: number;
+
+  cartAnonimus: string;
 
   constructor(router: Router) {
     this.workApi = new WorkApi(this, router);
@@ -35,9 +41,12 @@ export class Server {
       credentials.clientSecret,
       credentials.scopes
     );
-    this.cart = '';
-    this.versionCart = 1;
+    this.cartLogin = '';
+    this.cartAnonimus = '';
+    this.versionCartLogin = 1;
+    this.versionCartAnonimus = 1;
     this.idAddItem = '';
+    this.firstTime = 0;
     // this.workApi.getToCart();
   }
 

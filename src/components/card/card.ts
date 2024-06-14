@@ -127,9 +127,10 @@ export class CardView extends View {
         if (!(e.target as HTMLElement).classList.contains('in-cart')) {
           (e.target as HTMLElement).classList.toggle('add-cart');
           (e.target as HTMLElement).classList.toggle('in-cart');
-          await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
-          console.log(this.server.cart);
-          await this.server.workApi.getCarts(this.server.cart);
+          // await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
+          // console.log(this.server.cart);
+          // await this.server.workApi.getCarts(this.server.cart);
+          await this.checkForAddProduct();
           this.buttonRemove();
         }
       },
@@ -143,13 +144,86 @@ export class CardView extends View {
       tag: 'button',
       classNames: ['cards__button', 'remove-cart'],
       callback: async () => {
+        this.checkForRemoveProduct();
         this.buttonAdd?.classList.toggle('in-cart');
         this.buttonAdd?.classList.toggle('add-cart');
         buttonRemove.remove();
-        await this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
-        await this.server.workApi.getCarts(this.server.cart);
+        // await this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
+        // await this.server.workApi.getCarts(this.server.cart);
       },
     }).getNode();
     this.buttons?.append(buttonRemove);
+  }
+
+  async checkForAddProduct() {
+    if (await this.server.workApi.checkLoginUser()) {
+      console.log('логинен');
+      if (!(await this.server.workApi.checkActiveCartLoginUser())) {
+        console.log('нет корзины');
+        await this.server.workApi.createCartLogUser();
+        await this.server.workApi.addProductToCartLogUser(
+          this.server.cartLogin,
+          this.idProduct,
+          this.server.versionCartLogin
+        );
+        await this.server.workApi.checkExitCartLogUser();
+      } else {
+        console.log('несть корзина');
+        // if (await this.server.workApi.getCartId(this.server.cartAnonimus)) {
+        //   await this.server.workApi.createCartLogUser();
+        // }
+        await this.server.workApi.addProductToCartLogUser(
+          this.server.cartLogin,
+          this.idProduct,
+          this.server.versionCartLogin
+        );
+        await this.server.workApi.checkExitCartLogUser();
+      }
+    } else {
+      console.log('не залогинен');
+      if (!this.server.cartAnonimus) {
+        console.log('первый раз');
+        await this.server.workApi.createCartNoLogUser();
+        await this.server.workApi.addProductToCartNoLogUser(
+          this.server.cartAnonimus,
+          this.idProduct,
+          this.server.versionCartAnonimus
+        );
+        await this.server.workApi.getCartId(this.server.cartAnonimus);
+      } else {
+        console.log('не первый раз');
+        await this.server.workApi.addProductToCartNoLogUser(
+          this.server.cartAnonimus,
+          this.idProduct,
+          this.server.versionCartAnonimus
+        );
+        await this.server.workApi.getCartId(this.server.cartAnonimus);
+      }
+    }
+  }
+
+  async checkForRemoveProduct() {
+    if (await this.server.workApi.checkLoginUser()) {
+      console.log('логинен');
+      const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
+      if (idAddItem) {
+        await this.server.workApi.removeFromCartLogUser(this.server.cartLogin, idAddItem, this.server.versionCartLogin);
+        await this.server.workApi.checkExitCartLogUser();
+      }
+    } else {
+      console.log('не залогинен');
+      const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
+        this.server.cartAnonimus,
+        this.idProduct
+      );
+      if (idAddItem) {
+        await this.server.workApi.removeFromCartNoLogUser(
+          this.server.cartAnonimus,
+          idAddItem,
+          this.server.versionCartAnonimus
+        );
+        await this.server.workApi.getCartId(this.server.cartAnonimus);
+      }
+    }
   }
 }
