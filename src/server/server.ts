@@ -32,6 +32,8 @@ export class Server {
 
   cartAnonimus: string;
 
+  anonimousId: string;
+
   constructor(router: Router) {
     this.workApi = new WorkApi(this, router);
     this.categories = [];
@@ -47,6 +49,10 @@ export class Server {
     this.versionCartAnonimus = 1;
     this.idAddItem = '';
     this.firstTime = 0;
+    this.anonimousId = '';
+    this.workApi.checkIdCart();
+    console.log(this.cartAnonimus);
+    this.workApi.checkLogin();
     // this.workApi.getToCart();
   }
 

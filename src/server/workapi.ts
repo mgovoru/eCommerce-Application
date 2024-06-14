@@ -148,6 +148,8 @@ export class WorkApi {
   }
 
   loginCustomer(emailUser: string, passwordUser: string) {
+    localStorage.setItem('password', JSON.stringify(passwordUser));
+    localStorage.setItem('emailUser', JSON.stringify(emailUser));
     return (
       this.server
         .apiRoot()
@@ -450,5 +452,25 @@ export class WorkApi {
   async checkActiveCartLoginUser() {
     const result = await this.requestCart.checkActiveCartLoginUser();
     return result;
+  }
+
+  async checkIdCart() {
+    if (localStorage.getItem('idCart')) {
+      this.server.cartAnonimus = JSON.parse(localStorage.getItem('idCart') as string);
+    }
+    if (localStorage.getItem('idCartVersionAnonimus')) {
+      this.server.versionCartAnonimus = JSON.parse(localStorage.getItem('idCartVersionAnonimus') as string);
+    }
+  }
+
+  checkLogin() {
+    const token = JSON.parse(localStorage.getItem('tokenCashe') as string);
+    // const passwordUser = localStorage.getItem('password');
+    // console.log(emailUser, passwordUser);
+
+    if (token) {
+      this.userApi = new UserApiServer(this.server);
+      this.userApi.createCustomerApiClientWithToken(token);
+    }
   }
 }

@@ -45,9 +45,14 @@ export class RequestCart {
         .post({
           body: {
             currency: 'USD',
+            // anonymousId: `anon-${Math.random().toString(36).substring(7)}`,
           },
         })
         .execute();
+      console.log('при создании корзины', response);
+      localStorage.setItem('idCart', JSON.stringify(response.body.id));
+      localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
+      this.server.anonimousId = response.body.anonymousId as string;
       this.server.cartAnonimus = response.body.id;
       this.server.versionCartAnonimus = response.body.version;
       if (this.server.firstTime === 0) {
@@ -91,10 +96,11 @@ export class RequestCart {
       const response = await this.server
         .apiRoot()
         .carts()
+        // .withCustomerId({ customerId: this.server.anonimousId })
         .withId({ ID: cartId })
         .post({
           body: {
-            version: versionCart,
+            version: this.server.versionCartAnonimus,
             actions: [
               {
                 action: 'addLineItem',
@@ -107,6 +113,7 @@ export class RequestCart {
         .execute();
       // this.server.idAddItem = response.body.lineItems.find((el) => el.productId === productID)?.id as string;
       this.server.versionCartAnonimus = response.body.version;
+      localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
     } catch (err) {
       const errorElement = new ErrorView();
       errorElement.show(err as string);
@@ -121,7 +128,7 @@ export class RequestCart {
         .withId({ ID: cartId })
         .post({
           body: {
-            version: versionCart,
+            version: this.server.versionCartAnonimus,
             actions: [
               {
                 action: 'removeLineItem',
@@ -133,6 +140,7 @@ export class RequestCart {
         .execute();
       console.log(response);
       this.server.versionCartAnonimus = response?.body.version as number;
+      localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
     } catch (err) {
       const errorElement = new ErrorView();
       errorElement.show(err as string);
