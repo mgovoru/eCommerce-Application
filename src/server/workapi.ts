@@ -138,6 +138,9 @@ export class WorkApi {
           } else {
             localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
           }
+          // this.loginCustomer(customerDraft.email, customerDraft.password as string);
+          this.userApi = new UserApiServer(this.server);
+          this.userApi.createCustomerApiClient(customerDraft.email, customerDraft.password as string);
           this.router.navigate(Pages.MAIN);
         })
         .catch((err: Error) => {
