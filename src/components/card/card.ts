@@ -18,6 +18,8 @@ export class CardView extends View {
 
   buttonAdd: HTMLElement | null;
 
+  buttonRem: HTMLElement | null;
+
   buttons: HTMLElement | null;
 
   bodyElement: HTMLElement | null;
@@ -32,6 +34,7 @@ export class CardView extends View {
     this.server = server;
     this.bodyCard = null;
     this.buttonAdd = null;
+    this.buttonRem = null;
     this.buttons = null;
     this.bodyElement = null;
     this.configureView();
@@ -113,6 +116,7 @@ export class CardView extends View {
     textCard.appendChild(priceCard);
     contentCard.appendChild(subtitleCard);
     this.bodyElement?.appendChild(contentCard);
+    this.checkInCart();
   }
 
   createButtonAdd() {
@@ -125,8 +129,8 @@ export class CardView extends View {
       classNames: ['cards__button', 'add-cart'],
       callback: async (e: Event) => {
         if (!(e.target as HTMLElement).classList.contains('in-cart')) {
-          (e.target as HTMLElement).classList.toggle('add-cart');
-          (e.target as HTMLElement).classList.toggle('in-cart');
+          (e.target as HTMLElement).classList.remove('add-cart');
+          (e.target as HTMLElement).classList.add('in-cart');
           // await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
           // console.log(this.server.cart);
           // await this.server.workApi.getCarts(this.server.cart);
@@ -140,19 +144,19 @@ export class CardView extends View {
   }
 
   buttonRemove() {
-    const buttonRemove = new ElementCreator({
+    this.buttonRem = new ElementCreator({
       tag: 'button',
       classNames: ['cards__button', 'remove-cart'],
       callback: async () => {
         this.checkForRemoveProduct();
-        this.buttonAdd?.classList.toggle('in-cart');
-        this.buttonAdd?.classList.toggle('add-cart');
-        buttonRemove.remove();
+        this.buttonAdd?.classList.remove('in-cart');
+        this.buttonAdd?.classList.add('add-cart');
+        this.buttonRem?.remove();
         // await this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
         // await this.server.workApi.getCarts(this.server.cart);
       },
     }).getNode();
-    this.buttons?.append(buttonRemove);
+    this.buttons?.append(this.buttonRem);
   }
 
   async checkForAddProduct() {
@@ -223,6 +227,27 @@ export class CardView extends View {
           this.server.versionCartAnonimus
         );
         await this.server.workApi.getCartId(this.server.cartAnonimus);
+      }
+    }
+  }
+
+  async checkInCart() {
+    if (await this.server.workApi.checkLoginUser()) {
+      console.log('логинен');
+      const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
+      if (idAddItem) {
+        this.buttonAdd?.classList.add('in-cart');
+        this.buttonRemove();
+      }
+    } else {
+      console.log('не залогинен');
+      const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
+        this.server.cartAnonimus,
+        this.idProduct
+      );
+      if (idAddItem) {
+        this.buttonAdd?.classList.add('in-cart');
+        this.buttonRemove();
       }
     }
   }

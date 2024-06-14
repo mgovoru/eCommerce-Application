@@ -158,7 +158,7 @@ export class WorkApi {
           body: {
             email: emailUser,
             password: passwordUser,
-            activeCartSignInMode: `UseAsNewActiveCustomerCart`,
+            activeCartSignInMode: `MergeWithExistingCustomerCart`,
             updateProductData: true,
           },
         })
@@ -437,7 +437,11 @@ export class WorkApi {
   }
 
   async createUserApi() {
-    if (await this.checkLoginUser()) {
+    let token = '';
+    if (localStorage.getItem('tokenCashe')) {
+      token = JSON.parse(localStorage.getItem('tokenCashe') as string);
+    }
+    if (token) {
       this.userApi = new UserApiServer(this.server);
       this.userApi.createCustomerApiClient(this.arrDates[0], this.arrDates[1]);
     }
