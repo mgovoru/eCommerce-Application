@@ -58,6 +58,40 @@ export default class CartView extends View {
     this.renderCartItems(cartItemsContainer);
 
     this.viewElementCreator.append(cartContainer);
+
+    // lex010 отслеживаю изменения товаров в корзине
+    const observer = new MutationObserver((mutationsList) => {
+      mutationsList.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+          const cartItems = cartItemsContainer.querySelectorAll('.cart-item');
+          let cartItemsExist = cartItems.length > 0;
+
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.classList.contains('cart-item')) {
+              console.log('Новый элемент cart-item добавлен:', node);
+              cartItemsExist = true;
+            }
+          });
+
+          // mutation.removedNodes.forEach((node) => {
+          //   if (node instanceof HTMLElement && node.classList.contains('cart-item')) {
+          //     console.log('Элемент cart-item удален:', node);
+          //     // Здесь можно добавить дополнительные действия при удалении элемента cart-item
+          //   }
+          // });
+
+          if (!cartItemsExist) {
+            textBlock.classList.add('hidden');
+            cartButtonsContainer.classList.add('hidden');
+          } else {
+            textBlock.classList.remove('hidden');
+            cartButtonsContainer.classList.remove('hidden');
+          }
+        }
+      });
+    });
+    observer.observe(cartItemsContainer, { childList: true });
+    // lex010 закончил изменения
   }
 
   async renderCartItems(container: HTMLElement) {
@@ -135,7 +169,15 @@ export default class CartView extends View {
 
     const removeButton = this.drawElement({ tag: 'button', classNames: ['cart-item__remove'] }, itemElement);
     removeButton.textContent = 'Remove';
-    removeButton.addEventListener('click', () => this.handleRemoveItem(item.id));
+    // lex010 изменения для удаления элемента на странице
+    removeButton.addEventListener('click', () => {
+      this.handleRemoveItem(item.id);
+      const cartItem = removeButton.closest('.cart-item');
+      if (cartItem) {
+        cartItem.remove();
+      }
+    });
+    // lex010 конец изменений
 
     return itemElement;
   }
