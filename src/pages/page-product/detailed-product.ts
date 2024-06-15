@@ -5,6 +5,7 @@ import Router from '../../router/router';
 import { Server } from '../../server/server';
 import State from '../../state/state';
 import './detailed-product.scss';
+import { ElementCreator } from '../../app/base';
 
 const mainParams = {
   tag: 'div',
@@ -27,6 +28,14 @@ export default class DetailedProductView extends View {
 
   modal: Modal;
 
+  buttonAdd: HTMLElement | null;
+
+  buttonRem: HTMLElement | null;
+
+  buttons: HTMLElement | null;
+
+  productDescWrap: HTMLElement | null;
+
   constructor(router: Router, state: State, server: Server, productDetails: ProductDetail) {
     super(mainParams);
     this.router = router;
@@ -35,11 +44,16 @@ export default class DetailedProductView extends View {
     this.productDetails = productDetails;
     this.container = null;
     this.blockTitle = null;
+    this.buttonAdd = null;
+    this.buttonRem = null;
+    this.buttons = null;
+    this.productDescWrap = null;
     this.modal = new Modal();
     this.configureView();
   }
 
   configureView() {
+    console.log(this.productDetails.id);
     const { name, description, masterVariant, variants } = this.productDetails.masterData.current;
 
     const productName = name.en;
@@ -111,6 +125,9 @@ export default class DetailedProductView extends View {
     productWrapper.className = 'product-wrapper';
     productWrapper.appendChild(productImgWrapper);
     productWrapper.appendChild(productDescWrapper);
+    this.productDescWrap = productDescWrapper;
+
+    this.createButtonAddinProduct();
 
     this.container.appendChild(this.blockTitle);
     this.container.appendChild(productWrapper);
@@ -131,5 +148,110 @@ export default class DetailedProductView extends View {
 
   openModal(images: string[]) {
     this.modal.open(images);
+  }
+
+  createButtonAddinProduct() {
+    this.buttons = new ElementCreator({
+      tag: 'div',
+      classNames: ['product__buttons'],
+    }).getNode();
+    this.buttonAdd = new ElementCreator({
+      tag: 'button',
+      classNames: ['product__button', 'add-cart'],
+      callback: async (e: Event) => {
+        if (!(e.target as HTMLElement).classList.contains('in-cart')) {
+          (e.target as HTMLElement).classList.remove('add-cart');
+          (e.target as HTMLElement).classList.add('in-cart');
+          await this.checkForAddProduct();
+          this.buttonRemoveinProduct();
+        }
+      },
+    }).getNode();
+    this.buttons?.append(this.buttonAdd);
+    (this.productDescWrap as HTMLElement).appendChild(this.buttons);
+  }
+
+  buttonRemoveinProduct() {
+    this.buttonRem = new ElementCreator({
+      tag: 'button',
+      classNames: ['product__button', 'remove-cart'],
+      callback: async () => {
+        this.checkForRemoveProduct();
+        this.buttonAdd?.classList.remove('in-cart');
+        this.buttonAdd?.classList.add('add-cart');
+        this.buttonRem?.remove();
+      },
+    }).getNode();
+    this.buttons?.append(this.buttonRem);
+  }
+
+  async checkForAddProduct() {
+    if (await this.server.workApi.checkLoginUser()) {
+      if (!(await this.server.workApi.checkActiveCartLoginUser())) {
+        console.log('нет корзины залогинен');
+        await this.server.workApi.createCartLogUser();
+        await this.server.workApi.addProductToCartLogUser(
+          this.server.cartLogin,
+          this.productDetails.id,
+          this.server.versionCartLogin
+        );
+        await this.server.workApi.checkExitCartLogUser();
+      } else {
+        console.log('есть корзины залогинен', this.server.cartLogin);
+        await this.server.workApi.addProductToCartLogUser(
+          this.server.cartLogin,
+          this.productDetails.id,
+          this.server.versionCartLogin
+        );
+        await this.server.workApi.checkExitCartLogUser();
+      }
+    } else if (!this.server.cartAnonimus) {
+      console.log('нет корзины не залогинен');
+      await this.server.workApi.createCartNoLogUser();
+      await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.productDetails.id);
+      await this.server.workApi.getCartId(this.server.cartAnonimus);
+    } else {
+      console.log('есть корзины не залогинен', this.server.cartAnonimus);
+      await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.productDetails.id);
+      await this.server.workApi.getCartId(this.server.cartAnonimus);
+    }
+  }
+
+  async checkForRemoveProduct() {
+    if (await this.server.workApi.checkLoginUser()) {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.productDetails.id);
+      if (idAddItem) {
+        await this.server.workApi.removeFromCartLogUser(this.server.cartLogin, idAddItem, this.server.versionCartLogin);
+        await this.server.workApi.checkExitCartLogUser();
+      }
+    } else {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
+        this.server.cartAnonimus,
+        this.productDetails.id
+      );
+      if (idAddItem) {
+        await this.server.workApi.removeFromCartNoLogUser(this.server.cartAnonimus, idAddItem);
+        await this.server.workApi.getCartId(this.server.cartAnonimus);
+      }
+    }
+  }
+
+  async checkInCart() {
+    if (await this.server.workApi.checkLoginUser()) {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.productDetails.id);
+      if (idAddItem) {
+        this.buttonAdd?.classList.add('in-cart');
+        this.buttonRemoveinProduct();
+      }
+    } else {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
+        this.server.cartAnonimus,
+        this.productDetails.id
+      );
+      if (idAddItem) {
+        this.buttonAdd?.classList.add('in-cart');
+        this.buttonRemoveinProduct();
+      }
+    }
   }
 }

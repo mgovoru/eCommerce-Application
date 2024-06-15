@@ -50,6 +50,12 @@ export class HeaderView extends View {
     this.buttonSignInCreate(srcSignIn);
     this.buttonSignOutCreate(srcSignOut);
     this.buttonCartCreate(srcCart);
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768 && !document.querySelector('.header__nav')) {
+        this.navCreate();
+        (document.querySelector('.header__nav') as HTMLElement).style.cssText = 'display: flex !important';
+      }
+    });
   }
 
   headerContainerCreate(): void {
@@ -135,6 +141,33 @@ export class HeaderView extends View {
         }, 1000);
       });
     }
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 768 && !document.querySelector('.icon-menu')) {
+        const menu = this.addMenu();
+        menu.addEventListener('click', () => {
+          menu.classList.toggle('menu-open');
+          elementUl.style.display = 'flex';
+          if (!elementUl.classList.contains('animation')) {
+            elementUl.classList.add('animation');
+            elementUl.classList.remove('animationReturn');
+          } else {
+            elementUl.classList.add('animationReturn');
+            elementUl.classList.remove('animation');
+            setTimeout(() => {
+              elementUl.style.display = 'none';
+            }, 1000);
+          }
+        });
+        elementUl.addEventListener('click', () => {
+          menu.classList.toggle('menu-open');
+          elementUl.classList.add('animationReturn');
+          elementUl.classList.remove('animation');
+          setTimeout(() => {
+            elementUl.style.display = 'none';
+          }, 1000);
+        });
+      }
+    });
     return this.elementNav;
   }
 
