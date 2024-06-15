@@ -1,6 +1,7 @@
 import Router from '../router/router';
 import Page404View from '../pages/404page/404page';
 import { Server } from './server';
+// import { credentials } from './workapi';
 
 export class RequestDetailedProduct {
   server: Server;
@@ -13,21 +14,24 @@ export class RequestDetailedProduct {
   }
 
   getProductByKey(key: string) {
-    return this.server
-      .apiRoot()
-      .products()
-      .withKey({ key })
-      .get()
-      .execute()
-      .then((response) => {
-        const product = response.body;
-        console.log(product);
-        return product;
-      })
-      .catch((err: Error) => {
-        this.render404View(`Failed to load product details. ${err.message}`);
-        return null;
-      });
+    return (
+      this.server
+        .apiRoot()
+        // .withProjectKey({ projectKey: credentials.projectKey })
+        .products()
+        .withKey({ key })
+        .get()
+        .execute()
+        .then((response) => {
+          const product = response.body;
+          console.log(product);
+          return product;
+        })
+        .catch((err: Error) => {
+          this.render404View(`Failed to load product details. ${err.message}`);
+          return null;
+        })
+    );
   }
 
   render404View(errorMessage: string) {

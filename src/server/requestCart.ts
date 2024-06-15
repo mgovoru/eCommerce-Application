@@ -15,7 +15,6 @@ export class RequestCart {
   async checkLoginUser(): Promise<boolean> {
     try {
       const response = await this.server.workApi?.userApi?.apiRoot()?.me().get().execute();
-      console.log('me', response?.body);
       if (response?.body) {
         return true;
       }
@@ -24,13 +23,21 @@ export class RequestCart {
       // console.error(err);
       return false;
     }
+    // const token = JSON.parse(localStorage.getItem('tokenCashe') as string);
+
+    // if (token) {
+    //   return true;
+    // }
+    // return false;
   }
 
   async checkActiveCartLoginUser(): Promise<boolean> {
     try {
       const response = await this.server.workApi?.userApi?.apiRoot()?.me().activeCart().get().execute();
-      console.log('me', response?.body);
-      return true;
+      if (response?.body) {
+        return true;
+      }
+      return false;
     } catch (err) {
       // console.error(err);
       return false;
@@ -49,7 +56,6 @@ export class RequestCart {
           },
         })
         .execute();
-      console.log('при создании корзины', response);
       localStorage.setItem('idCart', JSON.stringify(response.body.id));
       localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
       this.server.anonimousId = response.body.anonymousId as string;
@@ -138,7 +144,6 @@ export class RequestCart {
           },
         })
         .execute();
-      console.log(response);
       this.server.versionCartAnonimus = response?.body.version as number;
       localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
     } catch (err) {
@@ -166,7 +171,6 @@ export class RequestCart {
           },
         })
         .execute();
-      console.log(response);
       this.server.versionCartLogin = response?.body.version as number;
     } catch (err) {
       const errorElement = new ErrorView();
@@ -177,7 +181,6 @@ export class RequestCart {
   async getCartId(cartId: string) {
     try {
       const response = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
-      console.log(response);
       return response?.statusCode === 200;
     } catch (err) {
       const errorElement = new ErrorView();
@@ -190,7 +193,6 @@ export class RequestCart {
     try {
       const response = await this.server.workApi?.userApi?.apiRoot()?.me().activeCart().get().execute();
       const findItem = response?.body.lineItems.find((el) => el.productId === productID);
-      console.log('finditem', findItem);
       if (findItem) {
         return findItem.id;
       }
@@ -206,7 +208,6 @@ export class RequestCart {
     try {
       const response = await this.server.apiRoot().carts().withId({ ID: cardId }).get().execute();
       const findItem = response.body.lineItems.find((el) => el.productId === productID);
-      console.log('finditem', findItem);
       if (findItem) {
         return findItem.id;
       }
@@ -226,8 +227,6 @@ export class RequestCart {
       .get()
       .execute()
       .then((response) => {
-        console.log(response?.statusCode);
-        console.log(response);
         return response;
       })
       .catch((err: Error) => {
@@ -264,6 +263,20 @@ export class RequestCart {
     } catch (err) {
       const errorElement = new ErrorView();
       errorElement.show(err as string);
+    }
+  }
+
+  async checkActiveCartLoginUserwithToken() {
+    try {
+      const response = await this.server.workApi?.userApi?.apiRoot()?.me().activeCart().get().execute();
+      console.log(response);
+      if (response?.body) {
+        return [response?.body.id, response?.body.version];
+      }
+      return '';
+    } catch (err) {
+      // console.error(err);
+      return '';
     }
   }
 }

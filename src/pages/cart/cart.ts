@@ -51,7 +51,7 @@ export default class CartView extends View {
 
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
-    clearCartButton.textContent = 'Clear Shopping Cart';
+    clearCartButton.textContent = 'Clear the Cart';
     const proceedToOrderButton = this.drawElement(
       { tag: 'button', classNames: ['page-cart__order'] },
       cartButtonsContainer
