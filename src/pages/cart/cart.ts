@@ -46,9 +46,6 @@ export default class CartView extends View {
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
-    // const totalCostContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total'] }, cartContainer);
-    // this.updateTotalCost(totalCostContainer);
-
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
     clearCartButton.textContent = 'Clear the Cart';
@@ -57,8 +54,6 @@ export default class CartView extends View {
       cartButtonsContainer
     );
     proceedToOrderButton.textContent = 'Place the order';
-    // clearCartButton.addEventListener('click', () => this.clearCart());
-    // proceedToOrderButton.addEventListener('click', () => this.showSuccessModal());
 
     this.renderCartItems(cartItemsContainer);
 
@@ -69,7 +64,7 @@ export default class CartView extends View {
     try {
       let cartItems: LineItem[] | undefined;
       if (!this.server.workApi?.userApi) {
-        const cartId = localStorage.getItem('idCart');
+        const cartId = this.server.cartAnonimus;
         if (cartId) {
           const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
           cartItems = fetchCartResult?.body.lineItems;
@@ -100,7 +95,6 @@ export default class CartView extends View {
       console.error(err);
       const errorElement = new ErrorView();
       console.log(errorElement);
-      // errorElement.show(err.message);
     }
   }
 
@@ -128,14 +122,12 @@ export default class CartView extends View {
       quantityButtons
     );
     increaseButton.textContent = '+';
-    // increaseButton.addEventListener('click', () => this.handleQuantityChange(item.id, 'increase'));
 
     const decreaseButton = this.drawElement(
       { tag: 'button', classNames: ['cart-item__button', 'cart-item__decrease'] },
       quantityButtons
     );
     decreaseButton.textContent = '-';
-    // decreaseButton.addEventListener('click', () => this.handleQuantityChange(item.id, 'decrease'));
 
     const itemPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
     const price = item.price.value.centAmount / 100;
@@ -148,29 +140,10 @@ export default class CartView extends View {
     return itemElement;
   }
 
-  // async handleQuantityChange(itemId: number, action: 'increase' | 'decrease') {
-  // not to forget: ADD updateTotalCost() here
-  //   try {
-  //     await this.requestCart.updateCartItemQuantity(itemId, action);
-  //     this.updateView();
-  //   } catch (err) {
-  //     const errorElement = new ErrorView();
-  //     errorElement.show(err.message);
-  //   }
-  // }
-
   async handleRemoveItem(itemId: string) {
-    // not to forget: ADD updateTotalCost() here
-    const cartID = localStorage.getItem('idCart');
-    const cartVersionString = localStorage.getItem('idCartVersionAnonimus');
-    const cartVersion = cartVersionString ? Number(cartVersionString) : null;
-
-    if (!cartID || cartVersion === null || Number.isNaN(cartVersion)) {
-      const errorElement = new ErrorView();
-      errorElement.show('Invalid cart ID or version');
-      return;
-    }
+    const cartID = this.server.cartAnonimus;
     if (!this.server.workApi?.userApi) {
+      console.log('пытается удалить тут');
       try {
         const response = await this.server
           .apiRoot()
@@ -190,15 +163,16 @@ export default class CartView extends View {
         errorElement.show(err as string);
       }
     } else if (this.server.workApi?.userApi) {
+      console.log(this.server.cartLogin, this.server.versionCartLogin, itemId);
       try {
         const response = await this.server.workApi.userApi
           .apiRoot()
           ?.me()
           .carts()
-          .withId({ ID: cartID })
+          .withId({ ID: this.server.cartLogin })
           .post({
             body: {
-              version: cartVersion,
+              version: this.server.versionCartLogin,
               actions: [
                 {
                   action: 'removeLineItem',
@@ -216,33 +190,9 @@ export default class CartView extends View {
     }
   }
 
-  // async updateTotalCost(container: HTMLElement) {
-  //   const cartID = localStorage.getItem('idCart');
-  //   if (!cartID) {
-  //     // container.textContent = 'Total Cost: $0.00';
-  //     return;
-  //   }
-
-  //   this.server
-  //     .apiRoot()
-  //     .carts()
-  //     .withId({ ID: cartID })
-  //     .get()
-  //     .execute()
-  //     .then((fetchCartResult) => {
-  //       const cartItems = fetchCartResult?.body.lineItems;
-  //       console.log('in total cost: ', cartItems);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       // container.textContent = 'Total Cost: $0.00';
-  //     });
-  // }
-
   updateView() {
     const container = this.viewElementCreator.getNode().querySelector('.page-cart__items') as HTMLElement;
     container.innerHTML = '';
     this.renderCartItems(container);
-    // not to forget: ADD updateTotalCost() here
   }
 }
