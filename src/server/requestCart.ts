@@ -23,6 +23,12 @@ export class RequestCart {
       // console.error(err);
       return false;
     }
+    // const token = JSON.parse(localStorage.getItem('tokenCashe') as string);
+
+    // if (token) {
+    //   return true;
+    // }
+    // return false;
   }
 
   async checkActiveCartLoginUser(): Promise<boolean> {
@@ -257,6 +263,20 @@ export class RequestCart {
     } catch (err) {
       const errorElement = new ErrorView();
       errorElement.show(err as string);
+    }
+  }
+
+  async checkActiveCartLoginUserwithToken() {
+    try {
+      const response = await this.server.workApi?.userApi?.apiRoot()?.me().activeCart().get().execute();
+      console.log(response);
+      if (response?.body) {
+        return [response?.body.id, response?.body.version];
+      }
+      return '';
+    } catch (err) {
+      // console.error(err);
+      return '';
     }
   }
 }

@@ -466,12 +466,22 @@ export class WorkApi {
     }
   }
 
-  checkLogin() {
+  async checkLogin() {
     const token = JSON.parse(localStorage.getItem('tokenCashe') as string);
 
     if (token) {
       this.userApi = new UserApiServer(this.server);
       this.userApi.createCustomerApiClientWithToken(token);
+      const answerWithCart = await this.server.workApi.checkActiveCartLoginUserwithToken();
+      if (answerWithCart) {
+        this.server.cartLogin = answerWithCart[0] as string;
+        this.server.versionCartLogin = answerWithCart[1] as number;
+      }
     }
+  }
+
+  async checkActiveCartLoginUserwithToken() {
+    const result = await this.requestCart.checkActiveCartLoginUserwithToken();
+    return result;
   }
 }
