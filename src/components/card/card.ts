@@ -207,14 +207,16 @@ export class CardView extends View {
     }
   }
 
-  async checkInCart() {
+   async checkInCart() {
     if (await this.server.workApi.checkLoginUser()) {
-      const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
-      if (idAddItem) {
-        this.buttonAdd?.classList.add('in-cart');
-        this.buttonRemove();
+      if (await this.server.workApi.checkActiveCartLoginUser()) {
+        const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
+        if (idAddItem) {
+          this.buttonAdd?.classList.add('in-cart');
+          this.buttonRemove();
+        }
       }
-    } else {
+    } else if (this.server.cartAnonimus) {
       const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
         this.server.cartAnonimus,
         this.idProduct

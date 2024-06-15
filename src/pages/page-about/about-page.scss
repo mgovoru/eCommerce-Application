@@ -1,0 +1,108 @@
+.page-about__container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  align-items: center;
+}
+
+.page-about__title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.page-about__member-unit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.page-about__member-unit {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-about__member-unit_name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: 1px solid;
+  padding: 0.1rem 0.3rem;
+  text-align: center;
+  transition:
+    color 0.7s ease,
+    background-color 0.7s ease;
+}
+
+.page-about__member-unit_name:hover {
+  color: white;
+  background-color: black;
+}
+
+.member-unit_foto-link {
+  transition: opacity 0.3s ease;
+}
+
+.member-unit_foto-link:hover {
+  opacity: 0.7;
+}
+
+.page-about__member-unit_foto {
+  width: 400px;
+  height: 400px;
+  transition:
+    width 0.5s,
+    height 0.5s;
+}
+
+.page-about__member-unit_text-about-member {
+  max-width: 400px;
+  transition: max-width 0.5s;
+}
+
+@media (max-width: 500px) {
+  .page-about__member-unit_foto {
+    width: 200px;
+    height: 200px;
+  }
+
+  .page-about__member-unit_text-about-member {
+    max-width: 200px;
+  }
+}
+
+.page-about__cont-team-coll {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.page-about__title-team-coll {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.page-about__text-team-coll {
+  padding: 0 10% 4rem 10%;
+}
+
+.page-about__logo-cont {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.page-about__logo {
+  width: 126px;
+  height: 47px;
+}
+
+.page-about__logo:hover {
+  opacity: 0.7;
+}

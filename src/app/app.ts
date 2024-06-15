@@ -120,6 +120,7 @@ export class App {
         callback: async () => {
           const { default: CartView } = await import('../pages/cart/cart');
           this.setContent(Pages.CART, new CartView(this.server, state, this.router));
+
         },
       },
       {

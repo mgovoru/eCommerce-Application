@@ -5,6 +5,7 @@ import {
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
+// import { Credentials } from '../app/type';
 import { WorkApi, credentials } from './workapi';
 import Router from '../router/router';
 
@@ -50,7 +51,6 @@ export class Server {
     this.firstTime = 0;
     this.anonimousId = '';
     this.workApi.checkIdCart();
-    console.log(this.cartAnonimus);
     this.workApi.checkLogin();
   }
 
