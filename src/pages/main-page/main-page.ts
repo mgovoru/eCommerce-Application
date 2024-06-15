@@ -31,7 +31,17 @@ export default class MainPageView extends View {
     } else {
       this.textBlock.textContent = `Hello!`;
     }
+    this.resize();
+    window.addEventListener('resize', () => {
+      this.resize();
+    });
     this.viewElementCreator.append(container);
+  }
+
+  resize() {
+    const heightHeader = document.querySelector('.header')?.clientHeight || 0;
+    const heightFooter = document.querySelector('.footer')?.clientHeight || 0;
+    this.getElement().style.height = `${window.innerHeight - heightHeader - heightFooter}px`;
   }
 
   addText(str: string) {

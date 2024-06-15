@@ -44,5 +44,6 @@ interface MasterData {
 }
 
 export interface ProductDetail {
+  id: string;
   masterData: MasterData;
 }

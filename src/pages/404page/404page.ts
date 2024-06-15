@@ -54,6 +54,16 @@ export default class Page404View extends View {
       'button',
       textBlock
     );
+    this.resize();
+    window.addEventListener('resize', () => {
+      this.resize();
+    });
     this.viewElementCreator.append(container);
+  }
+
+  resize() {
+    const heightHeader = document.querySelector('.header')?.clientHeight || 0;
+    const heightFooter = document.querySelector('.footer')?.clientHeight || 0;
+    this.getElement().style.height = `${window.innerHeight - heightHeader - heightFooter}px`;
   }
 }

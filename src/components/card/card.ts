@@ -18,6 +18,8 @@ export class CardView extends View {
 
   buttonAdd: HTMLElement | null;
 
+  buttonRem: HTMLElement | null;
+
   buttons: HTMLElement | null;
 
   bodyElement: HTMLElement | null;
@@ -32,6 +34,7 @@ export class CardView extends View {
     this.server = server;
     this.bodyCard = null;
     this.buttonAdd = null;
+    this.buttonRem = null;
     this.buttons = null;
     this.bodyElement = null;
     this.configureView();
@@ -113,6 +116,7 @@ export class CardView extends View {
     textCard.appendChild(priceCard);
     contentCard.appendChild(subtitleCard);
     this.bodyElement?.appendChild(contentCard);
+    this.checkInCart();
   }
 
   createButtonAdd() {
@@ -120,35 +124,107 @@ export class CardView extends View {
       tag: 'div',
       classNames: ['cards__buttons'],
     }).getNode();
-    const buttonRemove = new ElementCreator({
-      tag: 'button',
-      classNames: ['cards__button', 'remove-cart'],
-      callback: () => {
-        this.buttonAdd?.classList.toggle('in-cart');
-        this.buttonAdd?.classList.toggle('add-cart');
-        buttonRemove.style.display = 'none';
-        console.log('удаляется', this.server.cart);
-        this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
-        this.server.workApi.getCarts(this.server.cart);
-      },
-    }).getNode();
-    buttonRemove.style.display = 'none';
     this.buttonAdd = new ElementCreator({
       tag: 'button',
       classNames: ['cards__button', 'add-cart'],
       callback: async (e: Event) => {
         if (!(e.target as HTMLElement).classList.contains('in-cart')) {
-          (e.target as HTMLElement).classList.toggle('add-cart');
-          (e.target as HTMLElement).classList.toggle('in-cart');
-          buttonRemove.style.display = 'flex';
-          await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
-          console.log(this.server.cart);
-          this.server.workApi.getCarts(this.server.cart);
+          (e.target as HTMLElement).classList.remove('add-cart');
+          (e.target as HTMLElement).classList.add('in-cart');
+          await this.checkForAddProduct();
+          this.buttonRemove();
         }
       },
     }).getNode();
     this.buttons?.append(this.buttonAdd);
-    this.buttons?.append(buttonRemove);
     this.bodyElement?.appendChild(this.buttons);
+  }
+
+  buttonRemove() {
+    this.buttonRem = new ElementCreator({
+      tag: 'button',
+      classNames: ['cards__button', 'remove-cart'],
+      callback: async () => {
+        this.checkForRemoveProduct();
+        this.buttonAdd?.classList.remove('in-cart');
+        this.buttonAdd?.classList.add('add-cart');
+        this.buttonRem?.remove();
+        // await this.server.workApi.removeFromCart(this.server.cart, this.server.idAddItem, this.server.versionCart);
+        // await this.server.workApi.getCarts(this.server.cart);
+      },
+    }).getNode();
+    this.buttons?.append(this.buttonRem);
+  }
+
+  async checkForAddProduct() {
+    if (await this.server.workApi.checkLoginUser()) {
+      if (!(await this.server.workApi.checkActiveCartLoginUser())) {
+        console.log('нет корзины залогинен');
+        await this.server.workApi.createCartLogUser();
+        await this.server.workApi.addProductToCartLogUser(
+          this.server.cartLogin,
+          this.idProduct,
+          this.server.versionCartLogin
+        );
+        await this.server.workApi.checkExitCartLogUser();
+      } else {
+        console.log('есть корзины залогинен', this.server.cartLogin);
+        await this.server.workApi.addProductToCartLogUser(
+          this.server.cartLogin,
+          this.idProduct,
+          this.server.versionCartLogin
+        );
+        await this.server.workApi.checkExitCartLogUser();
+      }
+    } else if (!this.server.cartAnonimus) {
+      console.log('нет корзины не залогинен');
+      await this.server.workApi.createCartNoLogUser();
+      await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
+      await this.server.workApi.getCartId(this.server.cartAnonimus);
+    } else {
+      console.log('есть корзины не залогинен', this.server.cartAnonimus);
+      await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
+      await this.server.workApi.getCartId(this.server.cartAnonimus);
+    }
+  }
+
+  async checkForRemoveProduct() {
+    if (await this.server.workApi.checkLoginUser()) {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
+      if (idAddItem) {
+        await this.server.workApi.removeFromCartLogUser(this.server.cartLogin, idAddItem, this.server.versionCartLogin);
+        await this.server.workApi.checkExitCartLogUser();
+      }
+    } else {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
+        this.server.cartAnonimus,
+        this.idProduct
+      );
+      if (idAddItem) {
+        await this.server.workApi.removeFromCartNoLogUser(this.server.cartAnonimus, idAddItem);
+        await this.server.workApi.getCartId(this.server.cartAnonimus);
+      }
+    }
+  }
+
+  async checkInCart() {
+    if (await this.server.workApi.checkLoginUser()) {
+      if (await this.server.workApi.checkActiveCartLoginUser()) {
+        const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
+        if (idAddItem) {
+          this.buttonAdd?.classList.add('in-cart');
+          this.buttonRemove();
+        }
+      }
+    } else if (this.server.cartAnonimus) {
+      const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
+        this.server.cartAnonimus,
+        this.idProduct
+      );
+      if (idAddItem) {
+        this.buttonAdd?.classList.add('in-cart');
+        this.buttonRemove();
+      }
+    }
   }
 }
