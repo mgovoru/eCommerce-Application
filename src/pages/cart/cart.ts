@@ -46,7 +46,7 @@ export default class CartView extends View {
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
-    const totalCostContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total'] }, cartContainer);
+    // const totalCostContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total'] }, cartContainer);
     // this.updateTotalCost(totalCostContainer);
 
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
