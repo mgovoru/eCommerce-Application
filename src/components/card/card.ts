@@ -207,7 +207,7 @@ export class CardView extends View {
     }
   }
 
-  async checkInCart() {
+   async checkInCart() {
     if (await this.server.workApi.checkLoginUser()) {
       if (await this.server.workApi.checkActiveCartLoginUser()) {
         const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
