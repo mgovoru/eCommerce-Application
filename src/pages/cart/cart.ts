@@ -47,7 +47,7 @@ export default class CartView extends View {
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
     const totalCostContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total'] }, cartContainer);
-    this.updateTotalCost(totalCostContainer);
+    // this.updateTotalCost(totalCostContainer);
 
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
@@ -149,6 +149,7 @@ export default class CartView extends View {
   }
 
   // async handleQuantityChange(itemId: number, action: 'increase' | 'decrease') {
+  // not to forget: ADD updateTotalCost() here
   //   try {
   //     await this.requestCart.updateCartItemQuantity(itemId, action);
   //     this.updateView();
@@ -159,11 +160,12 @@ export default class CartView extends View {
   // }
 
   async handleRemoveItem(itemId: string) {
+    // not to forget: ADD updateTotalCost() here
     const cartID = localStorage.getItem('idCart');
     const cartVersionString = localStorage.getItem('idCartVersionAnonimus');
     const cartVersion = cartVersionString ? Number(cartVersionString) : null;
 
-    if (!cartID || cartVersion === null || isNaN(cartVersion)) {
+    if (!cartID || cartVersion === null || Number.isNaN(cartVersion)) {
       const errorElement = new ErrorView();
       errorElement.show('Invalid cart ID or version');
       return;
@@ -214,37 +216,33 @@ export default class CartView extends View {
     }
   }
 
-  async updateTotalCost(container: HTMLElement) {
-    const cartID = localStorage.getItem('idCart');
-    if (!cartID) {
-      container.textContent = 'Total Cost: $0.00';
-      return;
-    }
+  // async updateTotalCost(container: HTMLElement) {
+  //   const cartID = localStorage.getItem('idCart');
+  //   if (!cartID) {
+  //     // container.textContent = 'Total Cost: $0.00';
+  //     return;
+  //   }
 
-    this.server
-      .apiRoot()
-      .carts()
-      .withId({ ID: cartID })
-      .get()
-      .execute()
-      .then((fetchCartResult) => {
-        const cartItems = fetchCartResult?.body.lineItems;
-        if (cartItems) {
-          const totalCost = cartItems.reduce((acc, item) => acc + item.price.value.centAmount * item.quantity, 0) / 100;
-          container.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
-        } else {
-          container.textContent = 'Total Cost: $0.00';
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        container.textContent = 'Total Cost: $0.00';
-      });
-  }
+  //   this.server
+  //     .apiRoot()
+  //     .carts()
+  //     .withId({ ID: cartID })
+  //     .get()
+  //     .execute()
+  //     .then((fetchCartResult) => {
+  //       const cartItems = fetchCartResult?.body.lineItems;
+  //       console.log('in total cost: ', cartItems);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       // container.textContent = 'Total Cost: $0.00';
+  //     });
+  // }
 
   updateView() {
     const container = this.viewElementCreator.getNode().querySelector('.page-cart__items') as HTMLElement;
     container.innerHTML = '';
     this.renderCartItems(container);
+    // not to forget: ADD updateTotalCost() here
   }
 }
