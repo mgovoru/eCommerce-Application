@@ -197,6 +197,7 @@ export class HeaderView extends View {
       classNames: ['header__sign-out'],
       callback: () => {
         localStorage.clear();
+        window.location.reload();
         this.router.navigate(Pages.INDEX);
       },
     };

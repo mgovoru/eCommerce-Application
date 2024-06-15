@@ -139,6 +139,7 @@ export class WorkApi {
             localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
           }
           // this.loginCustomer(customerDraft.email, customerDraft.password as string);
+          console.log('ответ при регистрации', response);
           this.userApi = new UserApiServer(this.server);
           this.userApi.createCustomerApiClient(customerDraft.email, customerDraft.password as string);
           this.router.navigate(Pages.MAIN);
@@ -169,7 +170,6 @@ export class WorkApi {
         })
         .execute()
         .then((response) => {
-          console.log('ответ при мерже корзин', response);
           this.server.cartLogin = response.body.cart?.id as string;
           this.server.versionCartLogin = response.body.cart?.version as number;
           this.idUser = response.body.customer.id;
@@ -468,8 +468,6 @@ export class WorkApi {
 
   checkLogin() {
     const token = JSON.parse(localStorage.getItem('tokenCashe') as string);
-    // const passwordUser = localStorage.getItem('password');
-    // console.log(emailUser, passwordUser);
 
     if (token) {
       this.userApi = new UserApiServer(this.server);

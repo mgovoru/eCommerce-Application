@@ -131,9 +131,6 @@ export class CardView extends View {
         if (!(e.target as HTMLElement).classList.contains('in-cart')) {
           (e.target as HTMLElement).classList.remove('add-cart');
           (e.target as HTMLElement).classList.add('in-cart');
-          // await this.server.workApi.addToCart(this.server.cart, this.idProduct, this.server.versionCart);
-          // console.log(this.server.cart);
-          // await this.server.workApi.getCarts(this.server.cart);
           await this.checkForAddProduct();
           this.buttonRemove();
         }
@@ -161,9 +158,8 @@ export class CardView extends View {
 
   async checkForAddProduct() {
     if (await this.server.workApi.checkLoginUser()) {
-      console.log('логинен');
       if (!(await this.server.workApi.checkActiveCartLoginUser())) {
-        console.log('нет корзины');
+        console.log('нет корзины залогинен')
         await this.server.workApi.createCartLogUser();
         await this.server.workApi.addProductToCartLogUser(
           this.server.cartLogin,
@@ -172,10 +168,7 @@ export class CardView extends View {
         );
         await this.server.workApi.checkExitCartLogUser();
       } else {
-        console.log('несть корзина');
-        // if (await this.server.workApi.getCartId(this.server.cartAnonimus)) {
-        //   await this.server.workApi.createCartLogUser();
-        // }
+        console.log('есть корзины залогинен', this.server.cartLogin)
         await this.server.workApi.addProductToCartLogUser(
           this.server.cartLogin,
           this.idProduct,
@@ -183,31 +176,26 @@ export class CardView extends View {
         );
         await this.server.workApi.checkExitCartLogUser();
       }
+    } else if (!this.server.cartAnonimus) {
+      console.log('нет корзины не залогинен')
+      await this.server.workApi.createCartNoLogUser();
+      await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
+      await this.server.workApi.getCartId(this.server.cartAnonimus);
     } else {
-      console.log('не залогинен');
-      if (!this.server.cartAnonimus) {
-        console.log('первый раз');
-        await this.server.workApi.createCartNoLogUser();
-        await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
-        await this.server.workApi.getCartId(this.server.cartAnonimus);
-      } else {
-        console.log('не первый раз');
-        await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
-        await this.server.workApi.getCartId(this.server.cartAnonimus);
-      }
+      console.log('есть корзины не залогинен', this.server.cartAnonimus)
+      await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.idProduct);
+      await this.server.workApi.getCartId(this.server.cartAnonimus);
     }
   }
 
   async checkForRemoveProduct() {
     if (await this.server.workApi.checkLoginUser()) {
-      console.log('логинен');
       const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
       if (idAddItem) {
         await this.server.workApi.removeFromCartLogUser(this.server.cartLogin, idAddItem, this.server.versionCartLogin);
         await this.server.workApi.checkExitCartLogUser();
       }
     } else {
-      console.log('не залогинен');
       const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
         this.server.cartAnonimus,
         this.idProduct
@@ -221,14 +209,12 @@ export class CardView extends View {
 
   async checkInCart() {
     if (await this.server.workApi.checkLoginUser()) {
-      console.log('логинен');
       const idAddItem = await this.server.workApi?.checkExitProductinCartLog(this.idProduct);
       if (idAddItem) {
         this.buttonAdd?.classList.add('in-cart');
         this.buttonRemove();
       }
     } else {
-      console.log('не залогинен');
       const idAddItem = await this.server.workApi?.checkExitProductinCartNoLog(
         this.server.cartAnonimus,
         this.idProduct

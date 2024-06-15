@@ -75,7 +75,6 @@ export class UserApiServer {
       .withProjectKey(credentials.projectKey)
       .withHttpMiddleware(httpMiddlewareOptions)
       .build();
-    console.log('создали нового клиента со старыми данными');
 
     this.clientApiUser = createApiBuilderFromCtpClient(clientUser);
   }

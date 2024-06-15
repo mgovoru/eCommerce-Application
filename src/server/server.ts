@@ -51,9 +51,7 @@ export class Server {
     this.firstTime = 0;
     this.anonimousId = '';
     this.workApi.checkIdCart();
-    console.log(this.cartAnonimus);
     this.workApi.checkLogin();
-    // this.workApi.getToCart();
   }
 
   client(projectKey: string, clientID: string, clientSecret: string, scopes: string): Client {

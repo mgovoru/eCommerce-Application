@@ -407,12 +407,8 @@ export default class CatalogView extends View {
       (event.target as HTMLElement).classList.add('selected-item');
       this.strFilterArray.push(`categories.id:"${strId}"`);
       if (strParent) {
-        // this.router.navigate(`${strParent}/${str}`);
-        //  console.log('строка с родителем', strParent, str);
         this.router.navigate(`${Pages.SHOP}/${strParent}/${str}`);
       } else {
-        // this.router.navigate(`${str}`);
-        // console.log('строка без родителем', str);
         this.router.navigate(`${Pages.SHOP}/${str}`);
       }
     } else if (!this.treeSubCat.get(strId)) {

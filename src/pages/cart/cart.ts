@@ -39,7 +39,6 @@ export default class CartView extends View {
       }
 
       const response = await this.server.workApi.userApi.apiRoot()?.me().activeCart().get().execute();
-      console.log('Response на странице корзины:', response);
       return response?.body;
     } catch (err) {
       console.error('Error fetching cart items:', err);
