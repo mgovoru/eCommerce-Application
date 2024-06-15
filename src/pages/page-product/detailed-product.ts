@@ -134,6 +134,7 @@ export default class DetailedProductView extends View {
 
     this.viewElementCreator.append(returnBtn);
     this.viewElementCreator.append(this.container);
+    this.checkInCart();
   }
 
   collectVariantImages(variants: Variant[]): string[] {
