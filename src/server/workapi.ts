@@ -484,4 +484,18 @@ export class WorkApi {
     const result = await this.requestCart.checkActiveCartLoginUserwithToken();
     return result;
   }
+
+  async checkPromoCode(key: string): Promise<boolean> {
+    try {
+      const response = await this.server.apiRoot().discountCodes().withKey({ key }).get().execute();
+      console.log(response);
+      if (response?.body.isActive) {
+        return true;
+      }
+      return false;
+    } catch (err) {
+      // console.error(err);
+      return false;
+    }
+  }
 }
