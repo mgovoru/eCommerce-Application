@@ -41,13 +41,16 @@ export default class CartView extends View {
     container.addNameClass('page-cart');
     const cartContainer = container.getElement();
 
-    const textBlock = this.drawElement({ tag: 'div', classNames: ['page-cart__text'] }, cartContainer);
+    const textBlock = this.drawElement({ tag: 'div', classNames: ['page-cart__text', 'hidden'] }, cartContainer);
     textBlock.textContent = 'Cart Items';
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
     // div for Total Price
-    const totalPriceContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total-cost'] }, cartContainer);
+    const totalPriceContainer = this.drawElement(
+      { tag: 'div', classNames: ['page-cart__total-cost', 'hidden'] },
+      cartContainer
+    );
 
     this.getTotalPrice()
       .then((totalPrice) => {
@@ -58,7 +61,10 @@ export default class CartView extends View {
         totalPriceContainer.textContent = 'Total price: 0';
       });
 
-    const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
+    const cartButtonsContainer = this.drawElement(
+      { tag: 'div', classNames: ['page-cart__buttons', 'hidden'] },
+      cartContainer
+    );
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
     clearCartButton.textContent = 'Clear the Cart';
     clearCartButton.addEventListener('click', () => this.clearCart());
@@ -110,7 +116,10 @@ export default class CartView extends View {
     });
     observer.observe(cartItemsContainer, { childList: true });
     // lex010 закончил изменения
-    this.createfieldPromokod();
+    const promoStatus = localStorage.getItem('promoIsApply');
+    if (promoStatus === 'false' || !promoStatus) {
+      this.createfieldPromokod();
+    }
   }
 
   // fetch and update TOTAL PRICE
@@ -375,9 +384,10 @@ export default class CartView extends View {
   }
 
   createfieldPromokod() {
+    localStorage.setItem('promoIsApply', 'false');
     const container = this.viewElementCreator.getNode().querySelector('.page-cart__container') as HTMLElement;
     const targetElement = this.viewElementCreator.getNode().querySelector('.page-cart__buttons') as HTMLElement;
-    const formInput = new ElementCreator({ tag: 'form', classNames: ['page-cart__form'] }).getNode();
+    const formInput = new ElementCreator({ tag: 'form', classNames: ['page-cart__form', 'hidden'] }).getNode();
     const inputPromo = new ElementCreator({
       tag: 'input',
       classNames: ['page-cart__input'],
@@ -410,6 +420,9 @@ export default class CartView extends View {
     console.log('result in checkPromoCodeReturnTotal', result);
     if (result && result !== 0) {
       this.updateTotalPrice(result);
+      localStorage.setItem('promoIsApply', 'true');
+      const promoCodContainer = document.querySelector('.page-cart__form');
+      promoCodContainer?.classList.add('hidden');
     }
   }
 
