@@ -364,6 +364,7 @@ export default class CartView extends View {
     formInput.append(buttonPromo);
     container.insertBefore(formInput, targetElement);
   }
+
   updateTotalPrice(newTotalPrice: number) {
     const totalPriceContainer = document.querySelector('.page-cart__total-cost');
     if (totalPriceContainer) {
