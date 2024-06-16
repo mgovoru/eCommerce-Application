@@ -32,7 +32,7 @@ export default class MainPageView extends View {
       this.textBlock.textContent = `Hello!`;
     }
     const promoBlock = this.drawElement({ tag: 'div', classNames: ['page-main__promo-text'] }, container);
-    promoBlock.textContent = 'PROMO CODES: june - 15% (all), gift - 20% (for more than two quantities)';
+    promoBlock.textContent = 'PROMO CODE: june - 15% (all)';
     this.resize();
     window.addEventListener('resize', () => {
       this.resize();
