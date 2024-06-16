@@ -53,7 +53,7 @@ export class ProfilePageRequest {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   passwordUpdateUser() {
@@ -89,7 +89,7 @@ export class ProfilePageRequest {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   addresseCreate() {
@@ -155,7 +155,7 @@ export class ProfilePageRequest {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   addresseEdit(idAddresse: string) {
@@ -244,7 +244,7 @@ export class ProfilePageRequest {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   addresseDelete(idAddresse: string) {
@@ -282,6 +282,6 @@ export class ProfilePageRequest {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 }

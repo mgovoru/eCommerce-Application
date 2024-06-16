@@ -218,7 +218,7 @@ export class WorkApi {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
@@ -257,7 +257,7 @@ export class WorkApi {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
@@ -296,7 +296,7 @@ export class WorkApi {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   // ИЗМЕНЕНИЯ ВЕНСЕННЫЕ LEX010
@@ -335,7 +335,7 @@ export class WorkApi {
           })
       );
     }
-    return Promise.reject(new Error('Идентификатор пользователя не найден в localStorage'));
+    return Promise.reject();
   }
 
   getAllProductsCount(content: CatalogView) {
