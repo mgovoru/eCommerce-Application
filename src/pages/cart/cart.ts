@@ -351,6 +351,8 @@ export default class CartView extends View {
       tag: 'input',
       classNames: ['page-cart__input'],
     }).getNode() as HTMLInputElement;
+    inputPromo.type = 'text';
+    inputPromo.value = '';
     const buttonPromo = new ElementCreator({
       tag: 'button',
       classNames: ['page-cart__promo'],
@@ -375,6 +377,8 @@ export default class CartView extends View {
   async checkPromoCodeReturnTotal(key: string) {
     const result = await this.server.workApi.checkPromoCode(key);
     console.log('result in checkPromoCodeReturnTotal', result);
-    this.updateTotalPrice(result);
+    if (result && result !== 0) {
+      this.updateTotalPrice(result);
+    }
   }
 }
