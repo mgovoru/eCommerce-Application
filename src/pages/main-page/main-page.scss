@@ -1,4 +1,17 @@
 .page-main {
   font-size: 24px;
   font-weight: 500;
+  background-image: url('../../assets/gift.jpg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  text-align: center;
+  word-wrap: break-word;
+  color: white;
+}
+
+.page-main__promo-text {
+  margin: 0 auto;
+  width: 380px;
+  word-wrap: break-word;
 }

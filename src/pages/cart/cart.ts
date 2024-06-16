@@ -58,6 +58,7 @@ export default class CartView extends View {
     this.renderCartItems(cartItemsContainer);
 
     this.viewElementCreator.append(cartContainer);
+    this.createfieldPromokod();
   }
 
   async renderCartItems(container: HTMLElement) {
@@ -194,5 +195,33 @@ export default class CartView extends View {
     const container = this.viewElementCreator.getNode().querySelector('.page-cart__items') as HTMLElement;
     container.innerHTML = '';
     this.renderCartItems(container);
+  }
+
+  createfieldPromokod() {
+    const container = this.viewElementCreator.getNode().querySelector('.page-cart__container') as HTMLElement;
+    const targetElement = this.viewElementCreator.getNode().querySelector('.page-cart__buttons') as HTMLElement;
+    const formInput = new ElementCreator({ tag: 'form', classNames: ['page-cart__form'] }).getNode();
+    const inputPromo = new ElementCreator({
+      tag: 'input',
+      classNames: ['page-cart__input'],
+    }).getNode() as HTMLInputElement;
+    const buttonPromo = new ElementCreator({
+      tag: 'button',
+      classNames: ['page-cart__promo'],
+      textContent: 'Apply promo code',
+      callback: () => {
+        this.checkExistPromoCode(inputPromo.value as string);
+      },
+    }).getNode();
+    formInput.append(inputPromo);
+    formInput.append(buttonPromo);
+    container.insertBefore(formInput, targetElement);
+  }
+
+  async checkExistPromoCode(key: string) {
+    if (await this.server.workApi.checkPromoCode(key)) {
+      return true;
+    }
+    return false;
   }
 }
