@@ -88,16 +88,19 @@ export default class CartView extends View {
           const emptyMessage = document.querySelector('.page-cart__empty');
           const linkToCatalog = document.querySelector('.page-cart__button');
           const promoCodContainer = document.querySelector('.page-cart__form');
+          const totalCount = document.querySelector('.page-cart__total-cost');
 
           if (!cartItemsExist) {
             textBlock.classList.add('hidden');
             cartButtonsContainer.classList.add('hidden');
+            totalCount?.classList.add('hidden');
             promoCodContainer?.classList.add('hidden');
             emptyMessage?.classList.remove('hidden');
             linkToCatalog?.classList.remove('hidden');
           } else {
             textBlock.classList.remove('hidden');
             cartButtonsContainer.classList.remove('hidden');
+            totalCount?.classList.remove('hidden');
             promoCodContainer?.classList.remove('hidden');
             emptyMessage?.classList.add('hidden');
             linkToCatalog?.classList.add('hidden');
@@ -200,12 +203,38 @@ export default class CartView extends View {
       quantityButtons
     );
     increaseButton.textContent = '+';
+    // lex010
+    let newQuantity = item.quantity;
+
+    increaseButton.addEventListener('click', () => {
+      newQuantity += 1;
+      this.changeItemQuantity(item.id, newQuantity).then(() => {
+        itemQuantity.textContent = `Quantity: ${newQuantity}`;
+        this.setNewTotalPrice();
+      });
+    });
+    // конец изменений
 
     const decreaseButton = this.drawElement(
       { tag: 'button', classNames: ['cart-item__button', 'cart-item__decrease'] },
       quantityButtons
     );
     decreaseButton.textContent = '-';
+    // lex010
+    decreaseButton.addEventListener('click', () => {
+      newQuantity -= 1;
+      if (newQuantity === 0) {
+        const cartItem = decreaseButton.closest('.cart-item');
+        if (cartItem) {
+          cartItem.remove();
+        }
+      }
+      this.changeItemQuantity(item.id, newQuantity).then(() => {
+        itemQuantity.textContent = `Quantity: ${newQuantity}`;
+        this.setNewTotalPrice();
+      });
+    });
+    // конец изменений
 
     const itemPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
     const price = item.price.value.centAmount / 100;
@@ -215,11 +244,13 @@ export default class CartView extends View {
     removeButton.textContent = 'Remove';
     // lex010 изменения для удаления элемента на странице
     removeButton.addEventListener('click', () => {
-      this.handleRemoveItem(item.id);
-      const cartItem = removeButton.closest('.cart-item');
-      if (cartItem) {
-        cartItem.remove();
-      }
+      this.handleRemoveItem(item.id).then(() => {
+        const cartItem = removeButton.closest('.cart-item');
+        if (cartItem) {
+          cartItem.remove();
+          this.setNewTotalPrice();
+        }
+      });
     });
     // lex010 конец изменений
 
@@ -376,5 +407,70 @@ export default class CartView extends View {
     const result = await this.server.workApi.checkPromoCode(key);
     console.log('result in checkPromoCodeReturnTotal', result);
     this.updateTotalPrice(result);
+  }
+
+  // lex010
+  async changeItemQuantity(itemId: string, newQuantity: number) {
+    const cartID = this.server.cartAnonimus;
+    if (!this.server.workApi?.userApi) {
+      try {
+        const response = await this.server
+          .apiRoot()
+          .carts()
+          .withId({ ID: cartID })
+          .post({
+            body: {
+              version: this.server.versionCartAnonimus,
+              actions: [
+                {
+                  action: 'changeLineItemQuantity',
+                  lineItemId: itemId,
+                  quantity: newQuantity,
+                },
+              ],
+            },
+          })
+          .execute();
+        this.server.versionCartAnonimus = response?.body.version as number;
+        localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
+      } catch (err) {
+        const errorElement = new ErrorView();
+        errorElement.show(err as string);
+      }
+    } else if (this.server.workApi?.userApi) {
+      try {
+        const response = await this.server.workApi.userApi
+          .apiRoot()
+          ?.me()
+          .carts()
+          .withId({ ID: this.server.cartLogin })
+          .post({
+            body: {
+              version: this.server.versionCartLogin,
+              actions: [
+                {
+                  action: 'changeLineItemQuantity',
+                  lineItemId: itemId,
+                  quantity: newQuantity,
+                },
+              ],
+            },
+          })
+          .execute();
+        this.server.versionCartLogin = response?.body.version as number;
+      } catch (err) {
+        const errorElement = new ErrorView();
+        errorElement.show(err as string);
+      }
+    }
+  }
+
+  setNewTotalPrice() {
+    const totalPriceContainer = document.querySelector('.page-cart__total-cost');
+    this.getTotalPrice().then((totalPrice) => {
+      if (totalPriceContainer) {
+        totalPriceContainer.textContent = `Total price: $${totalPrice.toFixed(2)}`;
+      }
+    });
   }
 }
