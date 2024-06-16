@@ -292,8 +292,8 @@ export default class CartView extends View {
       tag: 'button',
       classNames: ['page-cart__promo'],
       textContent: 'Apply promo code',
-      callback: () => {
-        this.checkExistPromoCode(inputPromo.value as string);
+      callback: async () => {
+        console.log(await this.checkPromoCodeReturnTotal(inputPromo.value as string));
       },
     }).getNode();
     formInput.append(inputPromo);
@@ -301,10 +301,8 @@ export default class CartView extends View {
     container.insertBefore(formInput, targetElement);
   }
 
-  async checkExistPromoCode(key: string) {
-    if (await this.server.workApi.checkPromoCode(key)) {
-      return true;
-    }
-    return false;
+  async checkPromoCodeReturnTotal(key: string) {
+    const result = await this.server.workApi.checkPromoCode(key);
+    return result;
   }
 }

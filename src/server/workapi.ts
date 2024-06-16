@@ -485,17 +485,65 @@ export class WorkApi {
     return result;
   }
 
-  async checkPromoCode(key: string): Promise<boolean> {
+  async checkPromoCode(key: string) {
+    let result = 0;
     try {
       const response = await this.server.apiRoot().discountCodes().withKey({ key }).get().execute();
       console.log(response);
       if (response?.body.isActive) {
-        return true;
+        if (!(await this.server.workApi.checkLoginUser())) {
+          console.log('пользователь yt залогинен и зарос суммы');
+          const responseTwo = await this.server
+            .apiRoot()
+            .carts()
+            .withId({ ID: this.server.cartAnonimus })
+            .post({
+              body: {
+                version: this.server.versionCartAnonimus,
+                actions: [
+                  {
+                    action: 'addDiscountCode',
+                    code: key,
+                  },
+                ],
+              },
+            })
+            .execute();
+          console.log('ответ измененный', responseTwo);
+          if (responseTwo.body) {
+            this.server.versionCartAnonimus = responseTwo?.body.version as number;
+            result = (responseTwo?.body.totalPrice.centAmount as number) / 100;
+          }
+        } else {
+          const responseTwo = await this.server.workApi.userApi
+            ?.apiRoot()
+            ?.me()
+            .carts()
+            .withId({ ID: this.server.cartLogin })
+            .post({
+              body: {
+                version: this.server.versionCartLogin,
+                actions: [
+                  {
+                    action: 'addDiscountCode',
+                    code: key,
+                  },
+                ],
+              },
+            })
+            .execute();
+          console.log('ответ измененный', responseTwo);
+          if (responseTwo?.body) {
+            this.server.versionCartLogin = responseTwo?.body.version as number;
+            console.log(responseTwo?.body.totalPrice.centAmount);
+            result = (responseTwo?.body.totalPrice.centAmount as number) / 100;
+          }
+        }
       }
-      return false;
     } catch (err) {
-      // console.error(err);
-      return false;
+      const errorElement = new ErrorView();
+      errorElement.show(err as string);
     }
+    return result;
   }
 }
