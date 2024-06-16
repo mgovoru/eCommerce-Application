@@ -86,16 +86,19 @@ export default class CartView extends View {
           const emptyMessage = document.querySelector('.page-cart__empty');
           const linkToCatalog = document.querySelector('.page-cart__button');
           const promoCodContainer = document.querySelector('.page-cart__form');
+          const totalCount = document.querySelector('.page-cart__total-cost');
 
           if (!cartItemsExist) {
             textBlock.classList.add('hidden');
             cartButtonsContainer.classList.add('hidden');
+            totalCount?.classList.add('hidden');
             promoCodContainer?.classList.add('hidden');
             emptyMessage?.classList.remove('hidden');
             linkToCatalog?.classList.remove('hidden');
           } else {
             textBlock.classList.remove('hidden');
             cartButtonsContainer.classList.remove('hidden');
+            totalCount?.classList.remove('hidden');
             promoCodContainer?.classList.remove('hidden');
             emptyMessage?.classList.add('hidden');
             linkToCatalog?.classList.add('hidden');
