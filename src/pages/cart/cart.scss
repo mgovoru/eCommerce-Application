@@ -66,6 +66,7 @@
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
+
   @media (max-width: 640px) {
     justify-content: center;
     flex-direction: column;
@@ -101,6 +102,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .cart-item__increase {
   margin-right: 0.5rem;
 }
@@ -115,6 +117,7 @@
   font-size: 16px;
   color: #666;
 }
+
 .page-cart__total-cost {
   margin-top: 1rem;
 }
@@ -137,4 +140,27 @@
 
 .hidden {
   display: none;
+}
+
+.page-cart__form {
+  display: flex;
+  gap: 16px;
+}
+
+.page-cart__input {
+  padding: 10px 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 20px;
+}
+
+.page-cart__promo {
+  padding: 10px 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 20px;
 }

@@ -70,6 +70,40 @@ export default class CartView extends View {
     this.renderCartItems(cartItemsContainer);
 
     this.viewElementCreator.append(cartContainer);
+
+    // lex010 отслеживаю изменения товаров в корзине
+    const observer = new MutationObserver((mutationsList) => {
+      mutationsList.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+          const cartItems = cartItemsContainer.querySelectorAll('.cart-item');
+          let cartItemsExist = cartItems.length > 0;
+
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.classList.contains('cart-item')) {
+              console.log('Новый элемент cart-item добавлен:', node);
+              cartItemsExist = true;
+            }
+          });
+          const emptyMessage = document.querySelector('.page-cart__empty');
+          const linkToCatalog = document.querySelector('.page-cart__button');
+
+          if (!cartItemsExist) {
+            textBlock.classList.add('hidden');
+            cartButtonsContainer.classList.add('hidden');
+            emptyMessage?.classList.remove('hidden');
+            linkToCatalog?.classList.remove('hidden');
+          } else {
+            textBlock.classList.remove('hidden');
+            cartButtonsContainer.classList.remove('hidden');
+            emptyMessage?.classList.add('hidden');
+            linkToCatalog?.classList.add('hidden');
+          }
+        }
+      });
+    });
+    observer.observe(cartItemsContainer, { childList: true });
+    // lex010 закончил изменения
+    this.createfieldPromokod();
   }
 
   // fetch and update TOTAL PRICE
@@ -118,19 +152,19 @@ export default class CartView extends View {
         cartItems = fetchCartResult?.body.lineItems;
         console.log(cartItems);
       }
-
-      if (cartItems?.length === 0) {
-        const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
-        emptyMessage.textContent = 'Your cart is empty.';
-        const linkToCatalog = this.drawElement({ tag: 'button', classNames: ['page-cart__button'] }, container);
-        linkToCatalog.textContent = 'Try to find something you like here ->';
-        linkToCatalog.addEventListener('click', () => this.router.navigate(Pages.SHOP));
-      } else {
+      // lex010 код изменен
+      const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
+      emptyMessage.textContent = 'Your cart is empty.';
+      const linkToCatalog = this.drawElement({ tag: 'button', classNames: ['page-cart__button'] }, container);
+      linkToCatalog.textContent = 'Try to find something you like here ->';
+      linkToCatalog.addEventListener('click', () => this.router.navigate(Pages.SHOP));
+      if (cartItems && cartItems.length > 0) {
         cartItems?.forEach((item) => {
           const itemElement = this.createCartItemElement(item);
           container.appendChild(itemElement);
         });
       }
+      // конец изменений
     } catch (err) {
       console.error(err);
       const errorElement = new ErrorView();
@@ -175,7 +209,15 @@ export default class CartView extends View {
 
     const removeButton = this.drawElement({ tag: 'button', classNames: ['cart-item__remove'] }, itemElement);
     removeButton.textContent = 'Remove';
-    removeButton.addEventListener('click', () => this.handleRemoveItem(item.id));
+    // lex010 изменения для удаления элемента на странице
+    removeButton.addEventListener('click', () => {
+      this.handleRemoveItem(item.id);
+      const cartItem = removeButton.closest('.cart-item');
+      if (cartItem) {
+        cartItem.remove();
+      }
+    });
+    // lex010 конец изменений
 
     return itemElement;
   }
@@ -234,5 +276,33 @@ export default class CartView extends View {
     const container = this.viewElementCreator.getNode().querySelector('.page-cart__items') as HTMLElement;
     container.innerHTML = '';
     this.renderCartItems(container);
+  }
+
+  createfieldPromokod() {
+    const container = this.viewElementCreator.getNode().querySelector('.page-cart__container') as HTMLElement;
+    const targetElement = this.viewElementCreator.getNode().querySelector('.page-cart__buttons') as HTMLElement;
+    const formInput = new ElementCreator({ tag: 'form', classNames: ['page-cart__form'] }).getNode();
+    const inputPromo = new ElementCreator({
+      tag: 'input',
+      classNames: ['page-cart__input'],
+    }).getNode() as HTMLInputElement;
+    const buttonPromo = new ElementCreator({
+      tag: 'button',
+      classNames: ['page-cart__promo'],
+      textContent: 'Apply promo code',
+      callback: () => {
+        this.checkExistPromoCode(inputPromo.value as string);
+      },
+    }).getNode();
+    formInput.append(inputPromo);
+    formInput.append(buttonPromo);
+    container.insertBefore(formInput, targetElement);
+  }
+
+  async checkExistPromoCode(key: string) {
+    if (await this.server.workApi.checkPromoCode(key)) {
+      return true;
+    }
+    return false;
   }
 }
