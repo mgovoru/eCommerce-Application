@@ -46,6 +46,18 @@ export default class CartView extends View {
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
+    // div for Total Price
+    const totalPriceContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total-cost'] }, cartContainer);
+
+    this.getTotalPrice()
+      .then((totalPrice) => {
+        totalPriceContainer.textContent = `Total price: $${totalPrice.toFixed(2)}`;
+      })
+      .catch((error) => {
+        console.error('Error fetching total price:', error);
+        totalPriceContainer.textContent = 'Total price: 0';
+      });
+
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
     clearCartButton.textContent = 'Clear the Cart';
@@ -92,6 +104,34 @@ export default class CartView extends View {
     observer.observe(cartItemsContainer, { childList: true });
     // lex010 закончил изменения
     this.createfieldPromokod();
+  }
+
+  // fetch and update TOTAL PRICE
+  async getTotalPrice() {
+    let totalPrice: number;
+
+    if (!this.server.workApi.userApi) {
+      const cartId = this.server.cartAnonimus;
+      const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
+      if (fetchCartResult && fetchCartResult.body) {
+        totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
+        console.log('total price is', totalPrice.toFixed(2));
+        // установить бы вот отсюда значение Total price на странице
+      } else {
+        console.log('Fetch cart result or body is undefined');
+        totalPrice = 0;
+      }
+    } else {
+      const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
+      if (fetchCartResult && fetchCartResult.body) {
+        totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
+        console.log('total price is', totalPrice.toFixed(2));
+      } else {
+        console.log('Fetch cart result or body is undefined');
+        totalPrice = 0;
+      }
+    }
+    return totalPrice;
   }
 
   async renderCartItems(container: HTMLElement) {
