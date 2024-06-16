@@ -356,6 +356,7 @@ export default class CartView extends View {
       classNames: ['page-cart__promo'],
       textContent: 'Apply promo code',
       callback: async () => {
+        await this.checkPromoCodeReturnTotal(inputPromo.value as string);
         console.log(await this.checkPromoCodeReturnTotal(inputPromo.value as string));
       },
     }).getNode();
@@ -363,9 +364,16 @@ export default class CartView extends View {
     formInput.append(buttonPromo);
     container.insertBefore(formInput, targetElement);
   }
+  updateTotalPrice(newTotalPrice: number) {
+    const totalPriceContainer = document.querySelector('.page-cart__total-cost');
+    if (totalPriceContainer) {
+      totalPriceContainer.textContent = `Total price: $${newTotalPrice.toFixed(2)}`;
+    }
+  }
 
   async checkPromoCodeReturnTotal(key: string) {
     const result = await this.server.workApi.checkPromoCode(key);
-    return result;
+    console.log('result in checkPromoCodeReturnTotal', result);
+    this.updateTotalPrice(result);
   }
 }
