@@ -227,7 +227,7 @@ export default class CartView extends View {
     const itemDiscountPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
     itemDiscountPrice.textContent = `-`;
     if (item.price.discounted) {
-      const discountPrice = item.price.discounted?.value.centAmount / 100;
+      const discountPrice = item.price.discounted?.value?.centAmount / 100;
       itemDiscountPrice.textContent = `With Discount: $ ${discountPrice.toFixed(2)}`;
     }
 
