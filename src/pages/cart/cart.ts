@@ -28,6 +28,8 @@ export default class CartView extends View {
 
   clearCartButton: ElementCreator | null = null;
 
+  discountedPriceContainer: HTMLElement | null = null;
+
   constructor(server: Server, state: State, router: Router) {
     super(mainParams);
     this.server = server;
@@ -46,16 +48,29 @@ export default class CartView extends View {
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
-    // div for Total Price
-    const totalPriceContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__total-cost'] }, cartContainer);
+    const originalPriceContainer = this.drawElement(
+      { tag: 'div', classNames: ['page-cart__original-cost'] },
+      cartContainer
+    );
+    originalPriceContainer.textContent = `Total price: $0.00`;
+
+    this.discountedPriceContainer = this.drawElement(
+      { tag: 'div', classNames: ['page-cart__total-cost'] },
+      cartContainer
+    );
+    this.discountedPriceContainer.textContent = `$0.00`;
+    // this.discountedPriceContainer.classList.add('hidden');
 
     this.getTotalPrice()
       .then((totalPrice) => {
-        totalPriceContainer.textContent = `Total price: $${totalPrice.toFixed(2)}`;
+        originalPriceContainer.textContent = `Total price: $${totalPrice.toFixed(2)}`;
+        if (this.discountedPriceContainer) {
+          this.discountedPriceContainer.textContent = `Total price with promo code: $${totalPrice.toFixed(2)}`;
+        }
       })
       .catch((error) => {
         console.error('Error fetching total price:', error);
-        totalPriceContainer.textContent = 'Total price: 0';
+        originalPriceContainer.textContent = 'Original price: $0.00';
       });
 
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
@@ -119,8 +134,6 @@ export default class CartView extends View {
       const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
       if (fetchCartResult && fetchCartResult.body) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
-        console.log('total price is', totalPrice.toFixed(2));
-        // установить бы вот отсюда значение Total price на странице
       } else {
         console.log('Fetch cart result or body is undefined');
         totalPrice = 0;
@@ -129,12 +142,12 @@ export default class CartView extends View {
       const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
       if (fetchCartResult && fetchCartResult.body) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
-        console.log('total price is', totalPrice.toFixed(2));
       } else {
         console.log('Fetch cart result or body is undefined');
         totalPrice = 0;
       }
     }
+
     return totalPrice;
   }
 
@@ -210,6 +223,13 @@ export default class CartView extends View {
     const itemPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
     const price = item.price.value.centAmount / 100;
     itemPrice.textContent = `Price: $ ${price.toFixed(2)}`;
+
+    const itemDiscountPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
+    itemDiscountPrice.textContent = `-`;
+    if (item.price.discounted) {
+      const discountPrice = item.price.discounted?.value.centAmount / 100;
+      itemDiscountPrice.textContent = `With Discount: $ ${discountPrice.toFixed(2)}`;
+    }
 
     const removeButton = this.drawElement({ tag: 'button', classNames: ['cart-item__remove'] }, itemElement);
     removeButton.textContent = 'Remove';
