@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@100..900&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  cursor: pointer;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+button {
+  all: unset;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  background: none;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  text-align: center;
+  line-height: normal;
+  color: inherit;
+  font-family: inherit;
+}
+
+nav,
+nav * {
+  all: unset;
+  display: revert;
+}
+
+li {
+  all: unset;
+  display: list-item;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  all: unset;
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+select,
+option {
+  all: unset;
+  display: inline-block;
+  appearance: none;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+[class*='__container'] {
+  position: relative;
+  margin: 0 auto;
+  max-width: 1440px;
+  width: 100%;
+  height: 100%;
+  padding: 16px 0;
+}
+
+[class*='-ibg'] {
+  position: relative;
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+}
+
+[class*='-ibg_contain'] {
+  img {
+    object-fit: contain;
+  }
+}

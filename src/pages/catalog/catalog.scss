@@ -1,0 +1,125 @@
+.page-catalog__container {
+  padding: 16px;
+}
+
+.catalog__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  margin-bottom: 8px;
+}
+
+.catalog__sort {
+  width: 120px;
+  height: 42px;
+  background: rgb(246, 246, 246);
+  font-size: 20px;
+  color: black;
+  font-weight: 700;
+  line-height: 41.58px;
+  letter-spacing: 0px;
+  text-align: left;
+  border: none;
+  padding: 0px 4px;
+}
+
+.catalog__sort option {
+  padding: 8px;
+  border: none;
+  font: inherit;
+}
+
+.catalog__sort:focus {
+  border: 1px solid;
+  border-color: rgb(210, 116, 210);
+}
+
+.catalog__sort option:focus {
+  border-color: rgb(210, 116, 210);
+}
+
+.catalog__filter {
+  width: 120px;
+  height: 42px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 41.58px;
+  letter-spacing: 0px;
+  text-align: left;
+  padding: 0 11px;
+  position: relative;
+}
+
+.catalog__filter::after {
+  content: '';
+  position: absolute;
+  width: 34px;
+  height: 28px;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url('../../assets/filter_catalog.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.selected-item {
+  color: rgb(210, 116, 210);
+}
+
+.catalog__title {
+  font-weight: 700;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.categories__items,
+.categories__sub-items {
+  font-weight: 700;
+  font-size: 18px;
+  color: blueviolet;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.categories__item,
+.categories__sub-item {
+  font-weight: 700;
+  font-size: 14px;
+  color: black;
+}
+
+.catalog__block {
+  display: flex;
+  gap: 24px;
+}
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  font-weight: 700;
+}
+
+.breadcrumb li {
+  margin-right: 5px;
+}
+
+.breadcrumb li::after {
+  content: '>';
+  margin-left: 5px;
+}
+
+.breadcrumb li:last-child::after {
+  content: '';
+}
+
+.categories__sub-items,
+.categories__sub-item {
+  text-align: right;
+}
