@@ -242,11 +242,13 @@ export default class CartView extends View {
     removeButton.textContent = 'Remove';
     // lex010 изменения для удаления элемента на странице
     removeButton.addEventListener('click', () => {
-      this.handleRemoveItem(item.id);
-      const cartItem = removeButton.closest('.cart-item');
-      if (cartItem) {
-        cartItem.remove();
-      }
+      this.handleRemoveItem(item.id).then(() => {
+        const cartItem = removeButton.closest('.cart-item');
+        if (cartItem) {
+          cartItem.remove();
+          this.setNewTotalPrice();
+        }
+      });
     });
     // lex010 конец изменений
 
