@@ -54,19 +54,19 @@ export default class CartView extends View {
     );
     originalPriceContainer.textContent = `Total price: $0.00`;
 
-    this.discountedPriceContainer = this.drawElement(
-      { tag: 'div', classNames: ['page-cart__total-cost'] },
-      cartContainer
-    );
-    this.discountedPriceContainer.textContent = `$0.00`;
+    // this.discountedPriceContainer = this.drawElement(
+    //   { tag: 'div', classNames: ['page-cart__total-cost'] },
+    //   cartContainer
+    // );
+    // this.discountedPriceContainer.textContent = `$0.00`;
     // this.discountedPriceContainer.classList.add('hidden');
 
     this.getTotalPrice()
       .then((totalPrice) => {
         originalPriceContainer.textContent = `Total price: $${totalPrice.toFixed(2)}`;
-        if (this.discountedPriceContainer) {
-          this.discountedPriceContainer.textContent = `Total price with promo code: $${totalPrice.toFixed(2)}`;
-        }
+        // if (this.discountedPriceContainer) {
+        //   this.discountedPriceContainer.textContent = `Total price with promo code: $${totalPrice.toFixed(2)}`;
+        // }
       })
       .catch((error) => {
         console.error('Error fetching total price:', error);
@@ -224,12 +224,12 @@ export default class CartView extends View {
     const price = item.price.value.centAmount / 100;
     itemPrice.textContent = `Price: $ ${price.toFixed(2)}`;
 
-    const itemDiscountPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
-    itemDiscountPrice.textContent = `-`;
-    if (item.price.discounted && item.price.discounted.value && item.price.discounted.value.centAmount !== undefined) {
-      const discountPrice = item.price.discounted.value.centAmount / 100;
-      itemDiscountPrice.textContent = `With Discount: $ ${discountPrice.toFixed(2)}`;
-    }
+    // const itemDiscountPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
+    // itemDiscountPrice.textContent = `-`;
+    // if (item.price.discounted && item.price.discounted.value && item.price.discounted.value.centAmount !== undefined) {
+    //   const discountPrice = item.price.discounted.value.centAmount / 100;
+    //   itemDiscountPrice.textContent = `With Discount: $ ${discountPrice.toFixed(2)}`;
+    // }
 
     const removeButton = this.drawElement({ tag: 'button', classNames: ['cart-item__remove'] }, itemElement);
     removeButton.textContent = 'Remove';
