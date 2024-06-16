@@ -129,7 +129,7 @@ export default class CartView extends View {
     if (!this.server.workApi.userApi) {
       const cartId = this.server.cartAnonimus;
       const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
-      if (fetchCartResult && fetchCartResult.body) {
+      if (fetchCartResult && fetchCartResult.body && fetchCartResult.body.totalPrice) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
         console.log('total price is', totalPrice.toFixed(2));
         // установить бы вот отсюда значение Total price на странице
@@ -139,7 +139,7 @@ export default class CartView extends View {
       }
     } else {
       const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
-      if (fetchCartResult && fetchCartResult.body) {
+      if (fetchCartResult && fetchCartResult.body && fetchCartResult.body.totalPrice) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
         console.log('total price is', totalPrice.toFixed(2));
       } else {
