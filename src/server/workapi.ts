@@ -542,7 +542,7 @@ export class WorkApi {
       }
     } catch (err) {
       const errorElement = new ErrorView();
-      errorElement.show(err as string);
+      errorElement.show('You entered an invalid promotional code');
     }
     return result;
   }

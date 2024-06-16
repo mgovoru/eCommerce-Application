@@ -52,6 +52,7 @@ export class HeaderView extends View {
     this.buttonCartCreate(srcCart);
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768 && !document.querySelector('.header__nav')) {
+        console.log('должно сработать');
         this.navCreate();
         (document.querySelector('.header__nav') as HTMLElement).style.cssText = 'display: flex !important';
       }
@@ -127,18 +128,12 @@ export class HeaderView extends View {
         } else {
           elementUl.classList.add('animationReturn');
           elementUl.classList.remove('animation');
-          setTimeout(() => {
-            elementUl.style.display = 'none';
-          }, 1000);
         }
       });
       elementUl.addEventListener('click', () => {
         menu.classList.toggle('menu-open');
         elementUl.classList.add('animationReturn');
         elementUl.classList.remove('animation');
-        setTimeout(() => {
-          elementUl.style.display = 'none';
-        }, 1000);
       });
     }
     window.addEventListener('resize', () => {
@@ -153,18 +148,12 @@ export class HeaderView extends View {
           } else {
             elementUl.classList.add('animationReturn');
             elementUl.classList.remove('animation');
-            setTimeout(() => {
-              elementUl.style.display = 'none';
-            }, 1000);
           }
         });
         elementUl.addEventListener('click', () => {
           menu.classList.toggle('menu-open');
           elementUl.classList.add('animationReturn');
           elementUl.classList.remove('animation');
-          setTimeout(() => {
-            elementUl.style.display = 'none';
-          }, 1000);
         });
       }
     });
