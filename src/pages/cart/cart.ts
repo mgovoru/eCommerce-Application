@@ -1,4 +1,4 @@
-import { CartUpdateAction, LineItem, LocalizedString } from '@commercetools/platform-sdk';
+import { MyCartUpdateAction, LineItem, LocalizedString } from '@commercetools/platform-sdk';
 import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
 import Router from '../../router/router';
@@ -288,7 +288,7 @@ export default class CartView extends View {
       }
 
       if (cartItems && cartItems.length > 0) {
-        const actions: CartUpdateAction[] = cartItems.map((item) => ({
+        const actions: MyCartUpdateAction[] = cartItems.map((item) => ({
           action: 'removeLineItem',
           lineItemId: item.id,
         }));
@@ -316,7 +316,7 @@ export default class CartView extends View {
             .post({
               body: {
                 version: this.server.versionCartLogin,
-                actions: [], // что здесь должно быть? actions не проходит
+                actions,
               },
             })
             .execute();
