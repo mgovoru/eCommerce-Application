@@ -203,9 +203,10 @@ export default class CartView extends View {
 
     increaseButton.addEventListener('click', () => {
       newQuantity += 1;
-      this.changeItemQuantity(item.id, newQuantity);
-      itemQuantity.textContent = `Quantity: ${newQuantity}`;
-      this.setNewTotalPrice();
+      this.changeItemQuantity(item.id, newQuantity).then(() => {
+        itemQuantity.textContent = `Quantity: ${newQuantity}`;
+        this.setNewTotalPrice();
+      });
     });
     // конец изменений
 
@@ -223,8 +224,10 @@ export default class CartView extends View {
           cartItem.remove();
         }
       }
-      this.changeItemQuantity(item.id, newQuantity);
-      itemQuantity.textContent = `Quantity: ${newQuantity}`;
+      this.changeItemQuantity(item.id, newQuantity).then(() => {
+        itemQuantity.textContent = `Quantity: ${newQuantity}`;
+        this.setNewTotalPrice();
+      });
     });
     // конец изменений
 
