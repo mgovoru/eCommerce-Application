@@ -301,7 +301,7 @@ export default class CartView extends View {
             .post({
               body: {
                 version: this.server.versionCartAnonimus,
-                actions: actions,
+                actions,
               },
             })
             .execute();
