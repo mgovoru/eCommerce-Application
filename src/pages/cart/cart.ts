@@ -1,4 +1,4 @@
-import { LineItem, LocalizedString } from '@commercetools/platform-sdk';
+import { CartUpdateAction, LineItem, LocalizedString } from '@commercetools/platform-sdk';
 import { View } from '../../app/view';
 import { ContainerView } from '../../components/container/container';
 import Router from '../../router/router';
@@ -61,6 +61,8 @@ export default class CartView extends View {
     const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
     clearCartButton.textContent = 'Clear the Cart';
+    clearCartButton.addEventListener('click', () => this.clearCart());
+
     const proceedToOrderButton = this.drawElement(
       { tag: 'button', classNames: ['page-cart__order'] },
       cartButtonsContainer
@@ -225,7 +227,6 @@ export default class CartView extends View {
   async handleRemoveItem(itemId: string) {
     const cartID = this.server.cartAnonimus;
     if (!this.server.workApi?.userApi) {
-      console.log('пытается удалить тут');
       try {
         const response = await this.server
           .apiRoot()
@@ -269,6 +270,68 @@ export default class CartView extends View {
         const errorElement = new ErrorView();
         errorElement.show(err as string);
       }
+    }
+  }
+
+  // clear cart method
+  async clearCart() {
+    const cartID = this.server.cartAnonimus;
+    let cartItems: LineItem[] | undefined;
+
+    try {
+      if (!this.server.workApi?.userApi) {
+        const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartID }).get().execute();
+        cartItems = fetchCartResult?.body.lineItems;
+      } else {
+        const fetchCartResult = await this.server.workApi.userApi.apiRoot()?.me().activeCart().get().execute();
+        cartItems = fetchCartResult?.body.lineItems;
+      }
+
+      if (cartItems && cartItems.length > 0) {
+        const actions: CartUpdateAction[] = cartItems.map((item) => ({
+          action: 'removeLineItem',
+          lineItemId: item.id,
+        }));
+
+        if (!this.server.workApi?.userApi) {
+          const response = await this.server
+            .apiRoot()
+            .carts()
+            .withId({ ID: cartID })
+            .post({
+              body: {
+                version: this.server.versionCartAnonimus,
+                actions: actions,
+              },
+            })
+            .execute();
+          this.server.versionCartAnonimus = response?.body.version as number;
+          localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
+        } else {
+          const response = await this.server.workApi.userApi
+            .apiRoot()
+            ?.me()
+            .carts()
+            .withId({ ID: this.server.cartLogin })
+            .post({
+              body: {
+                version: this.server.versionCartLogin,
+                actions: [], // что здесь должно быть? actions не проходит
+              },
+            })
+            .execute();
+          this.server.versionCartLogin = response?.body.version as number;
+        }
+      }
+      this.updateView();
+      const totalPriceContainer = document.querySelector('.page-cart__total-cost');
+      if (totalPriceContainer) {
+        totalPriceContainer.textContent = 'Total price: $0.00';
+      }
+    } catch (err) {
+      console.error('Error clearing cart:', err);
+      const errorElement = new ErrorView();
+      errorElement.show(err as string);
     }
   }
 
