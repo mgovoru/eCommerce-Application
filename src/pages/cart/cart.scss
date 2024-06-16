@@ -138,10 +138,6 @@
   background-color: #ff4c4c84;
 }
 
-.hidden {
-  display: none;
-}
-
 .page-cart__form {
   display: flex;
   gap: 16px;
@@ -163,4 +159,8 @@
   cursor: pointer;
   align-self: flex-start;
   margin-top: 20px;
+}
+
+.hidden {
+  display: none;
 }
