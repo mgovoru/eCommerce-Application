@@ -68,7 +68,6 @@ export default class CartView extends View {
 
           mutation.addedNodes.forEach((node) => {
             if (node instanceof HTMLElement && node.classList.contains('cart-item')) {
-              console.log('Новый элемент cart-item добавлен:', node);
               cartItemsExist = true;
             }
           });
