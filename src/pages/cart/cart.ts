@@ -72,20 +72,19 @@ export default class CartView extends View {
               cartItemsExist = true;
             }
           });
-
-          // mutation.removedNodes.forEach((node) => {
-          //   if (node instanceof HTMLElement && node.classList.contains('cart-item')) {
-          //     console.log('Элемент cart-item удален:', node);
-          //     // Здесь можно добавить дополнительные действия при удалении элемента cart-item
-          //   }
-          // });
+          const emptyMessage = document.querySelector('.page-cart__empty');
+          const linkToCatalog = document.querySelector('.page-cart__button');
 
           if (!cartItemsExist) {
             textBlock.classList.add('hidden');
             cartButtonsContainer.classList.add('hidden');
+            emptyMessage?.classList.remove('hidden');
+            linkToCatalog?.classList.remove('hidden');
           } else {
             textBlock.classList.remove('hidden');
             cartButtonsContainer.classList.remove('hidden');
+            emptyMessage?.classList.add('hidden');
+            linkToCatalog?.classList.add('hidden');
           }
         }
       });
@@ -112,19 +111,19 @@ export default class CartView extends View {
         cartItems = fetchCartResult?.body.lineItems;
         console.log(cartItems);
       }
-
-      if (cartItems?.length === 0) {
-        const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
-        emptyMessage.textContent = 'Your cart is empty.';
-        const linkToCatalog = this.drawElement({ tag: 'button', classNames: ['page-cart__button'] }, container);
-        linkToCatalog.textContent = 'Try to find something you like here ->';
-        linkToCatalog.addEventListener('click', () => this.router.navigate(Pages.SHOP));
-      } else {
+      // lex010 код изменен
+      const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
+      emptyMessage.textContent = 'Your cart is empty.';
+      const linkToCatalog = this.drawElement({ tag: 'button', classNames: ['page-cart__button'] }, container);
+      linkToCatalog.textContent = 'Try to find something you like here ->';
+      linkToCatalog.addEventListener('click', () => this.router.navigate(Pages.SHOP));
+      if (cartItems && cartItems.length > 0) {
         cartItems?.forEach((item) => {
           const itemElement = this.createCartItemElement(item);
           container.appendChild(itemElement);
         });
       }
+      // конец изменений
     } catch (err) {
       console.error(err);
       const errorElement = new ErrorView();
