@@ -131,19 +131,15 @@ export default class CartView extends View {
       const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
       if (fetchCartResult && fetchCartResult.body && fetchCartResult.body.totalPrice) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
-        console.log('total price is', totalPrice.toFixed(2));
         // установить бы вот отсюда значение Total price на странице
       } else {
-        console.log('Fetch cart result or body is undefined');
         totalPrice = 0;
       }
     } else {
       const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
       if (fetchCartResult && fetchCartResult.body && fetchCartResult.body.totalPrice) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
-        console.log('total price is', totalPrice.toFixed(2));
       } else {
-        console.log('Fetch cart result or body is undefined');
         totalPrice = 0;
       }
     }
@@ -166,7 +162,6 @@ export default class CartView extends View {
       if (this.server.workApi?.userApi) {
         const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
         cartItems = fetchCartResult?.body.lineItems;
-        console.log(cartItems);
       }
       // lex010 код изменен
       const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
@@ -182,9 +177,8 @@ export default class CartView extends View {
       }
       // конец изменений
     } catch (err) {
-      console.error(err);
       const errorElement = new ErrorView();
-      console.log(errorElement);
+      errorElement.show(err as string);
     }
   }
 
@@ -288,7 +282,6 @@ export default class CartView extends View {
         errorElement.show(err as string);
       }
     } else if (this.server.workApi?.userApi) {
-      console.log(this.server.cartLogin, this.server.versionCartLogin, itemId);
       try {
         const response = await this.server.workApi.userApi
           .apiRoot()
@@ -398,9 +391,10 @@ export default class CartView extends View {
       tag: 'button',
       classNames: ['page-cart__promo'],
       textContent: 'Apply promo code',
-      callback: async () => {
+      callback: async (event) => {
+        event.stopPropagation();
+        event.preventDefault();
         await this.checkPromoCodeReturnTotal(inputPromo.value as string);
-        console.log(await this.checkPromoCodeReturnTotal(inputPromo.value as string));
       },
     }).getNode();
     formInput.append(inputPromo);
@@ -417,7 +411,6 @@ export default class CartView extends View {
 
   async checkPromoCodeReturnTotal(key: string) {
     const result = await this.server.workApi.checkPromoCode(key);
-    console.log('result in checkPromoCodeReturnTotal', result);
     if (result && result !== 0) {
       this.updateTotalPrice(result);
       localStorage.setItem('promoIsApply', 'true');
