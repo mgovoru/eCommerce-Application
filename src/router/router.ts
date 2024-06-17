@@ -40,7 +40,6 @@ export default class Router {
   urlChangedHandler(requestParams: RequestParams) {
     if (this.isHandling) return;
     this.isHandling = true;
-    console.log('urlChangedHandler called ONCE with:', requestParams);
 
     let pathForFind = requestParams.path;
 

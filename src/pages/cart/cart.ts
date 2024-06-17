@@ -43,23 +43,17 @@ export default class CartView extends View {
     container.addNameClass('page-cart');
     const cartContainer = container.getElement();
 
-    const textBlock = this.drawElement({ tag: 'div', classNames: ['page-cart__text'] }, cartContainer);
+    const textBlock = this.drawElement({ tag: 'div', classNames: ['page-cart__text', 'hidden'] }, cartContainer);
     textBlock.textContent = 'Cart Items';
 
     const cartItemsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__items'] }, cartContainer);
 
-    const originalPriceContainer = this.drawElement(
-      { tag: 'div', classNames: ['page-cart__original-cost'] },
+    // div for Total Price
+    const totalPriceContainer = this.drawElement(
+      { tag: 'div', classNames: ['page-cart__total-cost', 'hidden'] },
       cartContainer
     );
-    originalPriceContainer.textContent = `Total price: $0.00`;
 
-    // this.discountedPriceContainer = this.drawElement(
-    //   { tag: 'div', classNames: ['page-cart__total-cost'] },
-    //   cartContainer
-    // );
-    // this.discountedPriceContainer.textContent = `$0.00`;
-    // this.discountedPriceContainer.classList.add('hidden');
 
     this.getTotalPrice()
       .then((totalPrice) => {
@@ -73,7 +67,10 @@ export default class CartView extends View {
         originalPriceContainer.textContent = 'Original price: $0.00';
       });
 
-    const cartButtonsContainer = this.drawElement({ tag: 'div', classNames: ['page-cart__buttons'] }, cartContainer);
+    const cartButtonsContainer = this.drawElement(
+      { tag: 'div', classNames: ['page-cart__buttons', 'hidden'] },
+      cartContainer
+    );
     const clearCartButton = this.drawElement({ tag: 'button', classNames: ['page-cart__clear'] }, cartButtonsContainer);
     clearCartButton.textContent = 'Clear the Cart';
     clearCartButton.addEventListener('click', () => this.clearCart());
@@ -103,16 +100,19 @@ export default class CartView extends View {
           const emptyMessage = document.querySelector('.page-cart__empty');
           const linkToCatalog = document.querySelector('.page-cart__button');
           const promoCodContainer = document.querySelector('.page-cart__form');
+          const totalCount = document.querySelector('.page-cart__total-cost');
 
           if (!cartItemsExist) {
             textBlock.classList.add('hidden');
             cartButtonsContainer.classList.add('hidden');
+            totalCount?.classList.add('hidden');
             promoCodContainer?.classList.add('hidden');
             emptyMessage?.classList.remove('hidden');
             linkToCatalog?.classList.remove('hidden');
           } else {
             textBlock.classList.remove('hidden');
             cartButtonsContainer.classList.remove('hidden');
+            totalCount?.classList.remove('hidden');
             promoCodContainer?.classList.remove('hidden');
             emptyMessage?.classList.add('hidden');
             linkToCatalog?.classList.add('hidden');
@@ -122,7 +122,10 @@ export default class CartView extends View {
     });
     observer.observe(cartItemsContainer, { childList: true });
     // lex010 закончил изменения
-    this.createfieldPromokod();
+    const promoStatus = localStorage.getItem('promoIsApply');
+    if (promoStatus === 'false' || !promoStatus) {
+      this.createfieldPromokod();
+    }
   }
 
   // fetch and update TOTAL PRICE
@@ -132,18 +135,16 @@ export default class CartView extends View {
     if (!this.server.workApi.userApi) {
       const cartId = this.server.cartAnonimus;
       const fetchCartResult = await this.server.apiRoot().carts().withId({ ID: cartId }).get().execute();
-      if (fetchCartResult && fetchCartResult.body) {
+      if (fetchCartResult && fetchCartResult.body && fetchCartResult.body.totalPrice) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
       } else {
-        console.log('Fetch cart result or body is undefined');
         totalPrice = 0;
       }
     } else {
       const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
-      if (fetchCartResult && fetchCartResult.body) {
+      if (fetchCartResult && fetchCartResult.body && fetchCartResult.body.totalPrice) {
         totalPrice = fetchCartResult.body.totalPrice.centAmount / 100;
       } else {
-        console.log('Fetch cart result or body is undefined');
         totalPrice = 0;
       }
     }
@@ -167,7 +168,6 @@ export default class CartView extends View {
       if (this.server.workApi?.userApi) {
         const fetchCartResult = await this.server.workApi.userApi?.apiRoot()?.me().activeCart().get().execute();
         cartItems = fetchCartResult?.body.lineItems;
-        console.log(cartItems);
       }
       // lex010 код изменен
       const emptyMessage = this.drawElement({ tag: 'div', classNames: ['page-cart__empty'] }, container);
@@ -183,9 +183,8 @@ export default class CartView extends View {
       }
       // конец изменений
     } catch (err) {
-      console.error(err);
       const errorElement = new ErrorView();
-      console.log(errorElement);
+      errorElement.show(err as string);
     }
   }
 
@@ -213,12 +212,38 @@ export default class CartView extends View {
       quantityButtons
     );
     increaseButton.textContent = '+';
+    // lex010
+    let newQuantity = item.quantity;
+
+    increaseButton.addEventListener('click', () => {
+      newQuantity += 1;
+      this.changeItemQuantity(item.id, newQuantity).then(() => {
+        itemQuantity.textContent = `Quantity: ${newQuantity}`;
+        this.setNewTotalPrice();
+      });
+    });
+    // конец изменений
 
     const decreaseButton = this.drawElement(
       { tag: 'button', classNames: ['cart-item__button', 'cart-item__decrease'] },
       quantityButtons
     );
     decreaseButton.textContent = '-';
+    // lex010
+    decreaseButton.addEventListener('click', () => {
+      newQuantity -= 1;
+      if (newQuantity === 0) {
+        const cartItem = decreaseButton.closest('.cart-item');
+        if (cartItem) {
+          cartItem.remove();
+        }
+      }
+      this.changeItemQuantity(item.id, newQuantity).then(() => {
+        itemQuantity.textContent = `Quantity: ${newQuantity}`;
+        this.setNewTotalPrice();
+      });
+    });
+    // конец изменений
 
     const itemPrice = this.drawElement({ tag: 'div', classNames: ['cart-item__price'] }, itemElement);
     const price = item.price.value.centAmount / 100;
@@ -235,11 +260,13 @@ export default class CartView extends View {
     removeButton.textContent = 'Remove';
     // lex010 изменения для удаления элемента на странице
     removeButton.addEventListener('click', () => {
-      this.handleRemoveItem(item.id);
-      const cartItem = removeButton.closest('.cart-item');
-      if (cartItem) {
-        cartItem.remove();
-      }
+      this.handleRemoveItem(item.id).then(() => {
+        const cartItem = removeButton.closest('.cart-item');
+        if (cartItem) {
+          cartItem.remove();
+          this.setNewTotalPrice();
+        }
+      });
     });
     // lex010 конец изменений
 
@@ -268,7 +295,6 @@ export default class CartView extends View {
         errorElement.show(err as string);
       }
     } else if (this.server.workApi?.userApi) {
-      console.log(this.server.cartLogin, this.server.versionCartLogin, itemId);
       try {
         const response = await this.server.workApi.userApi
           .apiRoot()
@@ -364,20 +390,24 @@ export default class CartView extends View {
   }
 
   createfieldPromokod() {
+    localStorage.setItem('promoIsApply', 'false');
     const container = this.viewElementCreator.getNode().querySelector('.page-cart__container') as HTMLElement;
     const targetElement = this.viewElementCreator.getNode().querySelector('.page-cart__buttons') as HTMLElement;
-    const formInput = new ElementCreator({ tag: 'form', classNames: ['page-cart__form'] }).getNode();
+    const formInput = new ElementCreator({ tag: 'form', classNames: ['page-cart__form', 'hidden'] }).getNode();
     const inputPromo = new ElementCreator({
       tag: 'input',
       classNames: ['page-cart__input'],
     }).getNode() as HTMLInputElement;
+    inputPromo.type = 'text';
+    inputPromo.value = '';
     const buttonPromo = new ElementCreator({
       tag: 'button',
       classNames: ['page-cart__promo'],
       textContent: 'Apply promo code',
-      callback: async () => {
+      callback: async (event) => {
+        event.stopPropagation();
+        event.preventDefault();
         await this.checkPromoCodeReturnTotal(inputPromo.value as string);
-        console.log(await this.checkPromoCodeReturnTotal(inputPromo.value as string));
       },
     }).getNode();
     formInput.append(inputPromo);
@@ -394,7 +424,76 @@ export default class CartView extends View {
 
   async checkPromoCodeReturnTotal(key: string) {
     const result = await this.server.workApi.checkPromoCode(key);
-    console.log('result in checkPromoCodeReturnTotal', result);
-    this.updateTotalPrice(result);
+    if (result && result !== 0) {
+      this.updateTotalPrice(result);
+      localStorage.setItem('promoIsApply', 'true');
+      const promoCodContainer = document.querySelector('.page-cart__form');
+      promoCodContainer?.classList.add('hidden');
+    }
+  }
+
+  // lex010
+  async changeItemQuantity(itemId: string, newQuantity: number) {
+    const cartID = this.server.cartAnonimus;
+    if (!this.server.workApi?.userApi) {
+      try {
+        const response = await this.server
+          .apiRoot()
+          .carts()
+          .withId({ ID: cartID })
+          .post({
+            body: {
+              version: this.server.versionCartAnonimus,
+              actions: [
+                {
+                  action: 'changeLineItemQuantity',
+                  lineItemId: itemId,
+                  quantity: newQuantity,
+                },
+              ],
+            },
+          })
+          .execute();
+        this.server.versionCartAnonimus = response?.body.version as number;
+        localStorage.setItem('idCartVersionAnonimus', JSON.stringify(response.body.version));
+      } catch (err) {
+        const errorElement = new ErrorView();
+        errorElement.show(err as string);
+      }
+    } else if (this.server.workApi?.userApi) {
+      try {
+        const response = await this.server.workApi.userApi
+          .apiRoot()
+          ?.me()
+          .carts()
+          .withId({ ID: this.server.cartLogin })
+          .post({
+            body: {
+              version: this.server.versionCartLogin,
+              actions: [
+                {
+                  action: 'changeLineItemQuantity',
+                  lineItemId: itemId,
+                  quantity: newQuantity,
+                },
+              ],
+            },
+          })
+          .execute();
+        this.server.versionCartLogin = response?.body.version as number;
+      } catch (err) {
+        const errorElement = new ErrorView();
+        errorElement.show(err as string);
+      }
+    }
+  }
+
+  setNewTotalPrice() {
+    const totalPriceContainer = document.querySelector('.page-cart__total-cost');
+    this.getTotalPrice().then((totalPrice) => {
+      if (totalPriceContainer) {
+        totalPriceContainer.textContent = `Total price: $${totalPrice.toFixed(2)}`;
+      }
+    });
   }
 }

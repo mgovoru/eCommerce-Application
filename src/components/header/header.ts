@@ -127,18 +127,12 @@ export class HeaderView extends View {
         } else {
           elementUl.classList.add('animationReturn');
           elementUl.classList.remove('animation');
-          setTimeout(() => {
-            elementUl.style.display = 'none';
-          }, 1000);
         }
       });
       elementUl.addEventListener('click', () => {
         menu.classList.toggle('menu-open');
         elementUl.classList.add('animationReturn');
         elementUl.classList.remove('animation');
-        setTimeout(() => {
-          elementUl.style.display = 'none';
-        }, 1000);
       });
     }
     window.addEventListener('resize', () => {
@@ -153,18 +147,12 @@ export class HeaderView extends View {
           } else {
             elementUl.classList.add('animationReturn');
             elementUl.classList.remove('animation');
-            setTimeout(() => {
-              elementUl.style.display = 'none';
-            }, 1000);
           }
         });
         elementUl.addEventListener('click', () => {
           menu.classList.toggle('menu-open');
           elementUl.classList.add('animationReturn');
           elementUl.classList.remove('animation');
-          setTimeout(() => {
-            elementUl.style.display = 'none';
-          }, 1000);
         });
       }
     });
