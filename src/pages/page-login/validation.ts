@@ -1,11 +1,11 @@
 import { ElementCreator } from '../../app/base';
 
-const isEmailValid = (value: string) => {
+export const isEmailValid = (value: string) => {
   const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return pattern.test(value);
 };
 
-const isPasswordValid = (value: string) => {
+export const isPasswordValid = (value: string) => {
   const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/;
   return pattern.test(value);
 };

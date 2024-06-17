@@ -14,4 +14,8 @@ export class MyTokenCache implements TokenCache {
   get(): TokenStore {
     return this.myCaсhe;
   }
+
+  getToken(): string {
+    return this.myCaсhe.token;
+  }
 }

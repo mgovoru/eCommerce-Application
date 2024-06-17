@@ -31,7 +31,19 @@ export default class MainPageView extends View {
     } else {
       this.textBlock.textContent = `Hello!`;
     }
+    const promoBlock = this.drawElement({ tag: 'div', classNames: ['page-main__promo-text'] }, container);
+    promoBlock.textContent = 'PROMO CODE: june - 15% (all)';
+    this.resize();
+    window.addEventListener('resize', () => {
+      this.resize();
+    });
     this.viewElementCreator.append(container);
+  }
+
+  resize() {
+    const heightHeader = document.querySelector('.header')?.clientHeight || 0;
+    const heightFooter = document.querySelector('.footer')?.clientHeight || 0;
+    this.getElement().style.height = `${window.innerHeight - heightHeader - heightFooter}px`;
   }
 
   addText(str: string) {

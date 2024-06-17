@@ -47,13 +47,22 @@ export default class Page404View extends View {
         textContent: 'MAIN',
         classNames: ['page-404__button', 'button'],
         callback: () => {
-          console.log('clicked on main btn', this.router.navigate(''));
           this.router.navigate(Pages.MAIN);
         },
       },
       'button',
       textBlock
     );
+    this.resize();
+    window.addEventListener('resize', () => {
+      this.resize();
+    });
     this.viewElementCreator.append(container);
+  }
+
+  resize() {
+    const heightHeader = document.querySelector('.header')?.clientHeight || 0;
+    const heightFooter = document.querySelector('.footer')?.clientHeight || 0;
+    this.getElement().style.height = `${window.innerHeight - heightHeader - heightFooter}px`;
   }
 }
