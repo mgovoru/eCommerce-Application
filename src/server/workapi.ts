@@ -139,7 +139,6 @@ export class WorkApi {
             localStorage.setItem('name', JSON.stringify('client who did not indicate a name upon registration'));
           }
           // this.loginCustomer(customerDraft.email, customerDraft.password as string);
-          console.log('ответ при регистрации', response);
           this.userApi = new UserApiServer(this.server);
           this.userApi.createCustomerApiClient(customerDraft.email, customerDraft.password as string);
           this.router.navigate(Pages.MAIN);
@@ -213,8 +212,9 @@ export class WorkApi {
             userVariable.dateOfBirth = response.body.dateOfBirth;
             return response.body;
           })
-          .catch((error) => {
-            console.log(error.message);
+          .catch((err) => {
+            const errorElement = new ErrorView();
+            errorElement.show(err as string);
           })
       );
     }
@@ -489,10 +489,8 @@ export class WorkApi {
     let result = 0;
     try {
       const response = await this.server.apiRoot().discountCodes().withKey({ key }).get().execute();
-      console.log(response);
       if (response?.body.isActive) {
         if (!(await this.server.workApi.checkLoginUser())) {
-          console.log('пользователь yt залогинен и зарос суммы');
           const responseTwo = await this.server
             .apiRoot()
             .carts()
@@ -509,7 +507,6 @@ export class WorkApi {
               },
             })
             .execute();
-          console.log('ответ измененный', responseTwo);
           if (responseTwo.body) {
             this.server.versionCartAnonimus = responseTwo?.body.version as number;
             result = (responseTwo?.body.totalPrice.centAmount as number) / 100;
@@ -532,10 +529,8 @@ export class WorkApi {
               },
             })
             .execute();
-          console.log('ответ измененный', responseTwo);
           if (responseTwo?.body) {
             this.server.versionCartLogin = responseTwo?.body.version as number;
-            console.log(responseTwo?.body.totalPrice.centAmount);
             result = (responseTwo?.body.totalPrice.centAmount as number) / 100;
           }
         }

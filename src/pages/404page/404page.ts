@@ -47,7 +47,6 @@ export default class Page404View extends View {
         textContent: 'MAIN',
         classNames: ['page-404__button', 'button'],
         callback: () => {
-          console.log('clicked on main btn', this.router.navigate(''));
           this.router.navigate(Pages.MAIN);
         },
       },

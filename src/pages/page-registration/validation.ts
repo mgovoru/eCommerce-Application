@@ -174,7 +174,6 @@ export class RegistrationValidation {
       allValuesAreNotNull(billingRegistrationData) &&
       allValuesAreNotNull(shippingRegistrationData)
     ) {
-      // console.log('Все данные введены верно', registrationData);
       return {
         data: registrationData,
         ship: shippingRegistrationData,
@@ -222,7 +221,6 @@ export class RegistrationValidation {
     }
 
     if (allValuesAreNotNull(loginData)) {
-      // console.log('Дальше нужна проверка на сервере. Данные:', loginData);
       return loginData;
     }
     return null;

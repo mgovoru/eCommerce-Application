@@ -52,7 +52,6 @@ export class HeaderView extends View {
     this.buttonCartCreate(srcCart);
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768 && !document.querySelector('.header__nav')) {
-        console.log('должно сработать');
         this.navCreate();
         (document.querySelector('.header__nav') as HTMLElement).style.cssText = 'display: flex !important';
       }

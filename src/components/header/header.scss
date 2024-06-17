@@ -79,6 +79,7 @@
   }
 
   @media (max-width: 768px) {
+    display: none;
     flex-direction: column;
     position: absolute;
     width: 250px;

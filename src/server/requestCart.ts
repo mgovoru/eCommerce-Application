@@ -269,7 +269,6 @@ export class RequestCart {
   async checkActiveCartLoginUserwithToken() {
     try {
       const response = await this.server.workApi?.userApi?.apiRoot()?.me().activeCart().get().execute();
-      console.log(response);
       if (response?.body) {
         return [response?.body.id, response?.body.version];
       }

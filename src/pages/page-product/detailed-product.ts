@@ -53,7 +53,6 @@ export default class DetailedProductView extends View {
   }
 
   configureView() {
-    console.log(this.productDetails.id);
     const { name, description, masterVariant, variants } = this.productDetails.masterData.current;
 
     const productName = name.en;
@@ -189,7 +188,6 @@ export default class DetailedProductView extends View {
   async checkForAddProduct() {
     if (await this.server.workApi.checkLoginUser()) {
       if (!(await this.server.workApi.checkActiveCartLoginUser())) {
-        console.log('нет корзины залогинен');
         await this.server.workApi.createCartLogUser();
         await this.server.workApi.addProductToCartLogUser(
           this.server.cartLogin,
@@ -198,7 +196,6 @@ export default class DetailedProductView extends View {
         );
         await this.server.workApi.checkExitCartLogUser();
       } else {
-        console.log('есть корзины залогинен', this.server.cartLogin);
         await this.server.workApi.addProductToCartLogUser(
           this.server.cartLogin,
           this.productDetails.id,
@@ -207,12 +204,10 @@ export default class DetailedProductView extends View {
         await this.server.workApi.checkExitCartLogUser();
       }
     } else if (!this.server.cartAnonimus) {
-      console.log('нет корзины не залогинен');
       await this.server.workApi.createCartNoLogUser();
       await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.productDetails.id);
       await this.server.workApi.getCartId(this.server.cartAnonimus);
     } else {
-      console.log('есть корзины не залогинен', this.server.cartAnonimus);
       await this.server.workApi.addProductToCartNoLogUser(this.server.cartAnonimus, this.productDetails.id);
       await this.server.workApi.getCartId(this.server.cartAnonimus);
     }
